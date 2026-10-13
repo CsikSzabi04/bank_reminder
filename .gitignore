@@ -16,3 +16,4 @@ test-results/
 next-env.d.ts
 docs/email-preview/
 supabase/config.toml.bak
+!.env.smtp.local.example
