@@ -1,0 +1,942 @@
+export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
+
+export type Database = {
+  public: {
+    Tables: {
+      budgets: {
+        Row: {
+          category_id: string;
+          created_at: string;
+          currency: string;
+          id: string;
+          monthly_limit: number;
+          updated_at: string;
+          user_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          category_id: string;
+          created_at?: string;
+          currency?: string;
+          id?: string;
+          monthly_limit: number;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Update: {
+          category_id?: string;
+          created_at?: string;
+          currency?: string;
+          id?: string;
+          monthly_limit?: number;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "budgets_category_id_fkey";
+            columns: ["category_id"];
+            isOneToOne: false;
+            referencedRelation: "categories";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      categories: {
+        Row: {
+          color_slot: number;
+          created_at: string;
+          icon: string;
+          id: string;
+          key: string | null;
+          kind: string;
+          name_en: string | null;
+          name_hu: string | null;
+          sort: number;
+          user_id: string | null;
+        };
+        ComputedFields: never;
+        Insert: {
+          color_slot?: number;
+          created_at?: string;
+          icon?: string;
+          id?: string;
+          key?: string | null;
+          kind?: string;
+          name_en?: string | null;
+          name_hu?: string | null;
+          sort?: number;
+          user_id?: string | null;
+        };
+        Update: {
+          color_slot?: number;
+          created_at?: string;
+          icon?: string;
+          id?: string;
+          key?: string | null;
+          kind?: string;
+          name_en?: string | null;
+          name_hu?: string | null;
+          sort?: number;
+          user_id?: string | null;
+        };
+        Relationships: [];
+      };
+      expenses: {
+        Row: {
+          amount: number;
+          category_id: string | null;
+          created_at: string;
+          currency: string;
+          id: string;
+          note: string | null;
+          spent_on: string;
+          user_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          amount: number;
+          category_id?: string | null;
+          created_at?: string;
+          currency?: string;
+          id?: string;
+          note?: string | null;
+          spent_on?: string;
+          user_id?: string;
+        };
+        Update: {
+          amount?: number;
+          category_id?: string | null;
+          created_at?: string;
+          currency?: string;
+          id?: string;
+          note?: string | null;
+          spent_on?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "expenses_category_id_fkey";
+            columns: ["category_id"];
+            isOneToOne: false;
+            referencedRelation: "categories";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      fx_rates: {
+        Row: {
+          as_of: string;
+          currency: string;
+          per_eur: number;
+        };
+        ComputedFields: never;
+        Insert: {
+          as_of: string;
+          currency: string;
+          per_eur: number;
+        };
+        Update: {
+          as_of?: string;
+          currency?: string;
+          per_eur?: number;
+        };
+        Relationships: [];
+      };
+      goal_contributions: {
+        Row: {
+          amount: number;
+          contributed_on: string;
+          created_at: string;
+          goal_id: string;
+          id: string;
+          note: string | null;
+          user_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          amount: number;
+          contributed_on?: string;
+          created_at?: string;
+          goal_id: string;
+          id?: string;
+          note?: string | null;
+          user_id?: string;
+        };
+        Update: {
+          amount?: number;
+          contributed_on?: string;
+          created_at?: string;
+          goal_id?: string;
+          id?: string;
+          note?: string | null;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "goal_contributions_goal_id_fkey";
+            columns: ["goal_id"];
+            isOneToOne: false;
+            referencedRelation: "savings_goals";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      news_items: {
+        Row: {
+          expires_at: string;
+          fetched_at: string;
+          id: string;
+          image_url: string | null;
+          is_hidden: boolean;
+          published_at: string;
+          score: number;
+          snippet: string | null;
+          source_key: string;
+          title: string;
+          topic: string;
+          url: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          expires_at: string;
+          fetched_at?: string;
+          id?: string;
+          image_url?: string | null;
+          is_hidden?: boolean;
+          published_at: string;
+          score?: number;
+          snippet?: string | null;
+          source_key: string;
+          title: string;
+          topic: string;
+          url: string;
+        };
+        Update: {
+          expires_at?: string;
+          fetched_at?: string;
+          id?: string;
+          image_url?: string | null;
+          is_hidden?: boolean;
+          published_at?: string;
+          score?: number;
+          snippet?: string | null;
+          source_key?: string;
+          title?: string;
+          topic?: string;
+          url?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "news_items_source_key_fkey";
+            columns: ["source_key"];
+            isOneToOne: false;
+            referencedRelation: "news_sources";
+            referencedColumns: ["key"];
+          },
+        ];
+      };
+      news_reports: {
+        Row: {
+          created_at: string;
+          id: string;
+          news_id: string;
+          reason: string;
+          user_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          created_at?: string;
+          id?: string;
+          news_id: string;
+          reason: string;
+          user_id?: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          news_id?: string;
+          reason?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "news_reports_news_id_fkey";
+            columns: ["news_id"];
+            isOneToOne: false;
+            referencedRelation: "news_items";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      news_sources: {
+        Row: {
+          enabled: boolean;
+          etag: string | null;
+          feed_url: string;
+          home_url: string;
+          key: string;
+          last_error: string | null;
+          last_fetched_at: string | null;
+          last_modified: string | null;
+          last_status: number | null;
+          license_note: string | null;
+          name: string;
+          topic_hint: string | null;
+        };
+        ComputedFields: never;
+        Insert: {
+          enabled?: boolean;
+          etag?: string | null;
+          feed_url: string;
+          home_url: string;
+          key: string;
+          last_error?: string | null;
+          last_fetched_at?: string | null;
+          last_modified?: string | null;
+          last_status?: number | null;
+          license_note?: string | null;
+          name: string;
+          topic_hint?: string | null;
+        };
+        Update: {
+          enabled?: boolean;
+          etag?: string | null;
+          feed_url?: string;
+          home_url?: string;
+          key?: string;
+          last_error?: string | null;
+          last_fetched_at?: string | null;
+          last_modified?: string | null;
+          last_status?: number | null;
+          license_note?: string | null;
+          name?: string;
+          topic_hint?: string | null;
+        };
+        Relationships: [];
+      };
+      notifications: {
+        Row: {
+          attempts: number;
+          channel: string;
+          claimed_at: string | null;
+          created_at: string;
+          dedupe_key: string;
+          id: string;
+          kind: string;
+          last_error: string | null;
+          next_attempt_at: string | null;
+          occurrence_id: string | null;
+          payload: NonNullable<Json>;
+          read_at: string | null;
+          reminder_id: string | null;
+          scheduled_for: string;
+          sent_at: string | null;
+          status: string;
+          user_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          attempts?: number;
+          channel: string;
+          claimed_at?: string | null;
+          created_at?: string;
+          dedupe_key: string;
+          id?: string;
+          kind: string;
+          last_error?: string | null;
+          next_attempt_at?: string | null;
+          occurrence_id?: string | null;
+          payload?: NonNullable<Json>;
+          read_at?: string | null;
+          reminder_id?: string | null;
+          scheduled_for: string;
+          sent_at?: string | null;
+          status?: string;
+          user_id: string;
+        };
+        Update: {
+          attempts?: number;
+          channel?: string;
+          claimed_at?: string | null;
+          created_at?: string;
+          dedupe_key?: string;
+          id?: string;
+          kind?: string;
+          last_error?: string | null;
+          next_attempt_at?: string | null;
+          occurrence_id?: string | null;
+          payload?: NonNullable<Json>;
+          read_at?: string | null;
+          reminder_id?: string | null;
+          scheduled_for?: string;
+          sent_at?: string | null;
+          status?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "notifications_occurrence_id_fkey";
+            columns: ["occurrence_id"];
+            isOneToOne: false;
+            referencedRelation: "occurrences";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "notifications_reminder_id_fkey";
+            columns: ["reminder_id"];
+            isOneToOne: false;
+            referencedRelation: "reminders";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      occurrences: {
+        Row: {
+          amount: number;
+          created_at: string;
+          currency: string;
+          due_date: string;
+          id: string;
+          paid_amount: number | null;
+          paid_at: string | null;
+          paid_on: string | null;
+          reminder_id: string;
+          snoozed_until: string | null;
+          status: string;
+          user_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          amount: number;
+          created_at?: string;
+          currency: string;
+          due_date: string;
+          id?: string;
+          paid_amount?: number | null;
+          paid_at?: string | null;
+          paid_on?: string | null;
+          reminder_id: string;
+          snoozed_until?: string | null;
+          status?: string;
+          user_id: string;
+        };
+        Update: {
+          amount?: number;
+          created_at?: string;
+          currency?: string;
+          due_date?: string;
+          id?: string;
+          paid_amount?: number | null;
+          paid_at?: string | null;
+          paid_on?: string | null;
+          reminder_id?: string;
+          snoozed_until?: string | null;
+          status?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "occurrences_reminder_id_fkey";
+            columns: ["reminder_id"];
+            isOneToOne: false;
+            referencedRelation: "reminders";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      profiles: {
+        Row: {
+          avatar_path: string | null;
+          base_currency: string;
+          channel_email: boolean;
+          channel_push: boolean;
+          created_at: string;
+          default_notify_time: string;
+          default_offsets: number[];
+          display_name: string | null;
+          ics_token: string;
+          id: string;
+          locale: string;
+          monthly_income: number | null;
+          news_enabled: boolean;
+          notify_hide_details: boolean;
+          onboarding_done: boolean;
+          reminders_enabled: boolean;
+          theme: string;
+          timezone: string;
+          tips_enabled: boolean;
+          updated_at: string;
+          weekly_digest: boolean;
+        };
+        ComputedFields: never;
+        Insert: {
+          avatar_path?: string | null;
+          base_currency?: string;
+          channel_email?: boolean;
+          channel_push?: boolean;
+          created_at?: string;
+          default_notify_time?: string;
+          default_offsets?: number[];
+          display_name?: string | null;
+          ics_token?: string;
+          id: string;
+          locale?: string;
+          monthly_income?: number | null;
+          news_enabled?: boolean;
+          notify_hide_details?: boolean;
+          onboarding_done?: boolean;
+          reminders_enabled?: boolean;
+          theme?: string;
+          timezone?: string;
+          tips_enabled?: boolean;
+          updated_at?: string;
+          weekly_digest?: boolean;
+        };
+        Update: {
+          avatar_path?: string | null;
+          base_currency?: string;
+          channel_email?: boolean;
+          channel_push?: boolean;
+          created_at?: string;
+          default_notify_time?: string;
+          default_offsets?: number[];
+          display_name?: string | null;
+          ics_token?: string;
+          id?: string;
+          locale?: string;
+          monthly_income?: number | null;
+          news_enabled?: boolean;
+          notify_hide_details?: boolean;
+          onboarding_done?: boolean;
+          reminders_enabled?: boolean;
+          theme?: string;
+          timezone?: string;
+          tips_enabled?: boolean;
+          updated_at?: string;
+          weekly_digest?: boolean;
+        };
+        Relationships: [];
+      };
+      push_subscriptions: {
+        Row: {
+          auth: string;
+          created_at: string;
+          disabled_at: string | null;
+          endpoint: string;
+          failed_count: number;
+          id: string;
+          label: string | null;
+          last_seen_at: string;
+          last_success_at: string | null;
+          p256dh: string;
+          platform: string | null;
+          user_agent: string | null;
+          user_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          auth: string;
+          created_at?: string;
+          disabled_at?: string | null;
+          endpoint: string;
+          failed_count?: number;
+          id?: string;
+          label?: string | null;
+          last_seen_at?: string;
+          last_success_at?: string | null;
+          p256dh: string;
+          platform?: string | null;
+          user_agent?: string | null;
+          user_id?: string;
+        };
+        Update: {
+          auth?: string;
+          created_at?: string;
+          disabled_at?: string | null;
+          endpoint?: string;
+          failed_count?: number;
+          id?: string;
+          label?: string | null;
+          last_seen_at?: string;
+          last_success_at?: string | null;
+          p256dh?: string;
+          platform?: string | null;
+          user_agent?: string | null;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
+      reminders: {
+        Row: {
+          amount: number;
+          auto_paid: boolean;
+          category_id: string | null;
+          channels: string[];
+          created_at: string;
+          currency: string;
+          end_date: string | null;
+          id: string;
+          is_active: boolean;
+          is_subscription: boolean;
+          month_end: boolean;
+          name: string;
+          note: string | null;
+          recur_every: number;
+          recur_unit: string | null;
+          remind_enabled: boolean;
+          remind_offsets: number[];
+          remind_time: string;
+          service_slug: string | null;
+          start_date: string;
+          trial_ends_on: string | null;
+          updated_at: string;
+          url: string | null;
+          usage_tags: string[];
+          user_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          amount: number;
+          auto_paid?: boolean;
+          category_id?: string | null;
+          channels?: string[];
+          created_at?: string;
+          currency?: string;
+          end_date?: string | null;
+          id?: string;
+          is_active?: boolean;
+          is_subscription?: boolean;
+          month_end?: boolean;
+          name: string;
+          note?: string | null;
+          recur_every?: number;
+          recur_unit?: string | null;
+          remind_enabled?: boolean;
+          remind_offsets?: number[];
+          remind_time?: string;
+          service_slug?: string | null;
+          start_date: string;
+          trial_ends_on?: string | null;
+          updated_at?: string;
+          url?: string | null;
+          usage_tags?: string[];
+          user_id?: string;
+        };
+        Update: {
+          amount?: number;
+          auto_paid?: boolean;
+          category_id?: string | null;
+          channels?: string[];
+          created_at?: string;
+          currency?: string;
+          end_date?: string | null;
+          id?: string;
+          is_active?: boolean;
+          is_subscription?: boolean;
+          month_end?: boolean;
+          name?: string;
+          note?: string | null;
+          recur_every?: number;
+          recur_unit?: string | null;
+          remind_enabled?: boolean;
+          remind_offsets?: number[];
+          remind_time?: string;
+          service_slug?: string | null;
+          start_date?: string;
+          trial_ends_on?: string | null;
+          updated_at?: string;
+          url?: string | null;
+          usage_tags?: string[];
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "reminders_category_id_fkey";
+            columns: ["category_id"];
+            isOneToOne: false;
+            referencedRelation: "categories";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "reminders_service_slug_fkey";
+            columns: ["service_slug"];
+            isOneToOne: false;
+            referencedRelation: "service_catalog";
+            referencedColumns: ["slug"];
+          },
+        ];
+      };
+      savings_goals: {
+        Row: {
+          archived_at: string | null;
+          color_slot: number;
+          created_at: string;
+          currency: string;
+          icon: string;
+          id: string;
+          name: string;
+          target_amount: number;
+          target_date: string | null;
+          updated_at: string;
+          user_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          archived_at?: string | null;
+          color_slot?: number;
+          created_at?: string;
+          currency?: string;
+          icon?: string;
+          id?: string;
+          name: string;
+          target_amount: number;
+          target_date?: string | null;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Update: {
+          archived_at?: string | null;
+          color_slot?: number;
+          created_at?: string;
+          currency?: string;
+          icon?: string;
+          id?: string;
+          name?: string;
+          target_amount?: number;
+          target_date?: string | null;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
+      service_catalog: {
+        Row: {
+          annual_discount_pct: number | null;
+          category_key: string;
+          common_tags: string[];
+          family_plan: boolean;
+          group_key: string | null;
+          is_active: boolean;
+          logo_url: string | null;
+          name: string;
+          slug: string;
+          source_url: string | null;
+          typical_amount: number | null;
+          typical_currency: string | null;
+          typical_unit: string;
+          unique_tags: string[];
+          verified_at: string;
+          website: string | null;
+        };
+        ComputedFields: never;
+        Insert: {
+          annual_discount_pct?: number | null;
+          category_key: string;
+          common_tags?: string[];
+          family_plan?: boolean;
+          group_key?: string | null;
+          is_active?: boolean;
+          logo_url?: string | null;
+          name: string;
+          slug: string;
+          source_url?: string | null;
+          typical_amount?: number | null;
+          typical_currency?: string | null;
+          typical_unit?: string;
+          unique_tags?: string[];
+          verified_at: string;
+          website?: string | null;
+        };
+        Update: {
+          annual_discount_pct?: number | null;
+          category_key?: string;
+          common_tags?: string[];
+          family_plan?: boolean;
+          group_key?: string | null;
+          is_active?: boolean;
+          logo_url?: string | null;
+          name?: string;
+          slug?: string;
+          source_url?: string | null;
+          typical_amount?: number | null;
+          typical_currency?: string | null;
+          typical_unit?: string;
+          unique_tags?: string[];
+          verified_at?: string;
+          website?: string | null;
+        };
+        Relationships: [];
+      };
+      tips: {
+        Row: {
+          code: string;
+          created_at: string;
+          est_monthly_saving: number | null;
+          fingerprint: string;
+          id: string;
+          params: NonNullable<Json>;
+          reminder_ids: string[];
+          severity: string;
+          snoozed_until: string | null;
+          status: string;
+          updated_at: string;
+          user_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          code: string;
+          created_at?: string;
+          est_monthly_saving?: number | null;
+          fingerprint: string;
+          id?: string;
+          params?: NonNullable<Json>;
+          reminder_ids?: string[];
+          severity?: string;
+          snoozed_until?: string | null;
+          status?: string;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          code?: string;
+          created_at?: string;
+          est_monthly_saving?: number | null;
+          fingerprint?: string;
+          id?: string;
+          params?: NonNullable<Json>;
+          reminder_ids?: string[];
+          severity?: string;
+          snoozed_until?: string | null;
+          status?: string;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
+    };
+    Views: {
+      [_ in never]: never;
+    };
+    Functions: {
+      is_valid_timezone: { Args: { tz: string }; Returns: boolean };
+    };
+    Enums: {
+      [_ in never]: never;
+    };
+    CompositeTypes: {
+      [_ in never]: never;
+    };
+  };
+};
+
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">;
+
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">];
+
+export type Tables<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
+  }
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    : never) = never,
+> = DefaultSchemaTableNameOrOptions extends { schema: keyof DatabaseWithoutInternals }
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R;
+    }
+    ? R
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] & DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
+        Row: infer R;
+      }
+      ? R
+      : never
+    : never;
+
+export type TablesInsert<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never) = never,
+> = DefaultSchemaTableNameOrOptions extends { schema: keyof DatabaseWithoutInternals }
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I;
+    }
+    ? I
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Insert: infer I;
+      }
+      ? I
+      : never
+    : never;
+
+export type TablesUpdate<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never) = never,
+> = DefaultSchemaTableNameOrOptions extends { schema: keyof DatabaseWithoutInternals }
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U;
+    }
+    ? U
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Update: infer U;
+      }
+      ? U
+      : never
+    : never;
+
+export type Enums<
+  DefaultSchemaEnumNameOrOptions extends
+    | keyof DefaultSchema["Enums"]
+    | { schema: keyof DatabaseWithoutInternals },
+  EnumName extends (DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    : never) = never,
+> = DefaultSchemaEnumNameOrOptions extends { schema: keyof DatabaseWithoutInternals }
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
+    : never;
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof DatabaseWithoutInternals },
+  CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
+  }
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never) = never,
+> = PublicCompositeTypeNameOrOptions extends { schema: keyof DatabaseWithoutInternals }
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+    : never;
+
+export const Constants = {
+  public: {
+    Enums: {},
+  },
+} as const;
