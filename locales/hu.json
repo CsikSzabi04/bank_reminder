@@ -166,7 +166,87 @@
       "notify": "Értesítés",
       "when": "Mikor szóljunk?",
       "sameDay": "aznap",
-      "daysBefore": "{n, plural, one {# nappal előtte} other {# nappal előtte}}"
+      "daysBefore": "{n, plural, one {# nappal előtte} other {# nappal előtte}}",
+      "titleNew": "Új emlékeztető",
+      "titleEdit": "Emlékeztető szerkesztése",
+      "name": "Név",
+      "namePlaceholder": "pl. Netflix, Áram, Albérlet",
+      "amount": "Összeg",
+      "currency": "Pénznem",
+      "category": "Kategória",
+      "categoryNone": "Nincs kategória",
+      "serviceList": "Javaslatok a katalógusból",
+      "recurrence": {
+        "label": "Ismétlődés",
+        "once": "Egyszeri",
+        "week": "Hetente",
+        "month": "Havonta",
+        "year": "Évente",
+        "custom": "Egyéni",
+        "every": "Minden",
+        "unit": "Egység",
+        "unitDay": "{n, plural, one {nap} other {nap}}",
+        "unitWeek": "{n, plural, one {hét} other {hét}}",
+        "unitMonth": "{n, plural, one {hónap} other {hónap}}",
+        "unitYear": "{n, plural, one {év} other {év}}"
+      },
+      "firstDue": "Első esedékesség",
+      "monthEnd": "A hónap utolsó napja",
+      "preview": {
+        "next": "Következő: {dates}",
+        "loading": "Számolás…",
+        "none": "Nincs előnézet ehhez a beállításhoz.",
+        "past": "Az első esedékesség már elmúlt.",
+        "suggestion": "Javaslat: {date}",
+        "apply": "Beállítom"
+      },
+      "notifySection": "Értesítés",
+      "offsets": "Mikor szóljunk?",
+      "offsetCustom": "Egyéni (nap)",
+      "offsetAdd": "Hozzáadás",
+      "offsetsFull": "Legfeljebb {max} időpont adható meg.",
+      "time": "Idő",
+      "channels": "Csatornák",
+      "channelPush": "Push",
+      "channelEmail": "E-mail",
+      "more": "Továbbiak",
+      "subscription": "Előfizetés",
+      "trialEnds": "Ingyenes próba vége",
+      "autoPaid": "Csoportos beszedés — automatikusan kifizetettnek jelölöm",
+      "endDate": "Lezárás dátuma",
+      "note": "Megjegyzés",
+      "noteWarning": "Ne írj ide jelszót vagy számlaszámot.",
+      "url": "Link",
+      "usage": "Mit használsz ebben?",
+      "usageTag": {
+        "movies": "Filmek",
+        "series": "Sorozatok",
+        "originals": "Saját eredeti műsorok",
+        "sports": "Sport",
+        "kids": "Gyerek",
+        "documentary": "Dokumentum",
+        "music": "Zene",
+        "other": "Egyéb"
+      },
+      "save": "Mentés",
+      "saving": "Mentés…",
+      "saveFailed": "Nem sikerült menteni. Próbáld újra.",
+      "error": {
+        "required": "Ezt a mezőt ki kell töltened.",
+        "tooLong": "Ez a szöveg túl hosszú.",
+        "amountInvalid": "Adj meg érvényes összeget (pl. 2 300 vagy 2300,50).",
+        "amountNegative": "Az összeg nem lehet negatív.",
+        "invalidCurrency": "Válassz pénznemet.",
+        "invalidDate": "Adj meg érvényes dátumot.",
+        "startInPast": "Új emlékeztetőnél az első esedékesség nem lehet a múltban.",
+        "endBeforeStart": "A lezárás nem lehet az első esedékesség előtt.",
+        "tooManyOffsets": "Legfeljebb 5 időpontot adhatsz meg.",
+        "offsetRange": "Az időpont 0 és 30 nap közötti lehet.",
+        "invalidTime": "Adj meg érvényes időt.",
+        "urlInvalid": "A link http:// vagy https:// címmel kezdődjön.",
+        "noteTooLong": "A megjegyzés legfeljebb 500 karakter lehet.",
+        "invalid": "Ez az érték nem érvényes."
+      }
     },
     "status": {
       "upcoming": "Esedékes",
@@ -186,6 +266,99 @@
       "year": "{n, plural, one {évente} other {# évente}}",
       "monthlyOn": "{day}. napján",
       "monthEnd": "hónap utolsó napján"
+    },
+    "title": "Emlékeztetők",
+    "list": {
+      "search": "Keresés",
+      "searchPlaceholder": "Keresés név szerint",
+      "filterLabel": "Szűrők",
+      "filter": {
+        "all": "Mind",
+        "bills": "Számlák",
+        "subscriptions": "Előfizetések",
+        "overdue": "Lejárt"
+      },
+      "sort": {
+        "label": "Rendezés",
+        "due": "Esedékesség",
+        "amount": "Összeg",
+        "name": "Név"
+      },
+      "groups": {
+        "overdue": "Lejárt",
+        "thisWeek": "Ezen a héten",
+        "laterThisMonth": "Később ebben a hónapban",
+        "nextMonth": "Jövő hónap",
+        "later": "Később",
+        "paused": "Szüneteltetett",
+        "done": "Lezárt"
+      },
+      "count": "{count, plural, one {# tétel} other {# tétel}}",
+      "noResults": "Nincs találat",
+      "noResultsBody": "Próbálj másik keresést vagy szűrőt.",
+      "loadDemo": "Minta-adatok betöltése",
+      "loadDemoHint": "Kipróbálhatod az appot kitalált mintatételekkel — bármikor törölhetők.",
+      "demoLoaded": "Betöltöttük a minta-adatokat.",
+      "clearDemo": "Minta-adatok törlése",
+      "demoCleared": "A minta-adatok törölve.",
+      "demoFailed": "Nem sikerült a minta-adatok kezelése. Próbáld újra.",
+      "quickAdd": "Gyors hozzáadás",
+      "notifyToggle": "Értesítés: {name}"
+    },
+    "menu": {
+      "open": "Műveletek: {name}",
+      "edit": "Szerkesztés",
+      "snooze": "Később emlékeztess",
+      "snooze1": "Holnap",
+      "snooze3": "3 nap múlva",
+      "snooze7": "Egy hét múlva",
+      "skip": "Kihagyás",
+      "pause": "Szüneteltetés",
+      "resume": "Folytatás",
+      "delete": "Törlés",
+      "deleteTitle": "Törlöd az emlékeztetőt?",
+      "deleteBody": "Az esedékességek és a hozzájuk tartozó értesítések is törlődnek. Ez nem vonható vissza."
+    },
+    "toast": {
+      "skipped": "{name}: kihagyva",
+      "snoozed": "{name}: később emlékeztetünk",
+      "paused": "{name}: szüneteltetve",
+      "resumed": "{name}: újra aktív",
+      "deleted": "{name}: törölve",
+      "notifyOn": "Értesítés bekapcsolva",
+      "notifyOff": "Értesítés kikapcsolva",
+      "failed": "Nem sikerült. Próbáld újra."
+    },
+    "quickAdd": {
+      "electricity": "Áram",
+      "gas": "Gáz",
+      "internet": "Internet",
+      "phone": "Telefon",
+      "rent": "Albérlet"
+    },
+    "detail": {
+      "back": "Vissza az emlékeztetőkhöz",
+      "next": "Következő esedékesség",
+      "nothingDue": "Nincs több esedékesség",
+      "upcoming": "Következő esedékességek",
+      "history": "Előzmények",
+      "historyEmpty": "Még nincs előzmény.",
+      "priceUp": "Drágult: {pct}",
+      "priceDown": "Olcsóbb lett: {pct}",
+      "paidOn": "Fizetve: {date}",
+      "paidAmount": "Befizetett összeg: {amount}",
+      "details": "Részletek",
+      "category": "Kategória",
+      "recurrence": "Ismétlődés",
+      "notify": "Értesítés",
+      "notifyDisabled": "kikapcsolva",
+      "trialEnds": "Ingyenes próba vége",
+      "autoPaid": "Csoportos beszedés (automatikusan kifizetettnek jelölve)",
+      "link": "Link",
+      "note": "Megjegyzés",
+      "subscription": "Előfizetés",
+      "paused": "Szüneteltetve",
+      "edit": "Szerkesztés"
     }
   },
   "analytics": {},
@@ -275,7 +448,17 @@
       "step2": "Válaszd: Kezdőképernyőhöz adás"
     }
   },
-  "errors": {},
+  "errors": {
+    "notFound": {
+      "title": "Nem találjuk az oldalt",
+      "body": "A keresett oldal nem létezik, vagy nincs hozzáférésed hozzá.",
+      "home": "Vissza a főoldalra"
+    },
+    "generic": {
+      "title": "Hopp, valami elromlott",
+      "body": "Nem a te hibád. Próbáld újra, vagy térj vissza a főoldalra."
+    }
+  },
   "insights": {},
   "legal": {
     "draft": "TERVEZET — ez a szöveg még nem végleges, és nem minősül jogi tanácsnak. A végleges szöveget az üzemeltető hagyja jóvá.",

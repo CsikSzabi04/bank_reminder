@@ -17,6 +17,10 @@ describe("dueTone", () => {
     expect(dueTone("paid", "2026-01-01", today)).toBe("paid");
     expect(dueTone("skipped", "2026-01-01", today)).toBe("skipped");
   });
+  it("szüneteltetett és lezárt emlékeztető: saját tónus, a dátumtól függetlenül", () => {
+    expect(dueTone("paused", "2026-01-01", today)).toBe("paused");
+    expect(dueTone("done", "2026-01-01", today)).toBe("done");
+  });
   it("lejárt: tegnap vagy régebbi", () => {
     expect(dueTone("upcoming", "2026-10-12", today)).toBe("overdue");
   });

@@ -74,3 +74,10 @@ export function formatRelativeDay(dueDate: string, today: string, locale: Locale
   const diff = dayNumber(dueDate) - dayNumber(today);
   return new Intl.RelativeTimeFormat(DATE_LOCALE[locale], { numeric: "auto" }).format(diff, "day");
 }
+
+// Rövid dátum előnézetekhez ("nov. 10."); a napot nem csúsztatja az időzóna
+export function formatShortDate(isoDate: string, locale: Locale): string {
+  return new Intl.DateTimeFormat(DATE_LOCALE[locale], { month: "short", day: "numeric", timeZone: "UTC" }).format(
+    new Date(`${isoDate}T00:00:00Z`),
+  );
+}

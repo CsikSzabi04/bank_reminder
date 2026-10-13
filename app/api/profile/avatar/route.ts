@@ -60,7 +60,9 @@ export async function POST(request: NextRequest) {
   const bucket = supabase.storage.from(AVATAR_BUCKET);
   const { error: uploadError } = await bucket.upload(path, output, {
     contentType: "image/webp",
-    cacheControl: "31536000", // a fájlnév UUID: új feltöltés = új URL, a régi örökre cache-elhető
+    // A fájlnév UUID (új feltöltés = új URL), de a CDN a törölt fájlt is a cache-élettartamig kiszolgálná:
+    // rövid TTL, hogy a törlés (adatvédelem, §19.4) óra-nagyságrendben érvényesüljön.
+    cacheControl: "3600",
     upsert: false,
   });
   if (uploadError) return fail(502, "upstream_failed");

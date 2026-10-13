@@ -16,6 +16,7 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test --project=e2e-mobile --project=e2e-desktop",
     "test:e2e:prod": "node scripts/e2e-prod.mjs",
+    "test:e2e:authed": "playwright test --project=authed --workers=1",
     "test:a11y": "playwright test --project=a11y",
     "db:setup": "npm --prefix scripts install --no-audit --no-fund",
     "db:assert": "node scripts/db.mjs assert",

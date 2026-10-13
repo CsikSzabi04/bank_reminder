@@ -17,7 +17,8 @@ export function Fab() {
     <Link
       href="/reminders/new"
       aria-label={t("new")}
-      className="fixed right-4 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-30 flex size-14 items-center justify-center rounded-full bg-primary text-primary-fg shadow-card md:bottom-6 md:right-6 lg:right-8"
+      // asztalon (≥1024) a fejlécben van "Új emlékeztető" gomb, a FAB ott eltakarná a sorok műveleteit
+      className="fixed right-4 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-30 flex size-14 items-center justify-center rounded-full bg-primary text-primary-fg shadow-card md:bottom-6 md:right-6 lg:hidden"
     >
       <Plus className="size-6" aria-hidden />
     </Link>

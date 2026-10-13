@@ -5,6 +5,7 @@ import {
   formatMoneyCompact,
   formatPercent,
   formatRelativeDay,
+  formatShortDate,
   todayIn,
 } from "@/lib/format";
 
@@ -75,5 +76,13 @@ describe("formatRelativeDay", () => {
   });
   it("óraátállítás napján sem csúszik (naptári napok különbsége)", () => {
     expect(formatRelativeDay("2026-10-26", "2026-10-25", "en")).toBe("tomorrow");
+  });
+});
+
+describe("formatShortDate", () => {
+  it("rövid, időzóna-független", () => {
+    expect(norm(formatShortDate("2026-11-10", "hu"))).toBe("nov. 10.");
+    expect(norm(formatShortDate("2026-11-10", "en"))).toBe("10 Nov");
+    expect(norm(formatShortDate("2026-01-01", "hu"))).toBe("jan. 1.");
   });
 });

@@ -91,7 +91,7 @@ describe("POST /api/profile/avatar", () => {
 
     const [path, buffer, options] = state.upload.mock.calls[0];
     expect(path).toMatch(/^user-1\/[0-9a-f-]{36}\.webp$/);
-    expect(options).toMatchObject({ contentType: "image/webp", upsert: false });
+    expect(options).toMatchObject({ contentType: "image/webp", upsert: false, cacheControl: "3600" });
     const meta = await sharp(buffer).metadata();
     expect(meta.format).toBe("webp");
     expect([meta.width, meta.height]).toEqual([256, 256]);

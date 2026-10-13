@@ -10,6 +10,10 @@
 - 2026-10-13 · Toast: saját `ToastProvider` (nincs `sonner`) · alternatíva: sonner (ADR-02) · a sonner futásidőben `<style>`-t injektál, ami a nonce-os CSP-vel (§9.6) ütközik; a saját változat ~100 sor, aria-live, Visszavonás-gomb · AI-B.
 - 2026-10-13 · `i18n:check` ICU-elemző: beágyazást kezelő (a plural-ágak puszta szava nem argumentum) · AI-B.
 - 2026-10-13 · Kategória-ikonok statikus lucide-térképből (`lib/category-icons.ts`), nem `lucide-react/dynamic` · csak a használt ikonok kerülnek a csomagba · AI-B.
+- 2026-10-13 · Űrlapok `react-hook-form` NÉLKÜL (auth + emlékeztető): natív `<form action>` + `useActionState` + zod a szerveren (a szerver a forrás-igazság) · alternatíva: RHF (ADR-05) · kevesebb függőség/kliens-JS, a szerver-hibák mezőre képezése egységes; az élő előnézet külön szerver-akció · AI-B.
+- 2026-10-13 · Emlékeztető-űrlap: a kategória `<select>` (nem chip-sor, §14.6) · ~20 számla-kategória chipként zsúfolt lenne; natív választó mobilon is jó · AI-B.
+- 2026-10-13 · Profilkép `cacheControl: 3600` (nem 1 év) · a Supabase CDN a törölt publikus fájlt a TTL-ig kiszolgálja; a törlés (§19.4) óra-nagyságrendben érvényesüljön · AI-B.
+- 2026-10-13 · Authentikált e2e: külön `authed` projekt, **csak `--workers=1`** (közös teszt-fiók + megosztott refresh-token session), a `setup` alaphelyzetbe állítja a fiókot · AI-B.
 - 2026-10-13 · Migrációk futtatása: Supabase CLI (`npx supabase db push --db-url`), mert nincs Docker/psql/deno a gépen · pgTAP helyett (amíg nincs helyi DB) sima-SQL `do $$ assert … $$` tesztek tranzakcióban, ROLLBACK-kel.
 - 2026-10-13 · Analitika: számla a lejárati hónaphoz tartozik (nem a kifizetés hónapjához) · alternatíva: `paid_on` szerint (§15.2 eredeti) · átcsúszó tételek nélkül stabil havi összegek · AI-A (CONTRACT_CHANGES-ben egyeztetve).
 - 2026-10-13 · DB-tesztek: sima SQL `do $$ assert … $$` ROLLBACK-kel (`npm run db:test`) pgTAP helyett · nincs Docker a gépen; mutációval ellenőrizve, hogy a tesztek valóban bukni tudnak.

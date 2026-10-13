@@ -55,6 +55,16 @@ describe("BillRow", () => {
     expect(screen.getByText("Netflix")).toHaveClass("line-through");
   });
 
+  it("szüneteltetett és lezárt sor: állapotszöveg, nem „lejárt”", () => {
+    const { unmount } = renderRow({ status: "paused", dueDate: "2026-01-01" });
+    expect(screen.getByRole("listitem")).toHaveTextContent("Szüneteltetett");
+    expect(screen.getByRole("listitem")).not.toHaveTextContent("Lejárt");
+    unmount();
+    renderRow({ status: "done", dueDate: "2026-01-01" });
+    expect(screen.getByRole("listitem")).toHaveTextContent("Lezárt");
+    expect(screen.getByRole("listitem")).not.toHaveTextContent("Lejárt");
+  });
+
   it("távoli dátum konkrét dátumként jelenik meg, nem „42 nap múlva”", () => {
     renderRow({ dueDate: "2027-03-02" });
     expect(norm(screen.getByRole("listitem").textContent)).toContain("2027. márc. 2.");

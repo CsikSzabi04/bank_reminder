@@ -50,14 +50,19 @@ export function BillRow({
       <span className="min-w-0 flex-1">
         <span className="flex items-center gap-2">
           <span className={cn("truncate font-medium", status === "skipped" && "text-text-2 line-through")}>{name}</span>
-          {demo && (
-            <span className="shrink-0 rounded-full bg-primary-soft px-2 py-0.5 text-[11px] font-medium text-primary-text">
-              {t("demoBadge")}
-            </span>
-          )}
           {notifyOff && <BellOff aria-label={t("notifyOff")} role="img" className="size-3.5 shrink-0 text-text-muted" />}
         </span>
-        {subtitle && <span className="block truncate text-sm text-text-2">{subtitle}</span>}
+        {(subtitle || demo) && (
+          // a jelvény az alcím mellett (nem a név mellett): keskeny kijelzőn így a név nem csonkul
+          <span className="flex items-center gap-2 text-sm text-text-2">
+            {subtitle && <span className="truncate">{subtitle}</span>}
+            {demo && (
+              <span className="shrink-0 rounded-full bg-primary-soft px-2 py-0.5 text-[11px] font-medium text-primary-text">
+                {t("demoBadge")}
+              </span>
+            )}
+          </span>
+        )}
       </span>
       <span className="flex shrink-0 flex-col items-end">
         <AmountText amount={amount} currency={currency} className="font-medium" />
@@ -67,15 +72,16 @@ export function BillRow({
   );
 
   return (
-    <li className="flex items-center gap-2 px-4 py-3">
+    // keskeny kijelzőn a műveletek külön sorba törnek (jobbra igazítva), szélesen a sor végén vannak
+    <li className="flex flex-wrap items-center gap-x-2 gap-y-1 px-4 py-3">
       {href ? (
-        <Link href={href} className="-mx-2 flex min-w-0 flex-1 items-center gap-3 rounded-control px-2 py-1 hover:bg-surface-2">
+        <Link href={href} className="-mx-2 flex min-w-0 basis-full items-center gap-3 rounded-control px-2 py-1 hover:bg-surface-2 sm:flex-1 sm:basis-0">
           {main}
         </Link>
       ) : (
-        <div className="flex min-w-0 flex-1 items-center gap-3">{main}</div>
+        <div className="flex min-w-0 basis-full items-center gap-3 sm:flex-1 sm:basis-0">{main}</div>
       )}
-      {action}
+      {action && <div className="ml-auto flex items-center gap-1">{action}</div>}
     </li>
   );
 }

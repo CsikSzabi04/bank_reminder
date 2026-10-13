@@ -166,7 +166,87 @@
       "notify": "Notify me",
       "when": "When should we remind you?",
       "sameDay": "same day",
-      "daysBefore": "{n, plural, one {# day before} other {# days before}}"
+      "daysBefore": "{n, plural, one {# day before} other {# days before}}",
+      "titleNew": "New reminder",
+      "titleEdit": "Edit reminder",
+      "name": "Name",
+      "namePlaceholder": "e.g. Netflix, Electricity, Rent",
+      "amount": "Amount",
+      "currency": "Currency",
+      "category": "Category",
+      "categoryNone": "No category",
+      "serviceList": "Suggestions from the catalog",
+      "recurrence": {
+        "label": "Repeats",
+        "once": "One-time",
+        "week": "Weekly",
+        "month": "Monthly",
+        "year": "Yearly",
+        "custom": "Custom",
+        "every": "Every",
+        "unit": "Unit",
+        "unitDay": "{n, plural, one {day} other {days}}",
+        "unitWeek": "{n, plural, one {week} other {weeks}}",
+        "unitMonth": "{n, plural, one {month} other {months}}",
+        "unitYear": "{n, plural, one {year} other {years}}"
+      },
+      "firstDue": "First due date",
+      "monthEnd": "Last day of the month",
+      "preview": {
+        "next": "Next: {dates}",
+        "loading": "Calculating…",
+        "none": "No preview for this setup.",
+        "past": "The first due date has already passed.",
+        "suggestion": "Suggestion: {date}",
+        "apply": "Use it"
+      },
+      "notifySection": "Notifications",
+      "offsets": "When should we remind you?",
+      "offsetCustom": "Custom (days)",
+      "offsetAdd": "Add",
+      "offsetsFull": "You can set up to {max} reminders.",
+      "time": "Time",
+      "channels": "Channels",
+      "channelPush": "Push",
+      "channelEmail": "Email",
+      "more": "More options",
+      "subscription": "Subscription",
+      "trialEnds": "Free trial ends",
+      "autoPaid": "Direct debit — mark as paid automatically",
+      "endDate": "End date",
+      "note": "Note",
+      "noteWarning": "Don't write passwords or account numbers here.",
+      "url": "Link",
+      "usage": "What do you use it for?",
+      "usageTag": {
+        "movies": "Movies",
+        "series": "Series",
+        "originals": "Own originals",
+        "sports": "Sports",
+        "kids": "Kids",
+        "documentary": "Documentaries",
+        "music": "Music",
+        "other": "Other"
+      },
+      "save": "Save",
+      "saving": "Saving…",
+      "saveFailed": "Couldn't save. Please try again.",
+      "error": {
+        "required": "Please fill in this field.",
+        "tooLong": "This text is too long.",
+        "amountInvalid": "Enter a valid amount (e.g. 2,300 or 2300.50).",
+        "amountNegative": "The amount can't be negative.",
+        "invalidCurrency": "Choose a currency.",
+        "invalidDate": "Enter a valid date.",
+        "startInPast": "For a new reminder, the first due date can't be in the past.",
+        "endBeforeStart": "The end date can't be before the first due date.",
+        "tooManyOffsets": "You can set up to 5 reminder times.",
+        "offsetRange": "The reminder time must be between 0 and 30 days.",
+        "invalidTime": "Enter a valid time.",
+        "urlInvalid": "The link must start with http:// or https://.",
+        "noteTooLong": "The note can be at most 500 characters.",
+        "invalid": "This value isn't valid."
+      }
     },
     "status": {
       "upcoming": "Due",
@@ -186,6 +266,99 @@
       "year": "{n, plural, one {yearly} other {every # years}}",
       "monthlyOn": "on the {day, selectordinal, one {#st} two {#nd} few {#rd} other {#th}}",
       "monthEnd": "on the last day of the month"
+    },
+    "title": "Reminders",
+    "list": {
+      "search": "Search",
+      "searchPlaceholder": "Search by name",
+      "filterLabel": "Filters",
+      "filter": {
+        "all": "All",
+        "bills": "Bills",
+        "subscriptions": "Subscriptions",
+        "overdue": "Overdue"
+      },
+      "sort": {
+        "label": "Sort",
+        "due": "Due date",
+        "amount": "Amount",
+        "name": "Name"
+      },
+      "groups": {
+        "overdue": "Overdue",
+        "thisWeek": "This week",
+        "laterThisMonth": "Later this month",
+        "nextMonth": "Next month",
+        "later": "Later",
+        "paused": "Paused",
+        "done": "Finished"
+      },
+      "count": "{count, plural, one {# item} other {# items}}",
+      "noResults": "No results",
+      "noResultsBody": "Try a different search or filter.",
+      "loadDemo": "Load sample data",
+      "loadDemoHint": "Try the app with made-up sample items — you can remove them anytime.",
+      "demoLoaded": "Sample data loaded.",
+      "clearDemo": "Remove sample data",
+      "demoCleared": "Sample data removed.",
+      "demoFailed": "Couldn't update the sample data. Please try again.",
+      "quickAdd": "Quick add",
+      "notifyToggle": "Notify: {name}"
+    },
+    "menu": {
+      "open": "Actions: {name}",
+      "edit": "Edit",
+      "snooze": "Remind me later",
+      "snooze1": "Tomorrow",
+      "snooze3": "In 3 days",
+      "snooze7": "In a week",
+      "skip": "Skip",
+      "pause": "Pause",
+      "resume": "Resume",
+      "delete": "Delete",
+      "deleteTitle": "Delete this reminder?",
+      "deleteBody": "Its due dates and the notifications that belong to them will be deleted too. This can't be undone."
+    },
+    "toast": {
+      "skipped": "{name}: skipped",
+      "snoozed": "{name}: we'll remind you later",
+      "paused": "{name}: paused",
+      "resumed": "{name}: active again",
+      "deleted": "{name}: deleted",
+      "notifyOn": "Notifications turned on",
+      "notifyOff": "Notifications turned off",
+      "failed": "Something went wrong. Please try again."
+    },
+    "quickAdd": {
+      "electricity": "Electricity",
+      "gas": "Gas",
+      "internet": "Internet",
+      "phone": "Phone",
+      "rent": "Rent"
+    },
+    "detail": {
+      "back": "Back to reminders",
+      "next": "Next due date",
+      "nothingDue": "No more due dates",
+      "upcoming": "Upcoming due dates",
+      "history": "History",
+      "historyEmpty": "No history yet.",
+      "priceUp": "Price went up: {pct}",
+      "priceDown": "Price went down: {pct}",
+      "paidOn": "Paid: {date}",
+      "paidAmount": "Amount paid: {amount}",
+      "details": "Details",
+      "category": "Category",
+      "recurrence": "Repeats",
+      "notify": "Notifications",
+      "notifyDisabled": "turned off",
+      "trialEnds": "Free trial ends",
+      "autoPaid": "Direct debit (marked as paid automatically)",
+      "link": "Link",
+      "note": "Note",
+      "subscription": "Subscription",
+      "paused": "Paused",
+      "edit": "Edit"
     }
   },
   "analytics": {},
@@ -275,7 +448,17 @@
       "step2": "Choose \"Add to Home Screen\""
     }
   },
-  "errors": {},
+  "errors": {
+    "notFound": {
+      "title": "We can't find that page",
+      "body": "The page doesn't exist, or you don't have access to it.",
+      "home": "Back to home"
+    },
+    "generic": {
+      "title": "Oops, something went wrong",
+      "body": "It's not you. Try again, or go back home."
+    }
+  },
   "insights": {},
   "legal": {
     "draft": "DRAFT — this text isn't final and isn't legal advice. The operator will approve the final version.",

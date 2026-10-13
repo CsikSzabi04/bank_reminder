@@ -9,19 +9,25 @@ type Props = Omit<InputHTMLAttributes<HTMLInputElement>, "id" | "className"> & {
   label: string;
   errors?: string[];
   adornment?: ReactNode;
+  /** a hibakód → szöveg leképezés (alapból az auth-hibák); az űrlapok sajátot adhatnak */
+  translateError?: (code: string | undefined) => string;
+  /** a címke melletti kiegészítő szöveg (pl. "opcionális") */
+  hint?: string;
 };
 
 // Címke + beviteli mező + hiba a mező alatt (aria-describedby, aria-invalid)
-export function TextField({ label, errors, adornment, ...input }: Props) {
+export function TextField({ label, errors, adornment, translateError, hint, ...input }: Props) {
   const id = useId();
   const errorId = `${id}-error`;
-  const errorText = useFieldErrorText();
+  const authErrorText = useFieldErrorText();
+  const errorText = translateError ?? authErrorText;
   const invalid = Boolean(errors?.length);
 
   return (
     <div className="flex flex-col gap-1.5">
       <label htmlFor={id} className="text-sm font-medium text-text-2">
         {label}
+        {hint && <span className="ml-2 font-normal text-text-muted">{hint}</span>}
       </label>
       <div className="relative">
         <input
