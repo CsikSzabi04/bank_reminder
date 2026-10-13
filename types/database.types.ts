@@ -782,6 +782,25 @@ export type Database = {
         };
         Relationships: [];
       };
+      tip_config: {
+        Row: {
+          key: string;
+          note: string | null;
+          value: number;
+        };
+        ComputedFields: never;
+        Insert: {
+          key: string;
+          note?: string | null;
+          value: number;
+        };
+        Update: {
+          key?: string;
+          note?: string | null;
+          value?: number;
+        };
+        Relationships: [];
+      };
       tips: {
         Row: {
           code: string;
@@ -827,6 +846,39 @@ export type Database = {
           user_id?: string;
         };
         Relationships: [];
+      };
+      usage_checks: {
+        Row: {
+          answered_at: string;
+          id: string;
+          reminder_id: string;
+          used: boolean;
+          user_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          answered_at?: string;
+          id?: string;
+          reminder_id: string;
+          used: boolean;
+          user_id?: string;
+        };
+        Update: {
+          answered_at?: string;
+          id?: string;
+          reminder_id?: string;
+          used?: boolean;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "usage_checks_reminder_id_fkey";
+            columns: ["reminder_id"];
+            isOneToOne: false;
+            referencedRelation: "reminders";
+            referencedColumns: ["id"];
+          },
+        ];
       };
     };
     Views: {
@@ -973,8 +1025,23 @@ export type Database = {
           total: number;
         }[];
       };
+      answer_usage_check: { Args: { p_reminder_id: string; p_used: boolean }; Returns: number };
       budget_status: {
         Args: { p_month?: string };
+        Returns: {
+          budget_id: string;
+          category_id: string;
+          committed: number;
+          forecast: number;
+          left: number;
+          monthly_limit: number;
+          spent: number;
+          state: string;
+          suggested_limit: number;
+        }[];
+      };
+      budget_status_for: {
+        Args: { p_month: string; p_today: string; p_user: string };
         Returns: {
           budget_id: string;
           category_id: string;
@@ -1028,6 +1095,7 @@ export type Database = {
         };
       };
       cleanup_old_data: { Args: Record<PropertyKey, never>; Returns: Json };
+      compute_tips: { Args: { p_now?: string; p_user: string }; Returns: number };
       dashboard_summary: { Args: { p_month?: string }; Returns: Json };
       enqueue_extra_notifications: { Args: { p_now?: string }; Returns: number };
       ensure_occurrences: {
@@ -1106,6 +1174,17 @@ export type Database = {
         };
       };
       month_start: { Args: { d: string }; Returns: string };
+      monthly_equivalent: {
+        Args: {
+          p_amount: number;
+          p_base: string;
+          p_currency: string;
+          p_every: number;
+          p_on: string;
+          p_unit: string;
+        };
+        Returns: number;
+      };
       occurrence_dates: {
         Args: {
           p_end?: string;
@@ -1138,6 +1217,8 @@ export type Database = {
         Args: { p_http: number; p_now?: string; p_sub: string };
         Returns: undefined;
       };
+      refresh_tips: { Args: Record<PropertyKey, never>; Returns: number };
+      refresh_tips_all: { Args: { p_now?: string }; Returns: number };
       register_push_subscription: {
         Args: {
           p_auth: string;
@@ -1217,6 +1298,30 @@ export type Database = {
           isSetofReturn: false;
         };
       };
+      tip_action: {
+        Args: { p_action: string; p_tip_id: string };
+        Returns: {
+          code: string;
+          created_at: string;
+          est_monthly_saving: number | null;
+          fingerprint: string;
+          id: string;
+          params: NonNullable<Json>;
+          reminder_ids: string[];
+          severity: string;
+          snoozed_until: string | null;
+          status: string;
+          updated_at: string;
+          user_id: string;
+        };
+        SetofOptions: {
+          from: "*";
+          to: "tips";
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
+      tip_cfg: { Args: { p_key: string }; Returns: number };
       unread_notifications: { Args: Record<PropertyKey, never>; Returns: number };
       unregister_push_subscription: { Args: { p_endpoint: string }; Returns: boolean };
       upcoming_days: {
