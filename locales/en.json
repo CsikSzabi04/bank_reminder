@@ -1,0 +1,127 @@
+{
+  "common": {
+    "appName": "Bank Reminder",
+    "undo": "Undo",
+    "retry": "Retry",
+    "close": "Close",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "loading": "Loading…",
+    "error": {
+      "generic": "Oops, something went wrong. Please try again."
+    },
+    "disclaimer": {
+      "notBank": "Bank Reminder isn't a bank or financial advisor. It can't access your bank account."
+    },
+    "theme": {
+      "label": "Theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "language": {
+      "label": "Language",
+      "hu": "Magyar",
+      "en": "English"
+    }
+  },
+  "nav": {
+    "primary": "Main navigation",
+    "skipToContent": "Skip to content",
+    "home": "Home",
+    "reminders": "Reminders",
+    "calendar": "Calendar",
+    "analytics": "Analytics",
+    "budgets": "Budgets",
+    "savings": "Savings",
+    "tips": "Tips",
+    "news": "News",
+    "more": "More",
+    "profile": "Profile",
+    "notifications": "Notifications"
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome back",
+      "submit": "Log in",
+      "stay": "Stay signed in",
+      "forgot": "Forgot password?"
+    },
+    "signup": {
+      "title": "Create your account",
+      "submit": "Sign up",
+      "accept": "I accept the Privacy Policy and Terms"
+    },
+    "checkEmail": {
+      "title": "Check your inbox 📬",
+      "body": "If this email isn't registered yet, we've sent a confirmation link. It's valid for 1 hour.",
+      "resend": "Resend email"
+    },
+    "error": {
+      "invalidCredentials": "Wrong email or password."
+    },
+    "reset": {
+      "sent": "If an account exists, we've emailed you a reset link."
+    }
+  },
+  "dashboard": {
+    "hello": "Hi, {name}!",
+    "monthTotal": "Monthly spending",
+    "upcoming": "Due soon"
+  },
+  "reminders": {
+    "new": "New reminder",
+    "pay": "Paid",
+    "snooze": "Later",
+    "overdue": "Overdue",
+    "dueTomorrow": "tomorrow",
+    "empty": {
+      "title": "No reminders yet",
+      "body": "Add your first in 20 seconds — we'll nudge you in time."
+    },
+    "form": {
+      "notify": "Notify me",
+      "when": "When should we remind you?",
+      "sameDay": "same day",
+      "daysBefore": "{n, plural, one {# day before} other {# days before}}"
+    }
+  },
+  "analytics": {},
+  "budgets": {
+    "left": "{amount} left",
+    "over": "{amount} over"
+  },
+  "savings": {},
+  "tips": {
+    "disclaimer": "Tips are estimates, not financial advice."
+  },
+  "news": {
+    "source": "Source: {name}",
+    "freshness": {
+      "fresh": "Fresh",
+      "stale": "May no longer be current"
+    },
+    "deal": {
+      "disclaimer": "Based on a news source — check the offer's terms and validity in store."
+    }
+  },
+  "notifications": {
+    "push": {
+      "enable": "Turn on notifications on this device",
+      "test": "Send a test notification",
+      "brave": "Brave blocks the push service by default — turn on \"Use Google services for push messaging\", then restart."
+    }
+  },
+  "profile": {},
+  "install": {
+    "cta": "Download the app",
+    "installed": "Installed ✔",
+    "ios": {
+      "step1": "Tap the Share icon",
+      "step2": "Choose \"Add to Home Screen\""
+    }
+  },
+  "errors": {},
+  "insights": {}
+}

@@ -1,0 +1,127 @@
+{
+  "common": {
+    "appName": "Bank Reminder",
+    "undo": "Visszavonás",
+    "retry": "Újra",
+    "close": "Bezárás",
+    "cancel": "Mégse",
+    "save": "Mentés",
+    "delete": "Törlés",
+    "loading": "Betöltés…",
+    "error": {
+      "generic": "Hopp, valami elromlott. Próbáld újra."
+    },
+    "disclaimer": {
+      "notBank": "A Bank Reminder nem bank és nem pénzügyi tanácsadó. Nem fér hozzá a bankszámládhoz."
+    },
+    "theme": {
+      "label": "Téma",
+      "light": "Világos",
+      "dark": "Sötét",
+      "system": "Rendszer"
+    },
+    "language": {
+      "label": "Nyelv",
+      "hu": "Magyar",
+      "en": "English"
+    }
+  },
+  "nav": {
+    "primary": "Fő navigáció",
+    "skipToContent": "Ugrás a tartalomhoz",
+    "home": "Főoldal",
+    "reminders": "Emlékeztetők",
+    "calendar": "Naptár",
+    "analytics": "Analitika",
+    "budgets": "Keretek",
+    "savings": "Megtakarítás",
+    "tips": "Tippek",
+    "news": "Hírek",
+    "more": "Még",
+    "profile": "Profil",
+    "notifications": "Értesítések"
+  },
+  "auth": {
+    "login": {
+      "title": "Üdv újra!",
+      "submit": "Belépés",
+      "stay": "Maradjak bejelentkezve",
+      "forgot": "Elfelejtett jelszó?"
+    },
+    "signup": {
+      "title": "Hozd létre a fiókodat",
+      "submit": "Regisztráció",
+      "accept": "Elfogadom az Adatkezelési tájékoztatót és az ÁSZF-et"
+    },
+    "checkEmail": {
+      "title": "Nézd meg a leveled 📬",
+      "body": "Ha az e-mail cím még nincs regisztrálva, küldtünk egy megerősítő levelet. A link 1 óráig érvényes.",
+      "resend": "Levél újraküldése"
+    },
+    "error": {
+      "invalidCredentials": "Hibás e-mail vagy jelszó."
+    },
+    "reset": {
+      "sent": "Ha létezik ilyen fiók, küldtünk egy levelet a visszaállításhoz."
+    }
+  },
+  "dashboard": {
+    "hello": "Szia, {name}!",
+    "monthTotal": "Havi kiadás",
+    "upcoming": "Hamarosan esedékes"
+  },
+  "reminders": {
+    "new": "Új emlékeztető",
+    "pay": "Kifizettem",
+    "snooze": "Később",
+    "overdue": "Lejárt",
+    "dueTomorrow": "holnap",
+    "empty": {
+      "title": "Még nincs emlékeztetőd",
+      "body": "Vedd fel az elsőt 20 másodperc alatt — és mi időben szólunk."
+    },
+    "form": {
+      "notify": "Értesítés",
+      "when": "Mikor szóljunk?",
+      "sameDay": "aznap",
+      "daysBefore": "{n, plural, one {# nappal előtte} other {# nappal előtte}}"
+    }
+  },
+  "analytics": {},
+  "budgets": {
+    "left": "{amount} maradt",
+    "over": "{amount} túllépés"
+  },
+  "savings": {},
+  "tips": {
+    "disclaimer": "A tippek becslések, nem pénzügyi tanácsadás."
+  },
+  "news": {
+    "source": "Forrás: {name}",
+    "freshness": {
+      "fresh": "Friss",
+      "stale": "Lehet, hogy már nem aktuális"
+    },
+    "deal": {
+      "disclaimer": "Hírforrás alapján — az akció feltételeit és érvényességét ellenőrizd az üzletnél."
+    }
+  },
+  "notifications": {
+    "push": {
+      "enable": "Értesítések bekapcsolása ezen az eszközön",
+      "test": "Teszt-értesítés küldése",
+      "brave": "A Brave alapból tiltja a push-szolgáltatást — kapcsold be a „Use Google services for push messaging” beállítást, majd indítsd újra."
+    }
+  },
+  "profile": {},
+  "install": {
+    "cta": "Alkalmazás letöltése",
+    "installed": "Telepítve ✔",
+    "ios": {
+      "step1": "Koppints a Megosztás ikonra",
+      "step2": "Válaszd: Kezdőképernyőhöz adás"
+    }
+  },
+  "errors": {},
+  "insights": {}
+}

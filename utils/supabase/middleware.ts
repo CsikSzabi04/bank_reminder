@@ -1,4 +1,5 @@
 import { createServerClient } from "@supabase/ssr";
+import type { Database } from "@/types/database.types";
 import { NextResponse, type NextRequest } from "next/server";
 import { applyPersistence, REMEMBER_COOKIE } from "@/lib/auth/persist";
 import { getSupabaseEnv } from "./env";
@@ -10,7 +11,7 @@ export async function updateSession(request: NextRequest) {
   const remember = request.cookies.get(REMEMBER_COOKIE)?.value !== "0";
   let response = NextResponse.next({ request });
 
-  const supabase = createServerClient(url, key, {
+  const supabase = createServerClient<Database>(url, key, {
     cookies: {
       getAll: () => request.cookies.getAll(),
       setAll(cookiesToSet, headers) {
