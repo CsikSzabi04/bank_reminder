@@ -8,6 +8,8 @@ import {
   formatMonth,
   formatShortDate,
   formatTime,
+  formatMonthShort,
+  formatCompactNumber,
   todayIn,
 } from "@/lib/format";
 
@@ -102,5 +104,16 @@ describe("formatTime", () => {
     expect(formatTime("2026-10-13T07:00:00Z", "hu", "Europe/Budapest")).toBe("09:00");
     expect(formatTime("2026-11-10T08:00:00Z", "hu", "Europe/Budapest")).toBe("09:00");
     expect(formatTime("2026-10-13T23:30:00Z", "en", "UTC")).toBe("23:30");
+  });
+});
+
+describe("formatMonthShort / formatCompactNumber", () => {
+  it("rövid hónapnév a nyelv szerint, időzóna-független", () => {
+    expect(formatMonthShort("2026-10-01", "en")).toBe("Oct");
+    expect(formatMonthShort("2026-10-01", "hu")).toMatch(/^okt/);
+  });
+  it("kompakt szám pénznem nélkül", () => {
+    expect(formatCompactNumber(1200, "en")).toBe("1.2K");
+    expect(formatCompactNumber(50, "en")).toBe("50");
   });
 });

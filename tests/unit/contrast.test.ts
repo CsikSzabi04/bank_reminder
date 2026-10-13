@@ -48,6 +48,8 @@ const PAIRS: Pair[] = [
   { fg: "primary", bg: "surface", min: 4.5 },
   // fókusz-kontúr (nem szöveg): ≥ 3:1 a felületeken (WCAG 1.4.11)
   ...SURFACES.map((bg) => ({ fg: "primary", bg, min: 3 })),
+  // hőtérkép-lépcsők (C6): a szám olvasható marad minden lépcsőn
+  ...[1, 2, 3, 4].map((n) => ({ fg: `heat-${n}-fg`, bg: `heat-${n}`, min: 4.5 })),
 ];
 
 function failures(tokens: Tokens): string[] {

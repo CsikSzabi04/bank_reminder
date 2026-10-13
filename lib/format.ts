@@ -93,3 +93,13 @@ export function formatMonth(isoDate: string, locale: Locale): string {
 export function formatTime(value: string | Date, locale: Locale, timeZone: string): string {
   return new Intl.DateTimeFormat(DATE_LOCALE[locale], { hour: "2-digit", minute: "2-digit", timeZone, hourCycle: "h23" }).format(new Date(value));
 }
+
+// Rövid hónapnév tengelyfeliratokhoz ("okt." / "Oct")
+export function formatMonthShort(isoDate: string, locale: Locale): string {
+  return new Intl.DateTimeFormat(DATE_LOCALE[locale], { month: "short", timeZone: "UTC" }).format(new Date(`${isoDate}T00:00:00Z`));
+}
+
+// Pénznem nélküli kompakt szám a tengelyfeliratokhoz ("120 E" / "120K")
+export function formatCompactNumber(value: number, locale: Locale): string {
+  return new Intl.NumberFormat(NUM_LOCALE[locale], { notation: "compact", maximumFractionDigits: 1 }).format(value);
+}

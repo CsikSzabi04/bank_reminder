@@ -34,49 +34,51 @@ export function DonutChart({
   const byKey = new Map(slices.map((s) => [s.key, s]));
 
   return (
-    <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
-      <div className="relative mx-auto shrink-0" style={{ width: size, height: size }}>
-        <svg viewBox={`0 0 ${size} ${size}`} width={size} height={size} role="img" aria-label={ariaLabel}>
-          {arcs.length === 0 ? (
-            // nincs adat: halvány üres gyűrű
-            <circle
-              cx={size / 2}
-              cy={size / 2}
-              r={size / 2 - thickness / 2}
-              fill="none"
-              style={{ stroke: "var(--border)" }}
-              strokeWidth={thickness}
-            />
-          ) : (
-            arcs.map((arc) => {
-              const slice = byKey.get(arc.key)!;
-              return (
-                <path key={arc.key} d={arc.path} style={{ fill: slice.color }} fillRule="evenodd">
-                  {/* natív tooltip hover/hosszú érintésre; a tartalom a jelmagyarázatban is szövegként megvan */}
-                  <title>{`${slice.label}: ${slice.valueText} (${slice.shareText})`}</title>
-                </path>
-              );
-            })
+    <div className="@container">
+      <div className="flex flex-col gap-5 @md:flex-row @md:items-center">
+        <div className="relative mx-auto shrink-0" style={{ width: size, height: size }}>
+          <svg viewBox={`0 0 ${size} ${size}`} width={size} height={size} role="img" aria-label={ariaLabel}>
+            {arcs.length === 0 ? (
+              // nincs adat: halvány üres gyűrű
+              <circle
+                cx={size / 2}
+                cy={size / 2}
+                r={size / 2 - thickness / 2}
+                fill="none"
+                style={{ stroke: "var(--border)" }}
+                strokeWidth={thickness}
+              />
+            ) : (
+              arcs.map((arc) => {
+                const slice = byKey.get(arc.key)!;
+                return (
+                  <path key={arc.key} d={arc.path} style={{ fill: slice.color }} fillRule="evenodd">
+                    {/* natív tooltip hover/hosszú érintésre; a tartalom a jelmagyarázatban is szövegként megvan */}
+                    <title>{`${slice.label}: ${slice.valueText} (${slice.shareText})`}</title>
+                  </path>
+                );
+              })
+            )}
+          </svg>
+          {children && (
+            <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center">{children}</div>
           )}
-        </svg>
-        {children && (
-          <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center">{children}</div>
-        )}
-      </div>
+        </div>
 
-      <ul className="grid flex-1 gap-2 text-sm">
-        {arcs.map((arc) => {
-          const slice = byKey.get(arc.key)!;
-          return (
-            <li key={arc.key} className="flex items-center gap-2">
-              <span aria-hidden className="size-3 shrink-0 rounded-full" style={{ background: slice.color }} />
-              <span className="min-w-0 flex-1 truncate">{slice.label}</span>
-              <span className="font-medium tabular-nums">{slice.valueText}</span>
-              <span className="w-10 text-right text-text-2 tabular-nums">{slice.shareText}</span>
-            </li>
-          );
-        })}
-      </ul>
+        <ul className="grid flex-1 gap-2 text-sm">
+          {arcs.map((arc) => {
+            const slice = byKey.get(arc.key)!;
+            return (
+              <li key={arc.key} className="flex items-center gap-2">
+                <span aria-hidden className="size-3 shrink-0 rounded-full" style={{ background: slice.color }} />
+                <span className="min-w-0 flex-1 truncate">{slice.label}</span>
+                <span className="font-medium tabular-nums">{slice.valueText}</span>
+                <span className="w-10 text-right text-text-2 tabular-nums">{slice.shareText}</span>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </div>
   );
 }

@@ -386,6 +386,90 @@
     }
   },
   "analytics": {
+    "title": "Analytics",
+    "rangeLabel": "Period",
+    "viewLabel": "View",
+    "ranges": {
+      "month": "Month",
+      "3m": "3 mo",
+      "6m": "6 mo",
+      "12m": "12 mo",
+      "ytd": "This year"
+    },
+    "view": {
+      "chart": "Chart",
+      "table": "Table"
+    },
+    "kpi": {
+      "spend": "Monthly spending",
+      "paid": "Paid so far",
+      "remaining": "Still to pay",
+      "subs": "Subscriptions (yearly)"
+    },
+    "series": {
+      "paid": "Paid",
+      "remaining": "Remaining",
+      "average": "Average",
+      "thisMonth": "This month",
+      "prevMonth": "Previous month"
+    },
+    "table": {
+      "category": "Category",
+      "amount": "Amount",
+      "share": "Share",
+      "items": "Items",
+      "month": "Month",
+      "total": "Total",
+      "day": "Day",
+      "item": "Item",
+      "monthly": "Monthly",
+      "yearly": "Yearly"
+    },
+    "items": "{count, plural, one {# item} other {# items}}",
+    "denseDay": "busy day",
+    "noData": "No data for this period.",
+    "empty": {
+      "title": "Nothing to analyse yet",
+      "body": "Add a few reminders and your spending shows up here."
+    },
+    "c1": {
+      "title": "Categories",
+      "aria": "Categories: {summary}"
+    },
+    "c2": {
+      "title": "Monthly trend",
+      "aria": "Spending by month: {summary}"
+    },
+    "c3": {
+      "title": "How the month unfolds",
+      "aria": "Month progress ({month}): {total} by month end"
+    },
+    "c4": {
+      "title": "Top 5 items"
+    },
+    "c5": {
+      "title": "Categories over time",
+      "aria": "Categories by month: {summary}"
+    },
+    "c6": {
+      "title": "Next 30 days",
+      "hint": "Items due over the next 30 days — tap a day to open the calendar.",
+      "denseNote": "Busy days are outlined: at least 40% of the total falls within 3 days."
+    },
+    "c7": {
+      "title": "Subscription costs",
+      "none": "You have no active subscriptions.",
+      "perYear": "{amount} per year",
+      "row": "{monthly}/mo · {yearly}/yr · {share}"
+    },
+    "insights": {
+      "title": "Insights",
+      "deltaUp": "Your spending is up {pct} on the previous month.",
+      "deltaDown": "Your spending is down {pct} on the previous month.",
+      "topItem": "Biggest item: {name} ({amount}).",
+      "subsShare": "Subscriptions make up {pct} of your monthly spending.",
+      "frontLoaded": "{pct} of the month spending falls in the first 10 days."
+    },
     "groups": {
       "subscriptions": "Subscriptions",
       "housing": "Housing & utilities",

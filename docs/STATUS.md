@@ -1,5 +1,11 @@
 # STATUS  (legújabb fent)
 
+## 2026-10-13 · AI-B · M4 — B-20/B-21 kész (localhoston): diagram-csomag + /analytics (C1–C7, KPI, meglátások)
+
+- Diagramok kézi SVG-vel (`components/charts/*`, geometria: `lib/charts/*`, mutáció-ellenőrzött unit tesztekkel); Táblázat ⇄ Diagram kapcsoló, időszak-chipek, hónap-váltó; minden szám az A-oldali RPC-kből (az e2e egyezteti a `dashboard_summary`-val).
+- Kapuk: typecheck · lint · i18n:check (605 kulcs) · unit · authed e2e (analytics-spec, layout 360/768/1280, axe világos/sötét).
+- Következő: B-22 keretek + gyors kiadás, B-23 célok, B-24 tippek, B-25 hírek, B-26 onboarding, B-28 Profil II., B-29…B-31.
+
 ## 2026-10-13 · AI-B · M3 — B-15…B-19 kész (localhost): naptár, PWA, telepítés, push-kliens, értesítésközpont
 
 - ✔ **B-15** naptár + ICS-feed (token-rotáció) · **B-16** PWA (kézi `sw.js`, manifest, ikonok, offline) · **B-17** telepítés-gomb + `/install` · **B-18** push-kliens (Profil → Értesítések: beállítások, ezen az eszközön + diagnosztika, eszközeim, teszt-értesítés) · **B-19** `/notifications` (napi csoportok, olvasatlan jelölés, mély link), harang-számláló, app-jelvény + frissítés láthatóvá váláskor / SW push-üzenetre.

@@ -386,6 +386,90 @@
     }
   },
   "analytics": {
+    "title": "Analitika",
+    "rangeLabel": "Időszak",
+    "viewLabel": "Nézet",
+    "ranges": {
+      "month": "Hónap",
+      "3m": "3 hó",
+      "6m": "6 hó",
+      "12m": "12 hó",
+      "ytd": "Idén"
+    },
+    "view": {
+      "chart": "Diagram",
+      "table": "Táblázat"
+    },
+    "kpi": {
+      "spend": "Havi kiadás",
+      "paid": "Kifizetve eddig",
+      "remaining": "Még hátravan",
+      "subs": "Előfizetések (évesítve)"
+    },
+    "series": {
+      "paid": "Kifizetett",
+      "remaining": "Hátralévő",
+      "average": "Átlag",
+      "thisMonth": "Ez a hónap",
+      "prevMonth": "Előző hónap"
+    },
+    "table": {
+      "category": "Kategória",
+      "amount": "Összeg",
+      "share": "Arány",
+      "items": "Tételek",
+      "month": "Hónap",
+      "total": "Összesen",
+      "day": "Nap",
+      "item": "Tétel",
+      "monthly": "Havi",
+      "yearly": "Éves"
+    },
+    "items": "{count, plural, one {# tétel} other {# tétel}}",
+    "denseDay": "sűrű nap",
+    "noData": "Ebben az időszakban nincs adat.",
+    "empty": {
+      "title": "Még nincs mit elemezni",
+      "body": "Vegyél fel néhány emlékeztetőt, és itt látod a kiadásaid alakulását."
+    },
+    "c1": {
+      "title": "Kategóriák",
+      "aria": "Kategóriák: {summary}"
+    },
+    "c2": {
+      "title": "Havi trend",
+      "aria": "Havi kiadás hónaponként: {summary}"
+    },
+    "c3": {
+      "title": "A hónap lefutása",
+      "aria": "Lefutás ({month}): a hónap végére {total}"
+    },
+    "c4": {
+      "title": "Top 5 tétel"
+    },
+    "c5": {
+      "title": "Kategóriák alakulása",
+      "aria": "Kategóriák hónaponként: {summary}"
+    },
+    "c6": {
+      "title": "Következő 30 nap",
+      "hint": "Esedékes tételek a következő 30 napra — a napra koppintva megnyílik a naptár.",
+      "denseNote": "Kerettel jelölve a sűrű napok: 3 napba esik az összeg legalább 40%-a."
+    },
+    "c7": {
+      "title": "Előfizetések költsége",
+      "none": "Nincs aktív előfizetésed.",
+      "perYear": "évente {amount}",
+      "row": "{monthly} / hó · {yearly} / év · {share}"
+    },
+    "insights": {
+      "title": "Meglátások",
+      "deltaUp": "A kiadásod {pct}-kal nőtt az előző hónaphoz képest.",
+      "deltaDown": "A kiadásod {pct}-kal csökkent az előző hónaphoz képest.",
+      "topItem": "A legnagyobb tétel: {name} ({amount}).",
+      "subsShare": "Az előfizetéseid a havi kiadás {pct}-át teszik ki.",
+      "frontLoaded": "A hónap első 10 napjában esik a kiadás {pct}-a."
+    },
     "groups": {
       "subscriptions": "Előfizetések",
       "housing": "Lakhatás és rezsi",

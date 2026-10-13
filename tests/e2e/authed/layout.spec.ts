@@ -31,6 +31,8 @@ const PAGES: [string, () => string][] = [
   ["Szerkesztés", () => `/reminders/${reminderId}/edit`],
   ["Részletek", () => `/reminders/${reminderId}`],
   ["Naptár", () => "/calendar"],
+  ["Analitika", () => "/analytics"],
+  ["Analitika · táblázat", () => "/analytics?view=table&range=12m"],
   ["Értesítések", () => "/notifications"],
   ["Profil · Értesítések", () => "/profile?section=notifications"],
   ["Profil", () => "/profile"],

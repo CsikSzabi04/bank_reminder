@@ -34,6 +34,15 @@
   --chart-6: #008300;
   --chart-7: #6250d6;
   --chart-9: #98a2b3;
+  /* hőtérkép-lépcsők (C6): egyszínű kék rámpa, a szám színe lépcsőnként külön, hogy a kontraszt ≥ 4,5:1 maradjon */
+  --heat-1: #dbeafe;
+  --heat-1-fg: #0f1720;
+  --heat-2: #93c5fd;
+  --heat-2-fg: #0f1720;
+  --heat-3: #2468c2;
+  --heat-3-fg: #ffffff;
+  --heat-4: #0d366b;
+  --heat-4-fg: #ffffff;
   --card-shadow:
     0 1px 2px rgb(15 23 32 / 0.04), 0 8px 24px rgb(15 23 32 / 0.06);
 }
@@ -63,6 +72,14 @@
   --chart-6: #008300;
   --chart-7: #9085e9;
   --chart-9: #6b7686;
+  --heat-1: #1e3a5f;
+  --heat-1-fg: #f1f5f9;
+  --heat-2: #2f6fba;
+  --heat-2-fg: #ffffff;
+  --heat-3: #6aa5f2;
+  --heat-3-fg: #0b1220;
+  --heat-4: #a9ccf8;
+  --heat-4-fg: #0b1220;
   /* sötét módban nincs árnyék, csak 1 px border */
   --card-shadow: none;
 }
