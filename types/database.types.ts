@@ -823,6 +823,25 @@ export type Database = {
       };
     };
     Views: {
+      v_items: {
+        Row: {
+          amount_base: number | null;
+          amount_native: number | null;
+          category_id: string | null;
+          currency: string | null;
+          group_slot: number | null;
+          is_subscription: boolean | null;
+          item_id: string | null;
+          kind: string | null;
+          name: string | null;
+          on_date: string | null;
+          reminder_id: string | null;
+          status: string | null;
+          user_id: string | null;
+        };
+        ComputedFields: never;
+        Relationships: [];
+      };
       v_occurrences: {
         Row: {
           amount: number | null;
@@ -871,6 +890,62 @@ export type Database = {
       };
     };
     Functions: {
+      analytics_by_group: {
+        Args: { p_from: string; p_to: string };
+        Returns: {
+          group_key: string;
+          group_slot: number;
+          items: number;
+          paid: number;
+          remaining: number;
+          total: number;
+        }[];
+      };
+      analytics_cumulative: {
+        Args: { p_month: string };
+        Returns: {
+          cum_prev: number;
+          cum_this: number;
+          day: string;
+        }[];
+      };
+      analytics_group_trend: {
+        Args: { p_months: number };
+        Returns: {
+          group_slot: number;
+          month: string;
+          total: number;
+        }[];
+      };
+      analytics_monthly_trend: {
+        Args: { p_months: number };
+        Returns: {
+          month: string;
+          paid: number;
+          remaining: number;
+        }[];
+      };
+      analytics_subscriptions: {
+        Args: Record<PropertyKey, never>;
+        Returns: {
+          monthly: number;
+          name: string;
+          reminder_id: string;
+          service_slug: string;
+          share_pct: number;
+          yearly: number;
+        }[];
+      };
+      analytics_top: {
+        Args: { p_from: string; p_limit?: number; p_to: string };
+        Returns: {
+          group_slot: number;
+          name: string;
+          reminder_id: string;
+          total: number;
+        }[];
+      };
+      dashboard_summary: { Args: { p_month?: string }; Returns: Json };
       ensure_occurrences: {
         Args: { p_horizon_days?: number; p_now?: string; p_reminder_id?: string };
         Returns: number;
@@ -880,6 +955,7 @@ export type Database = {
         Args: { p_amount: number; p_from: string; p_on: string; p_to: string };
         Returns: number;
       };
+      group_key: { Args: { p_slot: number }; Returns: string };
       is_valid_timezone: { Args: { tz: string }; Returns: boolean };
       mark_paid: {
         Args: { p_occurrence_id: string; p_paid_amount?: number; p_paid_on?: string };
@@ -927,6 +1003,7 @@ export type Database = {
           isSetofReturn: false;
         };
       };
+      month_start: { Args: { d: string }; Returns: string };
       occurrence_dates: {
         Args: {
           p_end?: string;
@@ -973,6 +1050,15 @@ export type Database = {
           isSetofReturn: false;
         };
       };
+      upcoming_days: {
+        Args: { p_days?: number };
+        Returns: {
+          day: string;
+          items: number;
+          total: number;
+        }[];
+      };
+      user_today: { Args: Record<PropertyKey, never>; Returns: string };
     };
     Enums: {
       [_ in never]: never;
