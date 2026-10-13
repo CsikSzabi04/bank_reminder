@@ -17,10 +17,51 @@ export function flatten(obj, prefix = "") {
   return out;
 }
 
-// ICU-argumentumnevek: {name} és {n, plural, …} → "name", "n"; az ágak ({# nap}) nem számítanak
+// A `{`-hez tartozó záró `}` indexe (beágyazással); -1, ha nincs
+function matchingBrace(text, open) {
+  let depth = 0;
+  for (let i = open; i < text.length; i++) {
+    if (text[i] === "{") depth++;
+    else if (text[i] === "}" && --depth === 0) return i;
+  }
+  return -1;
+}
+
+const ICU_OPTION_TYPES = new Set(["plural", "select", "selectordinal"]);
+
+function collectArgs(text, names) {
+  for (let i = 0; i < text.length; i++) {
+    if (text[i] !== "{") continue;
+    const end = matchingBrace(text, i);
+    if (end < 0) return;
+    const inner = text.slice(i + 1, end);
+    const comma = inner.indexOf(",");
+    if (comma === -1) {
+      names.add(inner.trim()); // {name}
+    } else {
+      names.add(inner.slice(0, comma).trim()); // {n, plural, …}
+      const rest = inner.slice(comma + 1);
+      const second = rest.indexOf(",");
+      if (second !== -1 && ICU_OPTION_TYPES.has(rest.slice(0, second).trim())) {
+        // az ágak ("one {…} other {…}") tartalma külön üzenet: abban is lehet argumentum, a puszta szó nem az
+        const body = rest.slice(second + 1);
+        for (let j = 0; j < body.length; j++) {
+          if (body[j] !== "{") continue;
+          const close = matchingBrace(body, j);
+          if (close < 0) break;
+          collectArgs(body.slice(j + 1, close), names);
+          j = close;
+        }
+      }
+    }
+    i = end;
+  }
+}
+
+// ICU-argumentumnevek: {name}, {n, plural, one {# nap} other {…}} → "name", "n"; az ágak szövege nem argumentum
 export function icuArgs(message) {
   const names = new Set();
-  for (const m of message.matchAll(/\{\s*([A-Za-z_]\w*)\s*[,}]/g)) names.add(m[1]);
+  collectArgs(message, names);
   return [...names].sort();
 }
 

@@ -1,3 +1,5 @@
+-- elszigetelés: az élő adatoktól független (a tranzakció visszagörgetődik)
+delete from public.fx_rates;
 -- A-10: analitika-RPC-k kézzel ellenőrzött fixture-ön. A hónapok a "ma"-hoz képest relatívak (M = előző hónap, P = az azelőtti),
 -- így a teszt nem függ a futtatás napjától. Futtatás: tranzakcióban, ROLLBACK-kel.
 do $$

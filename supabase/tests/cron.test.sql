@@ -1,3 +1,5 @@
+-- elszigetelés: az élő adatoktól független (a tranzakció visszagörgetődik)
+delete from public.notifications; delete from public.news_items; delete from public.news_sources; delete from public.push_subscriptions;
 -- A-18: takarítás + Edge-hívó segéd + ütemezések megléte. Tranzakcióban, ROLLBACK-kel.
 do $$
 declare uA uuid := gen_random_uuid(); r jsonb; n int; has_secret boolean; res bigint;

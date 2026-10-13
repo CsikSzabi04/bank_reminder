@@ -7,6 +7,9 @@
 - 2026-10-13 · Token-eltérések a §14.2-től (B-06 kontraszt-teszt talált): `--text-muted` világosban #64748B → **#617288** (a surface-2-n 4,47:1 volt) · új token **`--primary-text`** (világos #0A7A6C, sötét = primary) a márka-szövegre halvány háttéren (a `--primary` a `--primary-soft`-on 4,34:1) · a `--primary` (#0B7F70) és a manifest `theme_color` marad · AI-B.
 - 2026-10-13 · `react/jsx-no-literals` (error) az `app/**`·`components/**` .tsx-ben (H8-lint); kivétel: `app/dev/**` · írásjelek (`· — / | …`) engedettek · AI-B.
 - 2026-10-13 · CI: `.github/workflows/ci.yml` (typecheck · lint · i18n:check · test · build; csak publikus helyőrző env, H3) · e2e/Playwright később külön job · AI-B.
+- 2026-10-13 · Toast: saját `ToastProvider` (nincs `sonner`) · alternatíva: sonner (ADR-02) · a sonner futásidőben `<style>`-t injektál, ami a nonce-os CSP-vel (§9.6) ütközik; a saját változat ~100 sor, aria-live, Visszavonás-gomb · AI-B.
+- 2026-10-13 · `i18n:check` ICU-elemző: beágyazást kezelő (a plural-ágak puszta szava nem argumentum) · AI-B.
+- 2026-10-13 · Kategória-ikonok statikus lucide-térképből (`lib/category-icons.ts`), nem `lucide-react/dynamic` · csak a használt ikonok kerülnek a csomagba · AI-B.
 - 2026-10-13 · Migrációk futtatása: Supabase CLI (`npx supabase db push --db-url`), mert nincs Docker/psql/deno a gépen · pgTAP helyett (amíg nincs helyi DB) sima-SQL `do $$ assert … $$` tesztek tranzakcióban, ROLLBACK-kel.
 - 2026-10-13 · Analitika: számla a lejárati hónaphoz tartozik (nem a kifizetés hónapjához) · alternatíva: `paid_on` szerint (§15.2 eredeti) · átcsúszó tételek nélkül stabil havi összegek · AI-A (CONTRACT_CHANGES-ben egyeztetve).
 - 2026-10-13 · DB-tesztek: sima SQL `do $$ assert … $$` ROLLBACK-kel (`npm run db:test`) pgTAP helyett · nincs Docker a gépen; mutációval ellenőrizve, hogy a tesztek valóban bukni tudnak.

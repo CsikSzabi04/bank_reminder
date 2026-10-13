@@ -22,7 +22,9 @@ if (spawnSync(process.execPath, ['scripts/assert-project.mjs', '--url', url], { 
 
 const who = run(['secrets', 'list', '--project-ref', REF]);
 if (who.status !== 0) { console.error('✖ A Supabase CLI nincs bejelentkezve. Futtasd egyszer: npx supabase login'); process.exit(3); }
-const existing = new Set((who.stdout.match(/^\s*([A-Z][A-Z0-9_]+)\s*\|/gm) ?? []).map((l) => l.replace(/[\s|]/g, '')));
+let existing;
+try { existing = new Set((JSON.parse(who.stdout).secrets ?? []).map((s) => s.name ?? s.Name)); }                                // a CLI nem-TTY módban JSON-t ad
+catch { existing = new Set((who.stdout.match(/^\s*([A-Z][A-Z0-9_]+)\s*\|/gm) ?? []).map((l) => l.replace(/[\s|]/g, ''))); }   // régebbi táblázatos kimenet
 
 const { default: pg } = await import('pg');
 const c = new pg.Client({ connectionString: url, ssl: { rejectUnauthorized: false } });

@@ -1,3 +1,5 @@
+-- elszigetelés: az élő adatoktól független (a tranzakció visszagörgetődik)
+delete from public.fx_rates;
 -- A-07: ismétlődés-vektorok (V1–V7), esedékesség-szinkron, kifizetés-RPC-k, auto_paid, fx_convert, v_occurrences.
 -- Futtatás: tranzakcióban, ROLLBACK-kel. A "most" fix (p_now), így a teszt nem függ a futtatás napjától.
 do $$

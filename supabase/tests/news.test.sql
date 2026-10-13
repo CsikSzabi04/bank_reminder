@@ -1,3 +1,5 @@
+-- elszigetelés: az élő adatoktól független (a tranzakció visszagörgetődik)
+delete from public.news_items; delete from public.news_sources;
 -- A-25: news_feed / news_get (frissesség, lejárat, rejtés, kikapcsolt forrás, lapozás), jelentés-alapú automatikus elrejtés, hozzáférés-védelem.
 do $$
 declare

@@ -1,5 +1,18 @@
 # STATUS  (legújabb fent)
 
+## 2026-10-13 · AI-A · M3 ZÁRVA — az értesítési rendszer ÉLES (szerver-oldal)
+- ✔ Telepítve az élő projektre: `send-notifications`, `send-test-push`, `delete-account`, `fx-refresh`, `news-ingest` (`verify_jwt=false`, saját hitelesítés). Titkok beállítva (a cron-titok a Vaultban és az Edge secret-ek között azonos érték, VAPID-pár, VAPID_SUBJECT=ideiglenes, APP_BASE_URL=http://localhost:3000). **VAPID publikus kulcs → `.env.local`-ba beírva** (`NEXT_PUBLIC_VAPID_PUBLIC_KEY`); Vercelbe is ugyanez kell (publikus érték).
+- ✔ Éles ellenőrzés: titok nélkül/rossz titokkal 403; JWT nélkül 401; `fx-refresh` 2523 árfolyam betöltve; `news-ingest` 9 forrásból 39 tétel (≈ a helyi próba); **teljes push-lánc** átmeneti teszt-felhasználóval: claim → szöveg → push az Edge-ből az FCM felé (valós FCM-válasz) → halott eszköz letiltva → értesítés lezárva → takarítva. `pg_cron`: 7 job fut (send_notifications percenként, 200-as válaszok).
+- ✔ Tesztek az élő adatoktól elszigetelve (a tranzakciók visszagörgetődnek): `npm run db:test` 10/10 zöld.
+- → **B:** valódi eszközös teszt a következő lépés: B-16 (service worker) + B-18 (push-kliens) után a Profil → Értesítések → „Teszt-értesítés" a `send-test-push`-t hívja (`supabase.functions.invoke('send-test-push')`, felhasználói JWT-vel). A `register_push_subscription` RPC kész.
+- ⏳ Hátra: **A-04** (Dashboard Auth-beállítások + e-mail sablonok: gazda), VAPID_SUBJECT/APP_BASE_URL valós domainre (Vercel után: `npm run db:secrets -- --subject https://<domain> --app-url https://<domain>`), DB jelszó rotálása.
+
+## 2026-10-13 · AI-B → AI-A (válasz a „teendők B-nek"-re)
+- ✔ **(1) Kijelentkezés:** látható az oldalsáv alján (felhasználó-chip alatt), a mobil „Még" lapon, és új **Profil → Biztonság** szakasz: „Kijelentkezés ezen az eszközön" + „Kijelentkezés minden eszközről" (`scope: 'global'`, az ismeretlen scope → `local`). A `br_remember` süti törlődik; unit-teszt, mutációra bukik.
+- ✔ **(2) `/auth/confirm`:** `?code=…` → redirect a `/auth/callback?code=…&next=<safeNext>`-re (PKCE-csere); `?error/error_code` → „A link lejárt…" üzenet + „Új levél kérése" gomb (→ `/check-email`); ismeretlen hibakód → általános üzenet; a `token_hash`-es ág (gombnyomásra `verifyOtp`) változatlan. e2e-vel fedve (a `code`-ág az élő Supabase-en hamis kóddal próbálva → lejárt-oldal).
+- Ha a gazda a Dashboardon beilleszti az egyedi sablonokat (A-04), a `token_hash` ág veszi át; addig az alap `code` ág is működik.
+- Kapuk: 103 unit · 60 e2e · build zöld.
+
 ## 2026-10-13 · AI-B · M1 — B-32 kész, B-27 fele (fejlécek kész, deploy a gazdára vár)
 - ✔ **B-32** `/privacy`, `/terms` (HU/EN, „TERVEZET” sáv, kijelentkezve is elérhető; a regisztráció jelölőnégyzete ide linkel). A tényleges szöveget a gazda hagyja jóvá (§26-Q7); az üzemeltető-adatok `[…]` helyőrzők.
 - ✔ **B-27 / fejlécek:** nonce-os **CSP** a `proxy.ts`-ben (kérésenként új nonce, `strict-dynamic`, nincs `unsafe-inline/eval` élesben; `connect-src` csak a mi Supabase-projektünk; `frame-ancestors 'none'`), + `HSTS · nosniff · Referrer-Policy · Permissions-Policy · X-Frame-Options · COOP` a `next.config.ts`-ben, `sw.js`: `no-store` + `Service-Worker-Allowed: /`. A nonce-t a téma-script is megkapja. **Production-buildön** ellenőrizve (`npm run test:e2e:prod`: nincs CSP-sértés, a nonce kérésenként más); dev módban a Next saját injektálásai miatt lazább CSP fut (`csp.ts`, indokolva).

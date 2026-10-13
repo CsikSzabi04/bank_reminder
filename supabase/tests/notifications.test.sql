@@ -1,3 +1,5 @@
+-- elszigetelés: az élő adatoktól független (a tranzakció visszagörgetődik)
+delete from public.notifications; delete from public.push_subscriptions;
 -- A-12/A-13: értesítési sor, DST-vektorok, claim/finish, kapcsolók, snooze, push-regisztráció, ICS, export.
 -- Futtatás: tranzakcióban, ROLLBACK-kel; a "most" a hívásokban fix (p_now), ahol a dátum számít.
 do $$
