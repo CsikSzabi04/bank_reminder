@@ -23,30 +23,33 @@ export function parseAmount(input: string): number | null {
   return Number.isFinite(value) && value <= MAX_AMOUNT ? value : null;
 }
 
-const emptyToUndefined = (v: unknown) => (typeof v === "string" && v.trim() === "" ? undefined : v);
-const optional = <T extends z.ZodType>(schema: T) => z.preprocess(emptyToUndefined, schema.optional());
-const isoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "invalidDate").refine((v) => !Number.isNaN(Date.parse(`${v}T00:00:00Z`)), "invalidDate");
+// Összeg-mező: szöveg → szám, hibakódokkal (a költségkeret és a gyors kiadás is ezt használja)
+export const amountField = z
+  .string()
+  .trim()
+  .min(1, "required")
+  .transform((v, ctx) => {
+    if (v.startsWith("-")) {
+      ctx.addIssue({ code: "custom", message: "amountNegative" });
+      return z.NEVER;
+    }
+    const parsed = parseAmount(v);
+    if (parsed === null) {
+      ctx.addIssue({ code: "custom", message: "amountInvalid" });
+      return z.NEVER;
+    }
+    return parsed;
+  });
+
+export const emptyToUndefined = (v: unknown) => (typeof v === "string" && v.trim() === "" ? undefined : v);
+export const optional = <T extends z.ZodType>(schema: T) => z.preprocess(emptyToUndefined, schema.optional());
+export const isoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "invalidDate").refine((v) => !Number.isNaN(Date.parse(`${v}T00:00:00Z`)), "invalidDate");
 const checkbox = z.string().optional().transform((v) => v === "on" || v === "1");
 
 export const reminderSchema = z
   .object({
     name: z.string().trim().min(1, "required").max(80, "tooLong"),
-    amount: z
-      .string()
-      .trim()
-      .min(1, "required")
-      .transform((v, ctx) => {
-        if (v.startsWith("-")) {
-          ctx.addIssue({ code: "custom", message: "amountNegative" });
-          return z.NEVER;
-        }
-        const parsed = parseAmount(v);
-        if (parsed === null) {
-          ctx.addIssue({ code: "custom", message: "amountInvalid" });
-          return z.NEVER;
-        }
-        return parsed;
-      }),
+    amount: amountField,
     currency: z.enum(CURRENCIES, "invalidCurrency"),
     categoryId: optional(z.uuid("invalid")),
     serviceSlug: optional(z.string().max(60, "tooLong")),

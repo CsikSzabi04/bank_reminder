@@ -24,7 +24,8 @@
       "label": "Nyelv",
       "hu": "Magyar",
       "en": "English"
-    }
+    },
+    "optional": "opcionális"
   },
   "nav": {
     "primary": "Fő navigáció",
@@ -40,7 +41,8 @@
     "more": "Még",
     "profile": "Profil",
     "notifications": "Értesítések",
-    "signOut": "Kijelentkezés"
+    "signOut": "Kijelentkezés",
+    "add": "Hozzáadás"
   },
   "auth": {
     "login": {
@@ -489,7 +491,39 @@
       "watch": "Közel a kerethez",
       "over": "Túllépés"
     },
-    "spentOf": "{spent} / {limit}"
+    "spentOf": "{spent} / {limit}",
+    "title": "Költségkeretek",
+    "empty": {
+      "title": "Még nincs költségkereted",
+      "body": "Állíts be havi keretet egy kategóriára, és követheted, mennyit költhetsz még."
+    },
+    "canSpend": "Mennyit költhetsz még?",
+    "overBy": "{amount} túllépés",
+    "spentOfTotal": "{spent} elköltve / {limit} keret",
+    "committedNote": "Ebből még hátralévő számla: {amount}",
+    "overall": "Összes keret",
+    "forecast": "Várható hónapvégi költés: {amount}",
+    "withoutBudget": "Még nincs kerete",
+    "moreCategories": "Több kategória",
+    "back": "Vissza a keretekhez",
+    "newBudget": "Új keret",
+    "editBudget": "Keret szerkesztése",
+    "limit": "Havi keret",
+    "suggestion": "Javasolt: {amount} (az utolsó 3 hónap átlaga)",
+    "save": "Mentés",
+    "saving": "Mentés…",
+    "delete": "Keret törlése",
+    "deleteTitle": "Törlöd a(z) {name} keretet?",
+    "deleteBody": "Csak a limit törlődik, a számlák és a kiadások megmaradnak.",
+    "deleted": "A keret törölve.",
+    "items": "Tételek",
+    "noItems": "Ebben a hónapban nincs tétel ebben a kategóriában.",
+    "itemPaid": "Kifizetve",
+    "itemUpcoming": "Esedékes",
+    "itemExpense": "Kiadás",
+    "deleteExpense": "{name} törlése",
+    "expenseDeleted": "A kiadás törölve.",
+    "expenseDeleteFailed": "A kiadást nem sikerült törölni."
   },
   "savings": {},
   "tips": {
@@ -843,5 +877,17 @@
   "pwa": {
     "updateAvailable": "Új verzió érhető el",
     "update": "Frissítés"
+  },
+  "expenses": {
+    "title": "Gyors kiadás",
+    "amount": "Összeg",
+    "category": "Kategória",
+    "noCategory": "Egyéb",
+    "date": "Dátum",
+    "note": "Megjegyzés",
+    "save": "Rögzítés",
+    "saving": "Mentés…",
+    "saved": "Kiadás rögzítve.",
+    "undo": "Visszavonás"
   }
 }

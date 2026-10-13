@@ -24,7 +24,8 @@
       "label": "Language",
       "hu": "Magyar",
       "en": "English"
-    }
+    },
+    "optional": "optional"
   },
   "nav": {
     "primary": "Main navigation",
@@ -40,7 +41,8 @@
     "more": "More",
     "profile": "Profile",
     "notifications": "Notifications",
-    "signOut": "Log out"
+    "signOut": "Log out",
+    "add": "Add"
   },
   "auth": {
     "login": {
@@ -489,7 +491,39 @@
       "watch": "Close to the limit",
       "over": "Over budget"
     },
-    "spentOf": "{spent} / {limit}"
+    "spentOf": "{spent} / {limit}",
+    "title": "Budgets",
+    "empty": {
+      "title": "No budgets yet",
+      "body": "Set a monthly budget for a category and see how much you can still spend."
+    },
+    "canSpend": "How much can you still spend?",
+    "overBy": "{amount} over",
+    "spentOfTotal": "{spent} spent / {limit} budgeted",
+    "committedNote": "Of which bills still to pay: {amount}",
+    "overall": "All budgets",
+    "forecast": "Expected spending by month end: {amount}",
+    "withoutBudget": "No budget yet",
+    "moreCategories": "More categories",
+    "back": "Back to budgets",
+    "newBudget": "New budget",
+    "editBudget": "Edit budget",
+    "limit": "Monthly budget",
+    "suggestion": "Suggested: {amount} (average of the last 3 months)",
+    "save": "Save",
+    "saving": "Saving…",
+    "delete": "Delete budget",
+    "deleteTitle": "Delete the {name} budget?",
+    "deleteBody": "Only the limit is removed; your bills and expenses stay.",
+    "deleted": "Budget deleted.",
+    "items": "Items",
+    "noItems": "No items in this category this month.",
+    "itemPaid": "Paid",
+    "itemUpcoming": "Due",
+    "itemExpense": "Expense",
+    "deleteExpense": "Delete {name}",
+    "expenseDeleted": "Expense deleted.",
+    "expenseDeleteFailed": "Could not delete the expense."
   },
   "savings": {},
   "tips": {
@@ -843,5 +877,17 @@
   "pwa": {
     "updateAvailable": "A new version is available",
     "update": "Update"
+  },
+  "expenses": {
+    "title": "Quick expense",
+    "amount": "Amount",
+    "category": "Category",
+    "noCategory": "Other",
+    "date": "Date",
+    "note": "Note",
+    "save": "Add expense",
+    "saving": "Saving…",
+    "saved": "Expense added.",
+    "undo": "Undo"
   }
 }

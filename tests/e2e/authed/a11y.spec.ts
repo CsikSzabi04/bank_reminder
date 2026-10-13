@@ -1,6 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
-import { hasE2eAccount, purgeReminders, userClient } from "../support/db";
+import { cleanBudget, hasE2eAccount, purgeReminders, seedBudget, userClient } from "../support/db";
 
 test.skip(!hasE2eAccount(), "nincs .env.e2e.local (teszt-fiók)");
 test.describe.configure({ mode: "serial" });
@@ -8,11 +8,13 @@ test.describe.configure({ mode: "serial" });
 // Automata hozzáférhetőségi ellenőrzés a bejelentkezett oldalakon: 0 serious/critical axe-hiba (§14.14, B-29 előzetes)
 let db: Awaited<ReturnType<typeof userClient>>;
 let reminderId: string;
+let categoryId: string;
 
 test.beforeAll(async () => {
   db = await userClient();
   await purgeReminders(db.client);
   await db.client.rpc("load_demo_data");
+  categoryId = await seedBudget(db.client);
   reminderId = (await db.client.from("reminders").select("id").eq("name", "Netflix").single()).data!.id;
   // egy mára esedékes tétel, hogy az értesítés-lista ne üres állapotot vizsgáljon
   const today = (await db.client.rpc("user_today")).data as string;
@@ -21,6 +23,7 @@ test.beforeAll(async () => {
     .insert({ name: "Értesítés-teszt", amount: 1234, currency: "HUF", start_date: today, recur_unit: "month", recur_every: 1, remind_offsets: [0], remind_time: "00:00:00" });
 });
 test.afterAll(async () => {
+  await cleanBudget(db.client, categoryId);
   await purgeReminders(db.client);
 });
 
@@ -40,6 +43,8 @@ const PAGES: [string, () => string][] = [
   ["Emlékeztető részletei", () => `/reminders/${reminderId}`],
   ["Naptár", () => "/calendar"],
   ["Analitika", () => "/analytics"],
+  ["Keretek", () => "/budgets"],
+  ["Keret-részlet", () => `/budgets/${categoryId}`],
   ["Analitika · táblázat", () => "/analytics?view=table&range=ytd"],
   ["Értesítések", () => "/notifications"],
   ["Profil", () => "/profile"],

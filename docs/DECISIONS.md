@@ -26,3 +26,6 @@
 - 2026-10-13 · Analitika-állapot az URL-ben (`?month=&range=&view=`), JS nélkül is működik · érvénytelen érték → alapérték · AI-B.
 - 2026-10-13 · A trend-átlagvonal (C2) a hónap-összegek számtani közepe JS-ben, csak a referencia-vonal helyéhez (nincs kiírt szám) · H9: kiírt összeg mindig SQL-ből · AI-B.
 - 2026-10-13 · C6 hőtérkép-rács (nem 30 vékony oszlop) · a 30 napnyi vékony oszlop mobilon nem érintésbarát (< 24 px cél); a cella szám + összeg, a „sűrű" nap kerettel és a hozzáférhető névben jelölt; `--heat-1..4` tokenek a kontraszt-tesztben · AI-B.
+- 2026-10-13 · Költségkeret-összesítő: a sorok összegét `sumMoney` (centre kerekített egészek) adja JS-ben · alternatíva: új A-oldali `budget_summary` RPC · a sorértékek az SQL-ből jönnek, az összesen-sor összegzése hibamentes; ha az A-oldal ad összesítő RPC-t, arra cserélendő (H9) · AI-B.
+- 2026-10-13 · A FAB koppintásra menüt nyit (új emlékeztető · gyors kiadás) · a „Gyors kiadás" a `/budgets?add=expense` linkre visz, ahol a lap nyitva renderelődik (nincs globális provider, az adatot az oldal tölti) · AI-B.
+- 2026-10-13 · Keret: kategóriánként egy (upsert `user_id,category_id`), pénznem = a profil alap-pénzneme; a gyors kiadás jövőbeli dátumot nem fogad el · AI-B.

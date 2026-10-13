@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { hasE2eAccount, purgeReminders, userClient } from "../support/db";
+import { cleanBudget, hasE2eAccount, purgeReminders, seedBudget, userClient } from "../support/db";
 import { overflowingElements } from "../support/layout";
 
 test.skip(!hasE2eAccount(), "nincs .env.e2e.local (teszt-fiók)");
@@ -7,15 +7,18 @@ test.describe.configure({ mode: "serial" });
 
 // Nincs vízszintes görgetés (és nincs kilógó elem) a bejelentkezett oldalakon 360 / 768 / 1280 px-en (§14.3, §22.3)
 let reminderId: string;
+let categoryId: string;
 let db: Awaited<ReturnType<typeof userClient>>;
 
 test.beforeAll(async () => {
   db = await userClient();
   await purgeReminders(db.client);
   await db.client.rpc("load_demo_data");
+  categoryId = await seedBudget(db.client);
   reminderId = (await db.client.from("reminders").select("id").eq("name", "Netflix").single()).data!.id;
 });
 test.afterAll(async () => {
+  await cleanBudget(db.client, categoryId);
   await purgeReminders(db.client);
 });
 
@@ -32,6 +35,8 @@ const PAGES: [string, () => string][] = [
   ["Részletek", () => `/reminders/${reminderId}`],
   ["Naptár", () => "/calendar"],
   ["Analitika", () => "/analytics"],
+  ["Keretek", () => "/budgets"],
+  ["Keret-részlet", () => `/budgets/${categoryId}`],
   ["Analitika · táblázat", () => "/analytics?view=table&range=12m"],
   ["Értesítések", () => "/notifications"],
   ["Profil · Értesítések", () => "/profile?section=notifications"],

@@ -1,5 +1,11 @@
 # STATUS  (legújabb fent)
 
+## 2026-10-13 · AI-B · M4 — B-22 kész (localhoston): /budgets + gyors kiadás
+
+- `/budgets` (összesítő „Mennyit költhetsz még?", sávok, keret nélküli kategóriák), `/budgets/[category]` (hónap tételei, keret létrehozás/szerkesztés/törlés), gyors kiadás lap (visszavonás toasttal), FAB-menü. A számok az SQL-ből (`budget_status`, `budget_suggestions`).
+- Kapuk: typecheck · lint · i18n:check (647 kulcs) · unit · authed e2e (budgets-spec, layout/a11y az új oldalakkal).
+- Tipp a gépen futtatóknak: ha az e2e belépés „login-hurokba" fut, állítsd le a régi `next dev`-et a 3000-es porton (elavult build).
+
 ## 2026-10-13 · AI-B · M4 — B-20/B-21 kész (localhoston): diagram-csomag + /analytics (C1–C7, KPI, meglátások)
 
 - Diagramok kézi SVG-vel (`components/charts/*`, geometria: `lib/charts/*`, mutáció-ellenőrzött unit tesztekkel); Táblázat ⇄ Diagram kapcsoló, időszak-chipek, hónap-váltó; minden szám az A-oldali RPC-kből (az e2e egyezteti a `dashboard_summary`-val).

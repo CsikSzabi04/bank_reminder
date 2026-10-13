@@ -38,3 +38,19 @@ export async function resetAccount() {
   const { data: files } = await client.storage.from("avatars").list(userId);
   if (files?.length) await client.storage.from("avatars").remove(files.map((f) => `${userId}/${f.name}`));
 }
+
+// Egy költségkeret + egy gyors kiadás a teszt-fiókon (a keret-oldalak vizsgálatához). Csak a saját, jelölt sorait érinti.
+export const E2E_EXPENSE_NOTE = "e2e-kiadás";
+
+export async function seedBudget(client: UserClient): Promise<string> {
+  const { data } = await client.from("categories").select("id").in("kind", ["expense", "both"]).order("sort").limit(1).single();
+  if (!data) throw new Error("nincs kiadás-kategória");
+  await client.from("budgets").upsert({ category_id: data.id, monthly_limit: 50000, currency: "HUF" }, { onConflict: "user_id,category_id" });
+  await client.from("expenses").insert({ category_id: data.id, amount: 12500, currency: "HUF", note: E2E_EXPENSE_NOTE });
+  return data.id;
+}
+
+export async function cleanBudget(client: UserClient, categoryId: string) {
+  await client.from("expenses").delete().eq("note", E2E_EXPENSE_NOTE);
+  await client.from("budgets").delete().eq("category_id", categoryId);
+}

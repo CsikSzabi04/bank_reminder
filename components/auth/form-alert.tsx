@@ -17,7 +17,7 @@ const REASONS: readonly AuthErrorReason[] = [
 ];
 
 // Űrlap-szintű hiba. A mező-hibákat a mezők maguk mutatják, itt csak a "reason" és az általános hiba jelenik meg.
-export function FormAlert({ state }: { state: ActionState | null }) {
+export function FormAlert({ state }: { state: ActionState<unknown> | null }) {
   const t = useTranslations("auth.error");
   if (!state || state.ok) return null;
   const reason = REASONS.find((r) => r === state.reason);
