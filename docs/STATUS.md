@@ -1,5 +1,11 @@
 # STATUS  (legújabb fent)
 
+## 2026-10-13 · AI-A · M4–M7 (backend) — minden SQL-oldali feladat kész, 9 tesztcsomag zöld az élő projekten
+- ✔ **A-10/A-11** analitika + keretek + célok · **A-21** tippek-motor (P0) · **A-23–A-25** hírek (betöltő kód + RPC-k; 9 forrás valós adaton hangolva) · **A-26** `ops_health()` + `docs/RESTORE.md` · **A-28** teljesítmény: 1100 esedékesség + 600 kiadás mellett `dashboard_summary` 38 ms, `budget_status` 8 ms, `compute_tips` 34 ms (cél ≤150 ms) · **A-29** biztonsági szigorítás + automata `security_lint.test.sql` (mutációval ellenőrizve).
+- ✔ Tesztek: `npm run db:test` (9 csomag, ROLLBACK) · `npm run fn:test` (Deno, 14 teszt) · `npm run fn:check`.
+- ⛔ **Még hátra (gazda):** (1) `npx supabase login` → én telepítem az 5 Edge Function-t + titkokat + HTTP-cront → éles teszt-push. (2) **A-04** Dashboard-beállítások (lásd lent). (3) DB jelszó rotálása éles indulás előtt.
+- **B-nek:** minden RPC/nézet a CONTRACT_CHANGES-ben; `types/database.types.ts` friss. Hírek CSAK `news_feed`/`news_get` RPC-n át. Tippek: `tips` tábla + `refresh_tips()`.
+
 ## 2026-10-13 · AI-B · M1 — B-04…B-07 kész, B-09 kész (B-08 következik)
 - ✔ **B-04** `proxy.ts` + `decideAccess` (védett → `/login?next=…`, `/api/*` → 401 JSON, belépve `/login`→`/dashboard`, `/` átirányít), `Cache-Control: private, no-store` hitelesített válaszon, `safeNext`, `/api/health`.
 - ✔ **B-05** `npm run i18n:check` (HU/EN paritás, ICU-argumentumok, használt-de-hiányzó kulcs) + `react/jsx-no-literals` lint + `.github/workflows/ci.yml`. ✔ **B-06** kontraszt-teszt a valódi tokenekre — **2 spec-token javítva** (lásd DECISIONS).
