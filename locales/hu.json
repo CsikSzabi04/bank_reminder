@@ -271,7 +271,8 @@
         "invalidTime": "Adj meg érvényes időt.",
         "urlInvalid": "A link http:// vagy https:// címmel kezdődjön.",
         "noteTooLong": "A megjegyzés legfeljebb 500 karakter lehet.",
-        "invalid": "Ez az érték nem érvényes."
+        "invalid": "Ez az érték nem érvényes.",
+        "insufficient": "Ennél többet nem vehetsz ki."
       }
     },
     "status": {
@@ -525,7 +526,70 @@
     "expenseDeleted": "A kiadás törölve.",
     "expenseDeleteFailed": "A kiadást nem sikerült törölni."
   },
-  "savings": {},
+  "savings": {
+    "title": "Megtakarítás",
+    "newGoal": "Új cél",
+    "active": "Aktív",
+    "archivedTab": "Archivált",
+    "noArchived": "Nincs archivált célod.",
+    "empty": {
+      "title": "Még nincs megtakarítási célod",
+      "body": "Válassz egy előkészített célt, vagy add meg a sajátodat — a haladást itt követheted."
+    },
+    "presets": {
+      "emergency": "Vészhelyzeti alap",
+      "vacation": "Nyaralás",
+      "phone": "Új telefon",
+      "custom": "Egyéni cél"
+    },
+    "back": "Vissza",
+    "emergencyHint": "Javasolt cél: {amount} (az utolsó hónapok átlagos kiadásának háromszorosa, becslés).",
+    "emergencyNoData": "A vészhelyzeti alap javaslatához még kevés a kiadási adat — add meg a célösszeget kézzel.",
+    "name": "Cél neve",
+    "target": "Célösszeg",
+    "targetDate": "Határidő",
+    "optional": "opcionális",
+    "icon": "Ikon",
+    "icons": {
+      "piggy-bank": "Malacpersely",
+      "shield-check": "Pajzs",
+      "plane": "Repülő",
+      "smartphone": "Telefon",
+      "home": "Otthon",
+      "gift": "Ajándék",
+      "graduation-cap": "Tanulás",
+      "car": "Autó"
+    },
+    "color": "Szín",
+    "colorN": "{n}. szín",
+    "save": "Mentés",
+    "saving": "Mentés…",
+    "savedOf": "{saved} / {target}",
+    "reached": "Elérted a célt!",
+    "deadline": "Határidő: {date}",
+    "needed": "még {months, plural, one {# hónap} other {# hónap}} — havi {amount} kellene",
+    "add": "Hozzáadás",
+    "withdraw": "Kivét",
+    "addTitle": "Hozzáadás: {name}",
+    "withdrawTitle": "Kivét: {name}",
+    "amount": "Összeg",
+    "date": "Dátum",
+    "note": "Megjegyzés",
+    "added": "Hozzáadva.",
+    "withdrawn": "Kivéve.",
+    "edit": "Szerkesztés",
+    "archive": "Archiválás",
+    "restore": "Visszaállítás",
+    "archivedToast": "A cél archiválva.",
+    "restored": "A cél visszaállítva.",
+    "failed": "Nem sikerült. Próbáld újra.",
+    "history": "Előzmények",
+    "noHistory": "Még nincs befizetés.",
+    "entryAdd": "Befizetés",
+    "entryWithdraw": "Kivét",
+    "deleteEntry": "Tétel törlése ({date})",
+    "entryDeleted": "A tétel törölve."
+  },
   "tips": {
     "disclaimer": "A tippek becslések, nem pénzügyi tanácsadás."
   },

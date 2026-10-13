@@ -1,6 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
-import { cleanBudget, hasE2eAccount, purgeReminders, seedBudget, userClient } from "../support/db";
+import { cleanBudget, cleanGoals, hasE2eAccount, purgeReminders, seedBudget, seedGoal, userClient } from "../support/db";
 
 test.skip(!hasE2eAccount(), "nincs .env.e2e.local (teszt-fiók)");
 test.describe.configure({ mode: "serial" });
@@ -9,12 +9,14 @@ test.describe.configure({ mode: "serial" });
 let db: Awaited<ReturnType<typeof userClient>>;
 let reminderId: string;
 let categoryId: string;
+let goalId: string;
 
 test.beforeAll(async () => {
   db = await userClient();
   await purgeReminders(db.client);
   await db.client.rpc("load_demo_data");
   categoryId = await seedBudget(db.client);
+  goalId = await seedGoal(db.client);
   reminderId = (await db.client.from("reminders").select("id").eq("name", "Netflix").single()).data!.id;
   // egy mára esedékes tétel, hogy az értesítés-lista ne üres állapotot vizsgáljon
   const today = (await db.client.rpc("user_today")).data as string;
@@ -24,6 +26,7 @@ test.beforeAll(async () => {
 });
 test.afterAll(async () => {
   await cleanBudget(db.client, categoryId);
+  await cleanGoals(db.client);
   await purgeReminders(db.client);
 });
 
@@ -45,6 +48,10 @@ const PAGES: [string, () => string][] = [
   ["Analitika", () => "/analytics"],
   ["Keretek", () => "/budgets"],
   ["Keret-részlet", () => `/budgets/${categoryId}`],
+  ["Megtakarítás", () => "/savings"],
+  ["Új cél", () => "/savings/new?preset=vacation"],
+  ["Cél részletei", () => `/savings/${goalId}`],
+  ["Cél szerkesztése", () => `/savings/${goalId}/edit`],
   ["Analitika · táblázat", () => "/analytics?view=table&range=ytd"],
   ["Értesítések", () => "/notifications"],
   ["Profil", () => "/profile"],

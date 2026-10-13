@@ -271,7 +271,8 @@
         "invalidTime": "Enter a valid time.",
         "urlInvalid": "The link must start with http:// or https://.",
         "noteTooLong": "The note can be at most 500 characters.",
-        "invalid": "This value isn't valid."
+        "invalid": "This value isn't valid.",
+        "insufficient": "You cannot withdraw more than you have saved."
       }
     },
     "status": {
@@ -525,7 +526,70 @@
     "expenseDeleted": "Expense deleted.",
     "expenseDeleteFailed": "Could not delete the expense."
   },
-  "savings": {},
+  "savings": {
+    "title": "Savings",
+    "newGoal": "New goal",
+    "active": "Active",
+    "archivedTab": "Archived",
+    "noArchived": "You have no archived goals.",
+    "empty": {
+      "title": "No savings goals yet",
+      "body": "Pick a ready-made goal or set your own — track your progress here."
+    },
+    "presets": {
+      "emergency": "Emergency fund",
+      "vacation": "Vacation",
+      "phone": "New phone",
+      "custom": "Custom goal"
+    },
+    "back": "Back",
+    "emergencyHint": "Suggested target: {amount} (three times your average monthly spending, an estimate).",
+    "emergencyNoData": "Not enough spending data yet to suggest an emergency fund — enter the target amount yourself.",
+    "name": "Goal name",
+    "target": "Target amount",
+    "targetDate": "Deadline",
+    "optional": "optional",
+    "icon": "Icon",
+    "icons": {
+      "piggy-bank": "Piggy bank",
+      "shield-check": "Shield",
+      "plane": "Plane",
+      "smartphone": "Phone",
+      "home": "Home",
+      "gift": "Gift",
+      "graduation-cap": "Study",
+      "car": "Car"
+    },
+    "color": "Colour",
+    "colorN": "Colour {n}",
+    "save": "Save",
+    "saving": "Saving…",
+    "savedOf": "{saved} / {target}",
+    "reached": "You reached your goal!",
+    "deadline": "Deadline: {date}",
+    "needed": "{months, plural, one {# month} other {# months}} left — {amount} a month needed",
+    "add": "Add",
+    "withdraw": "Withdraw",
+    "addTitle": "Add to {name}",
+    "withdrawTitle": "Withdraw from {name}",
+    "amount": "Amount",
+    "date": "Date",
+    "note": "Note",
+    "added": "Added.",
+    "withdrawn": "Withdrawn.",
+    "edit": "Edit",
+    "archive": "Archive",
+    "restore": "Restore",
+    "archivedToast": "Goal archived.",
+    "restored": "Goal restored.",
+    "failed": "That did not work. Please try again.",
+    "history": "History",
+    "noHistory": "No contributions yet.",
+    "entryAdd": "Contribution",
+    "entryWithdraw": "Withdrawal",
+    "deleteEntry": "Delete entry ({date})",
+    "entryDeleted": "Entry deleted."
+  },
   "tips": {
     "disclaimer": "Tips are estimates, not financial advice."
   },

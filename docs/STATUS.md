@@ -1,5 +1,11 @@
 # STATUS  (legújabb fent)
 
+## 2026-10-13 · AI-B · M4 — B-23 kész (localhoston): /savings megtakarítási célok
+
+- Cél-kártyák (haladás, határidő, „még N hónap — havi X"), hozzáadás/kivét lap, előzmények (törölhető), szerkesztés, archiválás/visszaállítás, előkészített célok (vészhelyzeti alap számolt javaslattal, nyaralás, új telefon, egyéni). Minden szám a `savings_goals_progress` view-ból.
+- Javítás: a hibás beküldés után a beírt értékek megmaradnak (kontrollált mezők; keret/kiadás/cél/befizetés).
+- Kapuk: typecheck · lint · i18n:check (704 kulcs) · unit · authed e2e (savings-spec, layout/a11y az új oldalakkal).
+
 ## 2026-10-13 · AI-B · M4 — B-22 kész (localhoston): /budgets + gyors kiadás
 
 - `/budgets` (összesítő „Mennyit költhetsz még?", sávok, keret nélküli kategóriák), `/budgets/[category]` (hónap tételei, keret létrehozás/szerkesztés/törlés), gyors kiadás lap (visszavonás toasttal), FAB-menü. A számok az SQL-ből (`budget_status`, `budget_suggestions`).

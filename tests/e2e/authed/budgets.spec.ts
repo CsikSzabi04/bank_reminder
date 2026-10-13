@@ -40,6 +40,7 @@ test("keret létrehozása: a kategória-chipből, mentés után a listában és 
   await page.getByLabel("Havi keret").fill("abc");
   await page.getByRole("button", { name: "Mentés" }).click();
   await expect(page.getByText("Adj meg érvényes összeget")).toBeVisible();
+  await expect(page.getByLabel("Havi keret")).toHaveValue("abc"); // a beírt érték megmarad
 
   await page.getByLabel("Havi keret").fill("50 000");
   await page.getByRole("button", { name: "Mentés" }).click();

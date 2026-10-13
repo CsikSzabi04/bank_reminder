@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useActionState, useRef } from "react";
+import { useActionState, useRef, useState } from "react";
 import { FormAlert } from "@/components/auth/form-alert";
 import { SubmitButton } from "@/components/auth/submit-button";
 import { TextField } from "@/components/auth/text-field";
@@ -23,6 +23,8 @@ export function BudgetForm({
   const t = useTranslations("budgets");
   const errorText = useReminderErrorText();
   const [state, action] = useActionState(saveBudget, null);
+  // kontrollált mező: a React 19 az akció után az nem-kontrollált mezőket alaphelyzetbe állítja, hibánál elveszne a beírt érték
+  const [limit, setLimit] = useState(initialLimit);
   const formRef = useRef<HTMLFormElement>(null);
   useFocusFirstError(state, formRef);
   const fe = state && !state.ok ? state.fieldErrors : undefined;
@@ -35,7 +37,8 @@ export function BudgetForm({
         label={t("limit")}
         inputMode="decimal"
         autoComplete="off"
-        defaultValue={initialLimit}
+        value={limit}
+        onChange={(e) => setLimit(e.target.value)}
         errors={fe?.limit ?? fe?.categoryId}
         translateError={errorText}
         required

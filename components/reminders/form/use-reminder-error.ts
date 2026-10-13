@@ -20,6 +20,7 @@ const CODES = [
   "urlInvalid",
   "noteTooLong",
   "invalid",
+  "insufficient",
 ] as const satisfies readonly Code[];
 
 const isCode = (code: string): code is Code => (CODES as readonly string[]).includes(code);

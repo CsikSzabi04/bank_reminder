@@ -54,3 +54,19 @@ export async function cleanBudget(client: UserClient, categoryId: string) {
   await client.from("expenses").delete().eq("note", E2E_EXPENSE_NOTE);
   await client.from("budgets").delete().eq("category_id", categoryId);
 }
+
+// Egy megtakarítási cél egy befizetéssel (a /savings oldalak vizsgálatához); csak a „E2E " előtagú célokat takarítja.
+export async function seedGoal(client: UserClient): Promise<string> {
+  const { data, error } = await client
+    .from("savings_goals")
+    .insert({ name: "E2E Layout-cél", target_amount: 300000, currency: "HUF", icon: "plane", color_slot: 3 })
+    .select("id")
+    .single();
+  if (error || !data) throw new Error("a teszt-cél létrehozása sikertelen");
+  await client.from("goal_contributions").insert({ goal_id: data.id, amount: 75000, note: "E2E befizetés" });
+  return data.id;
+}
+
+export async function cleanGoals(client: UserClient) {
+  await client.from("savings_goals").delete().like("name", "E2E %");
+}
