@@ -75,6 +75,8 @@ export async function saveReminder(
 
   revalidatePath("/reminders");
   revalidatePath("/dashboard");
+  // az onboarding 2. lépéséből indult új emlékeztető után a 3. lépés jön (csak ez az egy fix cél engedett)
+  if (reminderId === null && formData.get("onboarding") === "1") redirect("/onboarding?step=3");
   redirect(`/reminders/${data.id}`);
 }
 

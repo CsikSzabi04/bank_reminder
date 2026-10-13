@@ -21,8 +21,8 @@ export function Avatar({ userId, name, url, size = 40, alt, className }: Props) 
   const { background, color } = monogramColors(userId);
   return (
     <span
-      role="img"
-      aria-label={alt}
+      // üres `alt` = dekoratív (mellette a név szövegként van): nem „kép", így nem kell neki alternatív szöveg
+      {...(alt ? { role: "img", "aria-label": alt } : { "aria-hidden": true })}
       style={{ ...box, background, color, fontSize: Math.round(size * 0.4) }}
       className={cn("inline-flex shrink-0 items-center justify-center rounded-full font-semibold", className)}
     >

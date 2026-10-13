@@ -39,6 +39,7 @@ export function ReminderForm({
   catalog,
   today,
   cancelHref,
+  fromOnboarding = false,
 }: {
   /** szerkesztésnél az emlékeztető azonosítója; nélküle új emlékeztető */
   reminderId?: string;
@@ -48,6 +49,8 @@ export function ReminderForm({
   /** a mai nap a profil időzónájában */
   today: string;
   cancelHref: string;
+  /** az onboarding 2. lépéséből nyílt: mentés után a 3. lépés jön */
+  fromOnboarding?: boolean;
 }) {
   const t = useTranslations("reminders.form");
   const tc = useTranslations("common");
@@ -118,6 +121,7 @@ export function ReminderForm({
   return (
     <form ref={formRef} action={action} noValidate className="flex flex-col gap-5">
       <input type="hidden" name="serviceSlug" value={values.serviceSlug} />
+      {fromOnboarding && <input type="hidden" name="onboarding" value="1" />}
 
       {generalFailure && <Notice variant="error">{t("saveFailed")}</Notice>}
       <FormAlert state={state && !state.ok && state.code === "validation" && !state.reason ? null : state} />

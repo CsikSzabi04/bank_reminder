@@ -29,6 +29,11 @@ export default function manifest(): MetadataRoute.Manifest {
       { name: "Következő esedékesek", short_name: "Esedékes", url: "/reminders?source=shortcut" },
       { name: "Analitika", short_name: "Analitika", url: "/analytics?source=shortcut" },
     ],
-    // a "screenshots" a B-26-tal kerül ide (Chrome gazdag telepítő ablak)
+    // Chrome „gazdag telepítő" ablak: 2 keskeny (mobil) + 1 széles (asztali) kép, kitalált minta-adatokkal (public/screenshots)
+    screenshots: [
+      { src: "/screenshots/dashboard-narrow.png", sizes: "780x1688", type: "image/png", form_factor: "narrow", label: "Főoldal: havi kiadás és közelgő számlák" },
+      { src: "/screenshots/reminders-narrow.png", sizes: "780x1688", type: "image/png", form_factor: "narrow", label: "Emlékeztetők listája" },
+      { src: "/screenshots/dashboard-wide.png", sizes: "1280x720", type: "image/png", form_factor: "wide", label: "Főoldal asztali nézetben" },
+    ],
   };
 }

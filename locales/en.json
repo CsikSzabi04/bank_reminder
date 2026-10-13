@@ -1106,5 +1106,26 @@
     "saving": "Saving…",
     "saved": "Expense added.",
     "undo": "Undo"
+  },
+  "onboarding": {
+    "title": "Welcome to Bank Reminder",
+    "progress": "Step {step} of {total}",
+    "welcome": "Hi, {name}!",
+    "welcomeBody": "Three quick steps and you are done. You can skip any time and change the settings later.",
+    "currency": "Base currency",
+    "timezone": "Time zone",
+    "timezoneHint": "Detected automatically from your browser; notifications arrive at this local time.",
+    "next": "Next",
+    "saving": "Saving…",
+    "firstTitle": "Add your first reminder",
+    "firstBody": "Pick a common item — the form opens prefilled, you only need the amount and the date.",
+    "later": "Later",
+    "notifyTitle": "Notifications and install",
+    "notifyBody": "Turn on notifications on this device so we can warn you before a bill is due.",
+    "installTitle": "Install",
+    "installBody": "Put the app on your home screen to open it with one tap.",
+    "installGuide": "Install guide",
+    "done": "Done, go to Home",
+    "skip": "Skip"
   }
 }

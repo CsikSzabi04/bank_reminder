@@ -5,6 +5,8 @@ import { SECURITY_HEADERS, SERVICE_WORKER_HEADERS } from "./lib/security/headers
 const withNextIntl = createNextIntlPlugin("./lib/i18n/request.ts");
 
 const nextConfig: NextConfig = {
+  // a fejlesztői „N" jelző ne takarja a navigációt (tesztek, képernyőképek); a hibák a konzolban/terminálban látszanak
+  devIndicators: false,
   poweredByHeader: false,
   turbopack: {
     rules: {

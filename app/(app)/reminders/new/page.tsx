@@ -29,6 +29,7 @@ export default async function NewReminderPage(props: PageProps<"/reminders/new">
 
   // Előtöltés a gyors-hozzáadásból: ?service=<katalógus-slug> vagy ?name=…&category=<kulcs>
   const params = await props.searchParams;
+  const fromOnboarding = first(params.onboarding) === "1";
   const service = catalog.find((c) => c.slug === first(params.service));
   const categoryKey = service?.categoryKey ?? first(params.category);
   const category = categories.find((c) => c.key === categoryKey);
@@ -44,7 +45,14 @@ export default async function NewReminderPage(props: PageProps<"/reminders/new">
   return (
     <div className="mx-auto flex max-w-2xl flex-col gap-4">
       <h1 className="text-2xl font-semibold">{t("titleNew")}</h1>
-      <ReminderForm initial={initial} categories={categories} catalog={catalog} today={today} cancelHref="/reminders" />
+      <ReminderForm
+        initial={initial}
+        categories={categories}
+        catalog={catalog}
+        today={today}
+        cancelHref={fromOnboarding ? "/onboarding?step=2" : "/reminders"}
+        fromOnboarding={fromOnboarding}
+      />
     </div>
   );
 }

@@ -1106,5 +1106,26 @@
     "saving": "Mentés…",
     "saved": "Kiadás rögzítve.",
     "undo": "Visszavonás"
+  },
+  "onboarding": {
+    "title": "Üdv a Bank Reminderben",
+    "progress": "{step}. lépés / {total}",
+    "welcome": "Szia, {name}!",
+    "welcomeBody": "Három gyors lépés, és kész. Bármikor kihagyhatod, a beállításokat később is módosíthatod.",
+    "currency": "Alap-pénznem",
+    "timezone": "Időzóna",
+    "timezoneHint": "Automatikusan felismertük a böngésződből; az értesítések ennek az idejében érkeznek.",
+    "next": "Tovább",
+    "saving": "Mentés…",
+    "firstTitle": "Vegyük fel az első emlékeztetőt",
+    "firstBody": "Válassz egy gyakori tételt — az űrlap előtöltve nyílik, csak az összeget és a dátumot kell megadnod.",
+    "later": "Később",
+    "notifyTitle": "Értesítések és telepítés",
+    "notifyBody": "Kapcsold be az értesítéseket ezen az eszközön, hogy időben szóljunk, mielőtt egy számla esedékes.",
+    "installTitle": "Telepítés",
+    "installBody": "Tedd az appot a kezdőképernyődre, hogy egy koppintásra elérd.",
+    "installGuide": "Telepítési útmutató",
+    "done": "Kész, irány a Főoldal",
+    "skip": "Kihagyom"
   }
 }

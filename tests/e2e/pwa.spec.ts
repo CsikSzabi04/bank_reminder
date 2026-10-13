@@ -33,6 +33,18 @@ test("manifest: érvényes, minden ikon elérhető", async ({ request }) => {
     "any:192x192", "any:512x512", "maskable:192x192", "maskable:512x512",
   ]);
   for (const icon of m.icons) expect((await request.get(icon.src)).status()).toBe(200);
+
+  // Chrome „gazdag telepítő": 2 keskeny + 1 széles képernyőkép; a deklarált méret = a valódi PNG mérete
+  const shots = m.screenshots as Array<{ src: string; sizes: string; type: string; form_factor: string }>;
+  expect(shots.map((x) => x.form_factor).sort()).toEqual(["narrow", "narrow", "wide"]);
+  for (const shot of shots) {
+    const img = await request.get(shot.src);
+    expect(img.status(), shot.src).toBe(200);
+    expect(img.headers()["content-type"]).toContain("image/png");
+    const buf = await img.body();
+    const [w, h] = [buf.readUInt32BE(16), buf.readUInt32BE(20)];
+    expect(`${w}x${h}`, shot.src).toBe(shot.sizes);
+  }
 });
 
 test("a sw.js nem cache-elhető, az offline oldal saját szigorú CSP-vel jön", async ({ request }) => {

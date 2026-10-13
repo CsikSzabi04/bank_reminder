@@ -1,5 +1,11 @@
 # STATUS  (legújabb fent)
 
+## 2026-10-14 · AI-B · M4 — B-26 kész (localhoston): onboarding + manifest-képernyőképek
+
+- `/onboarding` 3 lépés (nyelv/téma + pénznem + automatikus időzóna → első emlékeztető chipekkel/„Később" → értesítés + telepítés), kihagyható, a végén `onboarding_done = true`; a regisztráció-megerősítés ide visz.
+- Manifest `screenshots` (2 keskeny + 1 széles), a Chrome gazdag telepítőjéhez. Kapuk: typecheck · lint · i18n:check (836 kulcs) · unit · authed e2e (onboarding-spec axe-szal 360 px-en, világos/sötét) · `test:e2e:prod` (15/15).
+- Talált + javított: dekoratív avatar mobil a11y-hiba.
+
 ## 2026-10-13 · AI-B · M4 — B-25 kész (localhoston): /news, /news/[id], Főoldal hír-sáv
 
 - Élő kiadói RSS-hírek (`news_feed`/`news_get`): témaszűrők, kártyarács (1/2/3 oszlop), kurzoros „Továbbiak", FreshnessBadge, akciós figyelmeztetés, „Hibásnak tűnik?" jelentés, hasonló hírek, jogi megjegyzés; hírek ki/be (`news_enabled`).
