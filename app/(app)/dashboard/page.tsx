@@ -12,12 +12,14 @@ import { LoadDemoButton } from "@/components/reminders/demo-buttons";
 import { OccurrencePayButton } from "@/components/reminders/occurrence-pay-button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { InstallCard } from "@/components/install/install-card";
+import { NewsStrip } from "@/components/news/news-strip";
 import { TipTeaser } from "@/components/tips/tip-teaser";
 import { getDashboardSummary, resolveMonth } from "@/lib/dashboard";
 import { todayIn } from "@/lib/format";
 import type { Locale } from "@/lib/i18n/config";
 import { getCurrentProfile } from "@/lib/profile/queries";
 import { getCategories } from "@/lib/reminders/queries";
+import { getNewsEnabled } from "@/lib/news/queries";
 import { first } from "@/lib/search-params";
 import { getTipsEnabled, getTopTip } from "@/lib/tips/queries";
 
@@ -41,7 +43,12 @@ export default async function DashboardPage(props: PageProps<"/dashboard">) {
   const currentMonth = `${today.slice(0, 7)}-01`;
   const month = resolveMonth(first((await props.searchParams).month), today);
 
-  const [summary, categories, tipsEnabled] = await Promise.all([getDashboardSummary(month), getCategories(locale), getTipsEnabled(profile.id)]);
+  const [summary, categories, tipsEnabled, newsEnabled] = await Promise.all([
+    getDashboardSummary(month),
+    getCategories(locale),
+    getTipsEnabled(profile.id),
+    getNewsEnabled(profile.id),
+  ]);
   const topTip = tipsEnabled ? await getTopTip(today) : null;
   const name = profile.display_name || profile.email.split("@")[0];
 
@@ -134,6 +141,7 @@ export default async function DashboardPage(props: PageProps<"/dashboard">) {
           </div>
         </div>
       )}
+      {newsEnabled && summary && <NewsStrip />}
       <InstallCard />
     </div>
   );

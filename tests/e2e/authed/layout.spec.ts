@@ -9,6 +9,7 @@ test.describe.configure({ mode: "serial" });
 let reminderId: string;
 let categoryId: string;
 let goalId: string;
+let newsId: string;
 let db: Awaited<ReturnType<typeof userClient>>;
 
 test.beforeAll(async () => {
@@ -18,6 +19,7 @@ test.beforeAll(async () => {
   categoryId = await seedBudget(db.client);
   goalId = await seedGoal(db.client);
   await db.client.rpc("refresh_tips");
+  newsId = ((await db.client.rpc("news_feed", { p_limit: 1 })).data ?? [])[0]?.id ?? "00000000-0000-4000-8000-000000000000";
   reminderId = (await db.client.from("reminders").select("id").eq("name", "Netflix").single()).data!.id;
 });
 test.afterAll(async () => {
@@ -42,6 +44,8 @@ const PAGES: [string, () => string][] = [
   ["Keretek", () => "/budgets"],
   ["Keret-részlet", () => `/budgets/${categoryId}`],
   ["Tippek", () => "/tips"],
+  ["Hírek", () => "/news"],
+  ["Hír részletei", () => `/news/${newsId}`],
   ["Megtakarítás", () => "/savings"],
   ["Új cél", () => "/savings/new?preset=vacation"],
   ["Cél részletei", () => `/savings/${goalId}`],

@@ -703,14 +703,58 @@
     }
   },
   "news": {
-    "source": "Source: {name}",
-    "freshness": {
-      "fresh": "Fresh",
-      "stale": "May no longer be current"
+    "title": "News",
+    "all": "All",
+    "back": "Back to news",
+    "topicsLabel": "Topic",
+    "topics": {
+      "all": "All",
+      "deals": "Deals",
+      "prices": "Prices",
+      "utilities": "Utilities",
+      "banking": "Banking and loans",
+      "saving": "Saving",
+      "general": "General"
     },
-    "deal": {
-      "disclaimer": "Based on a news source — check the offer's terms and validity in store."
-    }
+    "fresh": "Fresh",
+    "stale": "May no longer be current",
+    "source": "Source: {name}",
+    "openOriginal": "Open the original article",
+    "similar": "Similar news",
+    "dealDisclaimer": "Based on a news source — check the terms and validity of the offer with the store.",
+    "legalList": "News belongs to the publishers; we only show the headline and a short excerpt, with a link to the source.",
+    "legalItem": "The content belongs to {name}; we only show the headline and a short excerpt.",
+    "empty": {
+      "title": "No fresh news right now",
+      "body": "Check back later."
+    },
+    "unavailable": "News is not available right now. The rest of the app works.",
+    "disabled": {
+      "title": "News is turned off",
+      "body": "When on, you see news about cutting costs, with source and date."
+    },
+    "turnOn": "Turn news on",
+    "turnOff": "Turn news off",
+    "loadMore": "Load more",
+    "loading": "Loading…",
+    "loadMoreFailed": "Could not load more.",
+    "failed": "That did not work. Please try again.",
+    "report": {
+      "open": "Looks wrong?",
+      "title": "What is wrong with this item?",
+      "description": "If several people report it, we hide it and review it.",
+      "reasons": {
+        "outdated": "No longer current",
+        "wrong": "Contains a wrong claim",
+        "spam": "Spam or advert",
+        "other": "Other"
+      },
+      "send": "Send report",
+      "thanks": "Thanks for letting us know.",
+      "already": "You already reported this item.",
+      "failed": "Could not send the report."
+    },
+    "stripLabel": "News list"
   },
   "notifications": {
     "push": {

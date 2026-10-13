@@ -703,14 +703,58 @@
     }
   },
   "news": {
-    "source": "Forrás: {name}",
-    "freshness": {
-      "fresh": "Friss",
-      "stale": "Lehet, hogy már nem aktuális"
+    "title": "Hírek",
+    "all": "Mind",
+    "back": "Vissza a hírekhez",
+    "topicsLabel": "Téma",
+    "topics": {
+      "all": "Mind",
+      "deals": "Akciók",
+      "prices": "Árak",
+      "utilities": "Rezsi",
+      "banking": "Bank és hitel",
+      "saving": "Spórolás",
+      "general": "Általános"
     },
-    "deal": {
-      "disclaimer": "Hírforrás alapján — az akció feltételeit és érvényességét ellenőrizd az üzletnél."
-    }
+    "fresh": "Friss",
+    "stale": "Lehet, hogy már nem aktuális",
+    "source": "Forrás: {name}",
+    "openOriginal": "Eredeti cikk megnyitása",
+    "similar": "Hasonló hírek",
+    "dealDisclaimer": "Hírforrás alapján — az akció feltételeit és érvényességét ellenőrizd az üzletnél.",
+    "legalList": "A hírek a kiadók tulajdonai; itt csak a címet és rövid kivonatot mutatjuk, a forrásra hivatkozva.",
+    "legalItem": "A tartalom a(z) {name} tulajdona; itt csak a címet és rövid kivonatot mutatjuk.",
+    "empty": {
+      "title": "Most nincs friss hír",
+      "body": "Nézz vissza később."
+    },
+    "unavailable": "A hírek most nem érhetők el. Az app többi része működik.",
+    "disabled": {
+      "title": "A hírek ki vannak kapcsolva",
+      "body": "Bekapcsolva a költségcsökkentéssel kapcsolatos hírek jelennek meg, forrással és dátummal."
+    },
+    "turnOn": "Hírek bekapcsolása",
+    "turnOff": "Hírek kikapcsolása",
+    "loadMore": "Továbbiak",
+    "loading": "Betöltés…",
+    "loadMoreFailed": "A továbbiakat nem sikerült betölteni.",
+    "failed": "Nem sikerült. Próbáld újra.",
+    "report": {
+      "open": "Hibásnak tűnik?",
+      "title": "Mi a gond ezzel a hírrel?",
+      "description": "Ha többen jelzik, a hírt elrejtjük és átnézzük.",
+      "reasons": {
+        "outdated": "Már nem aktuális",
+        "wrong": "Téves állítást tartalmaz",
+        "spam": "Spam vagy hirdetés",
+        "other": "Egyéb"
+      },
+      "send": "Jelentés elküldése",
+      "thanks": "Köszönjük a jelzést.",
+      "already": "Ezt a hírt már jelentetted.",
+      "failed": "A jelentést nem sikerült elküldeni."
+    },
+    "stripLabel": "Hírek listája"
   },
   "notifications": {
     "push": {

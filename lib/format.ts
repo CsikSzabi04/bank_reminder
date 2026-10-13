@@ -103,3 +103,14 @@ export function formatMonthShort(isoDate: string, locale: Locale): string {
 export function formatCompactNumber(value: number, locale: Locale): string {
   return new Intl.NumberFormat(NUM_LOCALE[locale], { notation: "compact", maximumFractionDigits: 1 }).format(value);
 }
+
+// „2 órája" / „tegnap" / „5 napja": a hír életkora (§18.3/4). A `now`-t a hívó adja, így szerver és kliens ugyanazt írja ki.
+export function formatAge(published: string | Date, now: Date, locale: Locale): string {
+  const diffMs = new Date(published).getTime() - now.getTime();
+  const abs = Math.abs(diffMs);
+  const rtf = new Intl.RelativeTimeFormat(DATE_LOCALE[locale], { numeric: "auto" });
+  if (abs < 60_000) return rtf.format(0, "second");
+  if (abs < 3_600_000) return rtf.format(Math.round(diffMs / 60_000), "minute");
+  if (abs < 86_400_000) return rtf.format(Math.round(diffMs / 3_600_000), "hour");
+  return rtf.format(Math.round(diffMs / 86_400_000), "day");
+}

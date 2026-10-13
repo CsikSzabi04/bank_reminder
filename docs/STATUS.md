@@ -1,5 +1,10 @@
 # STATUS  (legújabb fent)
 
+## 2026-10-13 · AI-B · M4 — B-25 kész (localhoston): /news, /news/[id], Főoldal hír-sáv
+
+- Élő kiadói RSS-hírek (`news_feed`/`news_get`): témaszűrők, kártyarács (1/2/3 oszlop), kurzoros „Továbbiak", FreshnessBadge, akciós figyelmeztetés, „Hibásnak tűnik?" jelentés, hasonló hírek, jogi megjegyzés; hírek ki/be (`news_enabled`).
+- Kapuk: typecheck · lint · i18n:check (817 kulcs) · unit · authed e2e (news-spec az élő feeden; layout/a11y).
+
 ## 2026-10-13 · AI-B · M4 — B-24 kész (localhoston): /tips + Főoldal-teaser
 
 - 13 P0 tipp-kód (átfedés, fedett előfizetés „Mit nézel itt?", éves csomag, áremelés, próba-vége, előfizetés-arány, „használtad?", lemondás, keret-túllépés/előrejelzés, dupla emlékeztető, késői fizetés) — szöveg `locales`-ból, „Miért látom ezt?" minden kártyán, Később / Nem érdekel / Megcsináltam (a DB `tip_action`-je), tippek ki/be, állandó figyelmeztetés (H10). A Főoldalon egy tipp (legnagyobb becslés).
