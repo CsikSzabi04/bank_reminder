@@ -1,5 +1,14 @@
 # STATUS  (legújabb fent)
 
+## 2026-10-13 · AI-A · M3 — értesítési rendszer: kód kész, telepítésre vár
+- ✔ **A-12/A-13** élesítve: DST-helyes értesítési sor, claim/finish/retry, snooze, push-regisztráció, ICS, export (lásd CONTRACT_CHANGES). **A-18 (1/2)**: pg_cron + SQL-jobok élnek (napi karbantartás, 5 percenkénti extra-sorok, takarítás).
+- ✔ **A-15/A-16/A-17/A-19/A-20** kód kész + Deno-tesztek zöldek (RFC 8291 független visszafejtés, HU/EN szövegek, SSRF-allowlist) + `deno check` tiszta: `send-notifications`, `send-test-push`, `delete-account`, `fx-refresh`. **Még NINCS telepítve** (a CLI nincs bejelentkezve).
+- ⛔ **Blokkol — gazda, 1 perc:** terminálban futtasd egyszer: `npx supabase login` (böngészős bejelentkezés a Supabase fiókba). Utána én: `db:secrets` (CRON_SECRET + VAPID-pár beállítása) → `db:deploy` → HTTP-cron migráció → éles teszt-push.
+- → **B:** a push-kliensnek kell a VAPID **publikus** kulcs (`NEXT_PUBLIC_VAPID_PUBLIC_KEY`) — a `db:secrets` futása után beírom a `.env.local`-ba és ide. `send-test-push`: `POST` JWT-vel, válasz `{ ok, sent, devices, errors? }`, 429 = rate limit (3/perc); `delete-account`: `{ confirm: 'DELETE' }`.
+- → **B:** push-payload szerződés a `supabase/functions/_shared/i18n.ts` `toPushPayload`-ban (§12.6): `{ v, kind, title, body, url, tag, occId, badge, actions[{action:'paid'|'snooze',title}], ts, lang }`. A SW-akciók: `POST /api/occurrences/:id/paid|snooze` → B route-ja hívja az `mark_paid` / `snooze_occurrence` RPC-t.
+- Parancsok: `npm run db:test` · `npm run fn:test` · `npm run fn:check` · `npm run db:secrets` · `npm run db:deploy`.
+- Következő (A): A-11 (keretek/célok), A-21 (tippek), A-23–A-25 (hírek), amíg a bejelentkezésre várunk.
+
 ## 2026-10-13 · AI-B · M0 (folyt.)
 - ✔ **B-03** i18n alap: `next-intl` (előtag nélkül; feloldás: süti → Accept-Language → hu), `locales/{hu,en}.json` (§20.1 névterek + Függelék D kezdőkészlet), `lib/format.ts` (pénz/dátum/relatív/%/`todayIn`), tesztek. A `utils/supabase/*` már `Database`-típusos.
 - ✔ **B-02** tokenek (§14.2, világos/sötét) + Inter latin/latin-ext + `next-themes` + `AppShell` (alsó fül-sáv <768 · ikon-sín · oldalsáv ≥1024, skip link, FAB, „Még" lap) + `/dev/ui` játszótér (csak dev). Kapuk: typecheck · lint · 14 unit teszt · build · 14 e2e (360/768/1280 px, sötét-mód-villanás, téma/nyelv váltó) zöld; képernyőkép-átnézés megvolt.

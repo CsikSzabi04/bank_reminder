@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // A-oldali DB-eszköz (nincs Docker/psql igény). Mindig a H2-védővel indul.
-//   node scripts/db.mjs assert | push [--yes] | types | test [név] | sql (-e "..."|-f fájl) [--rollback]
+//   node scripts/db.mjs assert | push [--yes] | deploy [név…] | types | test [név] | sql (-e "..."|-f fájl) [--rollback]
 // Titok: SUPABASE_DB_PASSWORD környezeti változó (csak helyben; soha fájlba/repóba — H3).
 import { spawnSync } from 'node:child_process';
 import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
@@ -32,6 +32,16 @@ switch (cmd) {
   case 'push': {
     const r = run('npx', ['--yes', 'supabase@latest', 'db', 'push', '--db-url', dbUrl(), ...(args.includes('--yes') ? ['--yes'] : [])], { stdio: 'inherit' });
     process.exit(r.status ?? 1);
+  }
+  case 'deploy': {   // Edge Function-ök telepítése (CLI-bejelentkezés kell: npx supabase login)
+    dbUrl();          // H2-védő
+    const names = args.length ? args : readdirSync('supabase/functions', { withFileTypes: true }).filter((d) => d.isDirectory() && !d.name.startsWith('_')).map((d) => d.name);
+    for (const n of names) {
+      console.log('→ deploy', n);
+      const r = run('npx', ['--yes', 'supabase@latest', 'functions', 'deploy', n, '--project-ref', REF, '--use-api', '--no-verify-jwt'], { stdio: 'inherit' });
+      if (r.status !== 0) process.exit(r.status ?? 1);
+    }
+    break;
   }
   case 'types': {
     const r = run('npx', ['--yes', 'supabase@latest', 'gen', 'types', 'typescript', '--db-url', dbUrl(), '--schema', 'public']);

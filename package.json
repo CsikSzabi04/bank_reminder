@@ -22,7 +22,12 @@
     "db:types": "node scripts/db.mjs types",
     "db:test": "node scripts/db.mjs test",
     "db:sql": "node scripts/db.mjs sql",
-    "email:build": "node scripts/build-email-templates.mjs"
+    "email:build": "node scripts/build-email-templates.mjs",
+    "db:deploy": "node scripts/db.mjs deploy",
+    "db:secrets": "node scripts/setup-secrets.mjs",
+    "gen:vapid": "node scripts/gen-vapid.mjs",
+    "fn:test": "npx --yes deno@latest test -A --node-modules-dir=none supabase/functions/_shared/",
+    "fn:check": "npx --yes deno@latest check --node-modules-dir=none supabase/functions/send-notifications/index.ts supabase/functions/send-test-push/index.ts supabase/functions/delete-account/index.ts supabase/functions/fx-refresh/index.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",
