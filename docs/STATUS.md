@@ -1,5 +1,10 @@
 # STATUS  (legújabb fent)
 
+## 2026-10-13 · AI-B · M4 — B-24 kész (localhoston): /tips + Főoldal-teaser
+
+- 13 P0 tipp-kód (átfedés, fedett előfizetés „Mit nézel itt?", éves csomag, áremelés, próba-vége, előfizetés-arány, „használtad?", lemondás, keret-túllépés/előrejelzés, dupla emlékeztető, késői fizetés) — szöveg `locales`-ból, „Miért látom ezt?" minden kártyán, Később / Nem érdekel / Megcsináltam (a DB `tip_action`-je), tippek ki/be, állandó figyelmeztetés (H10). A Főoldalon egy tipp (legnagyobb becslés).
+- Kapuk: typecheck · lint · i18n:check (779 kulcs) · unit · authed e2e (tips-spec: tag-mentés → fedett tipp, státuszok DB-ben, ki/be; layout/a11y).
+
 ## 2026-10-13 · AI-B · M4 — B-23 kész (localhoston): /savings megtakarítási célok
 
 - Cél-kártyák (haladás, határidő, „még N hónap — havi X"), hozzáadás/kivét lap, előzmények (törölhető), szerkesztés, archiválás/visszaállítás, előkészített célok (vészhelyzeti alap számolt javaslattal, nyaralás, új telefon, egyéni). Minden szám a `savings_goals_progress` view-ból.

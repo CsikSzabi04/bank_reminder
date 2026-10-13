@@ -591,7 +591,116 @@
     "entryDeleted": "Entry deleted."
   },
   "tips": {
-    "disclaimer": "Tips are estimates, not financial advice."
+    "title": "Tips",
+    "teaserTitle": "Tip",
+    "allTips": "All tips",
+    "sections": {
+      "save": "You could save",
+      "warn": "Keep an eye on",
+      "info": "Ideas"
+    },
+    "totalSaving": "Up to about {monthly}/month ({yearly}/year) could be saved in total.",
+    "doneSaving": "You have done it: about {monthly}/month saved so far.",
+    "estimate": "about {amount}/month",
+    "empty": {
+      "title": "No tips right now",
+      "body": "Add more reminders, budgets or subscriptions and suggestions will show up here."
+    },
+    "disabled": {
+      "title": "Tips are turned off",
+      "body": "When on, we show saving ideas based on your data (reminders, budgets)."
+    },
+    "turnOn": "Turn tips on",
+    "turnOff": "Turn tips off",
+    "disclaimer": "Tips are estimates, not financial advice.",
+    "disclaimerLong": "Tips are general estimates based on the data you entered and a catalogue that is updated from time to time; they are not financial advice. Providers can change prices and plans — always check with the provider.",
+    "whyTitle": "Why am I seeing this?",
+    "snooze": "Later",
+    "dismiss": "Not interested",
+    "done": "I did it",
+    "yes": "Yes, I used it",
+    "no": "No, I did not",
+    "snoozed": "We will show it again in 30 days.",
+    "dismissed": "Hidden, it will not come back.",
+    "doneToast": "Great, we counted it in your savings.",
+    "thanks": "Thanks for answering.",
+    "failed": "That did not work. Please try again.",
+    "usageQuestion": "What do you watch on this?",
+    "usageSave": "Save",
+    "usageSaved": "Saved, and the tips were recalculated.",
+    "categoryFallback": "Category",
+    "groups": {
+      "video_streaming": "video streaming",
+      "music_streaming": "music streaming",
+      "cloud_storage": "cloud storage",
+      "game_subscription": "gaming",
+      "other": "similar"
+    },
+    "sub_overlap_group": {
+      "title": "You have {count} {group} subscriptions",
+      "body": "{names} — {total} a month together. It may be worth rotating them: cancelling the cheapest one costs you less.",
+      "why": "We looked at your active {group} subscriptions ({names}). The estimated saving is the cheapest one monthly price; the providers content can differ."
+    },
+    "sub_covered_by_others": {
+      "title": "Cancelling {name} may be an option",
+      "body": "You marked that you use it for: {tags}. These may also be in your {covered} subscription — worth checking with the provider.",
+      "why": "Based on what you marked ({tags}); we did not verify the providers content, which can change."
+    },
+    "sub_maybe_redundant": {
+      "title": "What do you watch on {name}?",
+      "body": "Mark what you use it for and we will tell you whether it is worth keeping.",
+      "why": "You have several similar ({group}) subscriptions; your marked usage lets us check the overlap."
+    },
+    "sub_annual_cheaper": {
+      "title": "{name} may be cheaper yearly",
+      "body": "According to the catalogue the yearly price saves about {pct} (≈ {saving}/year). The data is refreshed from time to time — check with the provider.",
+      "why": "You pay monthly and the catalogue lists a verified yearly discount for this service."
+    },
+    "price_increase": {
+      "title": "{name}: the price went up",
+      "body": "The price is {old} → {new} (+{pct}). Time to review the plan?",
+      "why": "We compared your last two due amounts (alert threshold: 5%)."
+    },
+    "trial_ending": {
+      "title": "{name}: the free trial is ending",
+      "body": "The trial ends on {date}. After that it costs {amount}. Do you need it?",
+      "why": "Based on the trial end date set on the reminder."
+    },
+    "subs_share_high": {
+      "title": "Subscriptions are a big part of your spending",
+      "body": "Your subscriptions make up {pct} of your monthly spending ({monthly} a month, {yearly} a year).",
+      "why": "We compared the monthly equivalent of your subscriptions to your total monthly spending (alert threshold: 15%)."
+    },
+    "unused_check": {
+      "title": "Did you use {name} in the last month?",
+      "body": "Answer — if you say no more than once, we will offer to cancel it.",
+      "why": "We check in on your subscriptions from time to time so you do not pay for things you do not use."
+    },
+    "sub_unused": {
+      "title": "Cancelling {name} may be an option",
+      "body": "You told us more than once that you do not use it. Cancel it?",
+      "why": "Based on your no answers to our check-ins."
+    },
+    "budget_over_now": {
+      "title": "{category}: over budget",
+      "body": "You are {over} over the budget this month.",
+      "why": "Spending so far this month exceeds the budget you set."
+    },
+    "budget_forecast_over": {
+      "title": "{category}: the budget may run out",
+      "body": "At this pace you will reach about {forecast} by month end, against a budget of {limit}.",
+      "why": "Estimated from your pace so far this month; actual spending may differ."
+    },
+    "duplicate_reminder": {
+      "title": "{a} and {b}: paying twice?",
+      "body": "Very similar names and the same amount. You may be tracking the same thing twice.",
+      "why": "Based on similar names and an identical amount."
+    },
+    "late_payment_pattern": {
+      "title": "{name}: paid late more than once",
+      "body": "Recently you marked it paid after the due date {count, plural, one {# time} other {# times}}. Consider an earlier reminder.",
+      "why": "We compared when you marked it paid with the due date."
+    }
   },
   "news": {
     "source": "Source: {name}",

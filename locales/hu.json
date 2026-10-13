@@ -591,7 +591,116 @@
     "entryDeleted": "A tétel törölve."
   },
   "tips": {
-    "disclaimer": "A tippek becslések, nem pénzügyi tanácsadás."
+    "title": "Tippek",
+    "teaserTitle": "Tipp",
+    "allTips": "Összes tipp",
+    "sections": {
+      "save": "Spórolhatsz",
+      "warn": "Figyelj rá",
+      "info": "Ötletek"
+    },
+    "totalSaving": "Összesen akár kb. {monthly}/hó (évi {yearly}) spórolható.",
+    "doneSaving": "Megcsináltad: kb. {monthly}/hó megtakarítás eddig.",
+    "estimate": "kb. {amount}/hó",
+    "empty": {
+      "title": "Most nincs tippünk",
+      "body": "Ha több emlékeztetőt, keretet vagy előfizetést adsz hozzá, itt jelennek meg a javaslatok."
+    },
+    "disabled": {
+      "title": "A tippek ki vannak kapcsolva",
+      "body": "Bekapcsolva az adataid alapján (emlékeztetők, keretek) mutatunk megtakarítási ötleteket."
+    },
+    "turnOn": "Tippek bekapcsolása",
+    "turnOff": "Tippek kikapcsolása",
+    "disclaimer": "A tippek becslések, nem pénzügyi tanácsadás.",
+    "disclaimerLong": "A tippek általános becslések az általad megadott adatok és egy időnként frissített katalógus alapján; nem minősülnek pénzügyi tanácsadásnak. A szolgáltatók díjai és csomagjai változhatnak — mindig ellenőrizd a szolgáltatónál.",
+    "whyTitle": "Miért látom ezt?",
+    "snooze": "Később",
+    "dismiss": "Nem érdekel",
+    "done": "Megcsináltam",
+    "yes": "Igen, használtam",
+    "no": "Nem használtam",
+    "snoozed": "30 nap múlva újra megmutatjuk.",
+    "dismissed": "Elrejtettük, nem jön vissza.",
+    "doneToast": "Szuper, beleszámoltuk a megtakarításba.",
+    "thanks": "Köszönjük a választ.",
+    "failed": "Nem sikerült. Próbáld újra.",
+    "usageQuestion": "Mit nézel ezen?",
+    "usageSave": "Mentés",
+    "usageSaved": "Elmentettük, újraszámoltuk a tippeket.",
+    "categoryFallback": "Kategória",
+    "groups": {
+      "video_streaming": "online film- és sorozat",
+      "music_streaming": "zenei",
+      "cloud_storage": "felhőtárhely",
+      "game_subscription": "játék",
+      "other": "hasonló"
+    },
+    "sub_overlap_group": {
+      "title": "{count} {group} előfizetésed van",
+      "body": "{names} — együtt havi {total}. Érdemes lehet váltogatni őket: a legolcsóbbat lemondva kevesebbet fizetsz.",
+      "why": "A(z) {group} csoportba tartozó aktív előfizetéseidet vettük figyelembe ({names}). A becsült megtakarítás a legolcsóbb tag havi díja; a szolgáltatók tartalma eltérhet."
+    },
+    "sub_covered_by_others": {
+      "title": "A(z) {name} lemondása lehet",
+      "body": "Azt jelölted meg, hogy itt ezt használod: {tags}. Ezek a(z) {covered} előfizetésedben is szerepelhetnek — érdemes ellenőrizni a szolgáltatónál.",
+      "why": "A megjelölt használatod alapján ({tags}); nem a szolgáltatók tartalmát ellenőriztük, az változhat."
+    },
+    "sub_maybe_redundant": {
+      "title": "Mit nézel a(z) {name} előfizetésen?",
+      "body": "Jelöld be, mire használod, és megmondjuk, érdemes-e megtartani.",
+      "why": "Több hasonló ({group}) előfizetésed van; a bejelölt használat alapján tudjuk megnézni az átfedést."
+    },
+    "sub_annual_cheaper": {
+      "title": "A(z) {name} éves díjjal olcsóbb lehet",
+      "body": "A katalógus szerint éves díjjal kb. {pct} spórolható (≈ {saving}/év). Az adat időnként frissül — ellenőrizd a szolgáltatónál.",
+      "why": "Havi díjat fizetsz, és a katalógusban ellenőrzött éves kedvezmény szerepel ehhez a szolgáltatáshoz."
+    },
+    "price_increase": {
+      "title": "{name}: drágább lett",
+      "body": "A díj {old} → {new} (+{pct}). Átnézed a csomagot?",
+      "why": "Az utolsó két esedékességed összegét hasonlítottuk össze (jelzési küszöb: 5%)."
+    },
+    "trial_ending": {
+      "title": "{name}: közeledik az ingyenes próba vége",
+      "body": "A próba vége: {date}. Utána {amount} a díj. Szükséged van rá?",
+      "why": "Az emlékeztetőnél megadott próba-lejárat alapján."
+    },
+    "subs_share_high": {
+      "title": "Az előfizetések a kiadásod nagy része",
+      "body": "A havi kiadásod {pct}-át teszik ki az előfizetéseid (havi {monthly}, évi {yearly}).",
+      "why": "Az előfizetések havi egyenértékét a havi összes kiadáshoz viszonyítottuk (jelzési küszöb: 15%)."
+    },
+    "unused_check": {
+      "title": "Használtad a(z) {name} előfizetést az elmúlt hónapban?",
+      "body": "Válaszolj — ha többször nemet mondasz, felajánljuk a lemondás lehetőségét.",
+      "why": "Időnként rákérdezünk az előfizetéseidre, hogy ne fizess olyanért, amit nem használsz."
+    },
+    "sub_unused": {
+      "title": "A(z) {name} lemondása lehet",
+      "body": "Többször jelezted, hogy nem használod. Lemondod?",
+      "why": "A rákérdezésekre adott „nem” válaszaid alapján."
+    },
+    "budget_over_now": {
+      "title": "{category}: túlléptél a kereten",
+      "body": "{over} a keret fölött jársz ebben a hónapban.",
+      "why": "A hónap eddigi kiadása meghaladja a beállított keretet."
+    },
+    "budget_forecast_over": {
+      "title": "{category}: a keret várhatóan elfogy",
+      "body": "Ebben a tempóban a hónap végére kb. {forecast} lesz, a keret {limit}.",
+      "why": "A hónap eddigi ritmusából becsültük; a tényleges kiadás eltérhet."
+    },
+    "duplicate_reminder": {
+      "title": "{a} és {b}: dupla fizetés?",
+      "body": "Nagyon hasonló nevű és azonos összegű emlékeztetők. Lehet, hogy ugyanazt kétszer követed.",
+      "why": "Hasonló név és azonos összeg alapján."
+    },
+    "late_payment_pattern": {
+      "title": "{name}: többször késve fizetted",
+      "body": "Az utóbbi időben {count, plural, one {# alkalommal} other {# alkalommal}} a határidő után jelölted kifizetettnek. Érdemes lehet korábbi emlékeztetőt beállítani.",
+      "why": "A kifizetés jelölésének időpontját a határidővel vetettük össze."
+    }
   },
   "news": {
     "source": "Forrás: {name}",

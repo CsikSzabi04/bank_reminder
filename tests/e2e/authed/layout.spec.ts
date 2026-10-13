@@ -17,6 +17,7 @@ test.beforeAll(async () => {
   await db.client.rpc("load_demo_data");
   categoryId = await seedBudget(db.client);
   goalId = await seedGoal(db.client);
+  await db.client.rpc("refresh_tips");
   reminderId = (await db.client.from("reminders").select("id").eq("name", "Netflix").single()).data!.id;
 });
 test.afterAll(async () => {
@@ -40,6 +41,7 @@ const PAGES: [string, () => string][] = [
   ["Analitika", () => "/analytics"],
   ["Keretek", () => "/budgets"],
   ["Keret-részlet", () => `/budgets/${categoryId}`],
+  ["Tippek", () => "/tips"],
   ["Megtakarítás", () => "/savings"],
   ["Új cél", () => "/savings/new?preset=vacation"],
   ["Cél részletei", () => `/savings/${goalId}`],
