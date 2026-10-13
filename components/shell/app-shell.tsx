@@ -2,6 +2,7 @@ import { Bell, Download, User } from "lucide-react";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
+import { Avatar } from "@/components/profile/avatar";
 import { BRAND } from "@/lib/brand";
 import { Fab } from "./fab";
 import { MoreSheet } from "./more-sheet";
@@ -12,8 +13,11 @@ const ICON_BTN =
   "flex size-11 items-center justify-center rounded-full text-text-2 hover:bg-surface-2";
 
 // Reszponzív váz (§14.3): <768 alsó fül-sáv · 768–1023 ikon-sín · ≥1024 oldalsáv (248 px)
-export async function AppShell({ children }: { children: ReactNode }) {
+export type ShellUser = { id: string; name: string | null; avatarUrl: string | null };
+
+export async function AppShell({ children, user }: { children: ReactNode; user?: ShellUser }) {
   const t = await getTranslations();
+  const avatarAlt = t("profile.overview.avatar.alt", { name: user?.name ?? "" });
 
   return (
     <div className="min-h-dvh md:flex">
@@ -54,8 +58,12 @@ export async function AppShell({ children }: { children: ReactNode }) {
             {t("install.cta")}
           </Link>
           <Link href="/profile" className="flex min-h-11 items-center gap-3 rounded-control px-3 text-sm font-medium text-text-2 hover:bg-surface-2">
-            <User className="size-5" aria-hidden />
-            {t("nav.profile")}
+            {user ? (
+              <Avatar userId={user.id} name={user.name} url={user.avatarUrl} size={28} alt={avatarAlt} />
+            ) : (
+              <User className="size-5" aria-hidden />
+            )}
+            <span className="truncate">{user?.name || t("nav.profile")}</span>
           </Link>
         </div>
       </aside>
@@ -68,7 +76,11 @@ export async function AppShell({ children }: { children: ReactNode }) {
               <Bell className="size-5" aria-hidden />
             </Link>
             <Link href="/profile" aria-label={t("nav.profile")} className={`${ICON_BTN} lg:hidden`}>
-              <User className="size-5" aria-hidden />
+              {user ? (
+                <Avatar userId={user.id} name={user.name} url={user.avatarUrl} size={32} alt="" />
+              ) : (
+                <User className="size-5" aria-hidden />
+              )}
             </Link>
           </div>
         </header>

@@ -17,3 +17,11 @@ test("védett /api/* kijelentkezve → 401 JSON, nem átirányítás", async ({ 
   expect(await res.json()).toEqual({ ok: false, code: "unauthenticated" });
   expect(res.headers()["cache-control"]).toContain("no-store");
 });
+
+test("védett profil és avatar-API kijelentkezve nem érhető el", async ({ page, request }) => {
+  await page.goto("/profile?section=appearance");
+  await expect(page).toHaveURL(/\/login\?next=%2Fprofile%3Fsection%3Dappearance$/);
+
+  const res = await request.post("/api/profile/avatar", { maxRedirects: 0 });
+  expect(res.status()).toBe(401);
+});

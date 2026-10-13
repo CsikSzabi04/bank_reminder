@@ -192,7 +192,51 @@
       "brave": "A Brave alapból tiltja a push-szolgáltatást — kapcsold be a „Use Google services for push messaging” beállítást, majd indítsd újra."
     }
   },
-  "profile": {},
+  "profile": {
+    "title": "Profil",
+    "back": "Vissza a profilhoz",
+    "sections": {
+      "label": "Profil szakaszai",
+      "overview": "Áttekintés",
+      "appearance": "Megjelenés"
+    },
+    "overview": {
+      "avatar": {
+        "label": "Profilkép",
+        "alt": "{name} profilképe",
+        "choose": "Fotó kiválasztása",
+        "take": "Fotó készítése",
+        "remove": "Kép törlése",
+        "uploading": "Feltöltés…",
+        "errorType": "Csak JPG, PNG vagy WebP kép tölthető fel.",
+        "errorSize": "A kép túl nagy (legfeljebb 2 MB lehet).",
+        "errorImage": "Ezt a képet nem tudtuk feldolgozni. Próbálj másikat.",
+        "errorGeneric": "Nem sikerült a képet menteni. Próbáld újra."
+      },
+      "name": {
+        "label": "Megjelenítési név",
+        "save": "Mentés",
+        "saving": "Mentés…",
+        "saved": "Elmentve."
+      },
+      "email": "E-mail",
+      "memberSince": "Tag ezóta",
+      "stats": {
+        "activeReminders": "Aktív emlékeztetők"
+      }
+    },
+    "appearance": {
+      "title": "Megjelenés",
+      "hint": "A beállításaidat minden eszközödön megjegyezzük."
+    },
+    "crop": {
+      "title": "Kép kivágása",
+      "hint": "Húzd a képet a pozicionáláshoz, vagy használd a nyílbillentyűket.",
+      "zoom": "Nagyítás",
+      "confirm": "Használom",
+      "loadError": "A képet nem sikerült megnyitni."
+    }
+  },
   "install": {
     "cta": "Alkalmazás letöltése",
     "installed": "Telepítve ✔",

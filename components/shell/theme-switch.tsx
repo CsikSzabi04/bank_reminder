@@ -3,6 +3,7 @@
 import { useTheme } from "next-themes";
 import { useTranslations } from "next-intl";
 import { useSyncExternalStore } from "react";
+import { saveTheme } from "@/lib/profile/actions";
 import { Segmented } from "./segmented";
 
 const noopSubscribe = () => () => {};
@@ -17,7 +18,11 @@ export function ThemeSwitch() {
     <Segmented
       label={t("label")}
       value={mounted ? (theme as "light" | "dark" | "system" | undefined) : undefined}
-      onChange={setTheme}
+      onChange={(next) => {
+        setTheme(next);
+        // belépve a profilba is mentjük (§19.3); kijelentkezve a szerver csendben elutasítja
+        void saveTheme(next);
+      }}
       options={[
         { value: "light", label: t("light") },
         { value: "dark", label: t("dark") },

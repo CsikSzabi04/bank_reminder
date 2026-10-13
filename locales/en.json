@@ -192,7 +192,51 @@
       "brave": "Brave blocks the push service by default — turn on \"Use Google services for push messaging\", then restart."
     }
   },
-  "profile": {},
+  "profile": {
+    "title": "Profile",
+    "back": "Back to profile",
+    "sections": {
+      "label": "Profile sections",
+      "overview": "Overview",
+      "appearance": "Appearance"
+    },
+    "overview": {
+      "avatar": {
+        "label": "Profile picture",
+        "alt": "{name}'s profile picture",
+        "choose": "Choose photo",
+        "take": "Take photo",
+        "remove": "Remove photo",
+        "uploading": "Uploading…",
+        "errorType": "Only JPG, PNG or WebP images can be uploaded.",
+        "errorSize": "That image is too large (2 MB at most).",
+        "errorImage": "We couldn't process that image. Try another one.",
+        "errorGeneric": "Couldn't save the picture. Please try again."
+      },
+      "name": {
+        "label": "Display name",
+        "save": "Save",
+        "saving": "Saving…",
+        "saved": "Saved."
+      },
+      "email": "Email",
+      "memberSince": "Member since",
+      "stats": {
+        "activeReminders": "Active reminders"
+      }
+    },
+    "appearance": {
+      "title": "Appearance",
+      "hint": "We remember your settings on all your devices."
+    },
+    "crop": {
+      "title": "Crop photo",
+      "hint": "Drag the image to position it, or use the arrow keys.",
+      "zoom": "Zoom",
+      "confirm": "Use photo",
+      "loadError": "Couldn't open that image."
+    }
+  },
   "install": {
     "cta": "Download the app",
     "installed": "Installed ✔",

@@ -7,6 +7,7 @@ import { mapAuthError } from "@/lib/auth/errors";
 import { FOUR_HUNDRED_DAYS, REMEMBER_COOKIE } from "@/lib/auth/persist";
 import { safeNext } from "@/lib/auth/safe-next";
 import { validationFailure } from "@/lib/auth/server-utils";
+import { isLocale, LOCALE_COOKIE, LOCALE_COOKIE_OPTIONS } from "@/lib/i18n/config";
 import { signInSchema } from "@/lib/schemas/auth";
 import { createClient } from "@/utils/supabase/server";
 
@@ -26,8 +27,12 @@ export async function signIn(_prev: ActionState | null, formData: FormData): Pro
   });
 
   const supabase = createClient(cookieStore, { remember });
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) return mapAuthError(error);
+
+  // Belépéskor a profil nyelve nyer az eszköz helyi beállítása felett (§20.1): a süti a profilból áll be
+  const { data: profile } = await supabase.from("profiles").select("locale").eq("id", data.user.id).single();
+  if (profile && isLocale(profile.locale)) cookieStore.set(LOCALE_COOKIE, profile.locale, LOCALE_COOKIE_OPTIONS);
 
   redirect(safeNext(next));
 }

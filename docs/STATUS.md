@@ -1,5 +1,13 @@
 # STATUS  (legújabb fent)
 
+## 2026-10-13 · AI-B · M1 — B-08 kész (kézi átvétel hátra)
+- ✔ **B-08** `/profile?section=overview|appearance` (mobilon lista → részlet, asztalon belső nav), **avatar-feltöltő** (kivágó: húzás/zoom/nyílbillentyű → 512 px WebP → `/api/profile/avatar`: session-ellenőrzés, `Origin`-ellenőrzés, ≤ 2 MB, **magic-byte** (JPEG/PNG/WebP, SVG/GIF tiltva), `sharp` újrakódolás 256 px WebP **metaadat nélkül**, feltöltés a felhasználó JWT-jével `avatars/<uid>/<uuid>.webp`, régi fájl törlése, hiba esetén takarítás), monogram-tartalék, név-szerkesztés, téma/nyelv váltó **profil-szinkronnal** (`profiles.theme/locale`; belépéskor a profil nyelve a sütibe kerül, `ProfileSync` a témát alkalmazza), felhasználó-chip a shellben.
+- Kapuk: typecheck · lint · i18n:check · **92 unit** (route-teszt mutációra bukik: magic-byte, EXIF, Origin, takarítás, mappa, méret) · build · 48 e2e zöld.
+- ⏳ **Kézi átvétel (gazda):** avatar csere valós fiókkal (EXIF-mentes fájl, rossz típus elutasítva) — bejelentkezett felületet nem tudok automatizáltan tesztelni, mert nincs teszt-fiók (az alap SMTP csak csapattag-címre küld).
+- → **AI-A kérés (A-30 előrehozva?):** fejlesztői **teszt-/demó-felhasználó** az élő projekten (`seed/dev_demo.sql`), hogy az authentikált oldalakat (profil, emlékeztetők, dashboard) e2e-ben ki tudjam próbálni. A jelszót **ne** chatbe/repóba: írd egy gitignore-os `.env.e2e.local`-ba (`E2E_EMAIL=`, `E2E_PASSWORD=`), én onnan olvasom. Cserébe a Playwright-teszt bejelentkezik és kijelentkezik, adatot nem módosít a demó-fiókon kívül.
+- Nem szerepel még (P1/később, §19.1): „Kontrasztosabb diagramok" és „Kevesebb mozgás" kapcsoló (B-20/B-29-cel jön, nincs hozzá `profiles` oszlop → eszköz-szintű beállítás lesz).
+- Következő: **B-27** (Vercel + biztonsági fejlécek) és **B-32** (jogi helyőrzők), majd **B-10…B-14** (alap-komponensek, emlékeztető-lista/-űrlap/-részletek, dashboard; A-07/A-10 kész).
+
 ## 2026-10-13 · AI-A · M4–M7 (backend) — minden SQL-oldali feladat kész, 9 tesztcsomag zöld az élő projekten
 - ✔ **A-10/A-11** analitika + keretek + célok · **A-21** tippek-motor (P0) · **A-23–A-25** hírek (betöltő kód + RPC-k; 9 forrás valós adaton hangolva) · **A-26** `ops_health()` + `docs/RESTORE.md` · **A-28** teljesítmény: 1100 esedékesség + 600 kiadás mellett `dashboard_summary` 38 ms, `budget_status` 8 ms, `compute_tips` 34 ms (cél ≤150 ms) · **A-29** biztonsági szigorítás + automata `security_lint.test.sql` (mutációval ellenőrizve).
 - ✔ Tesztek: `npm run db:test` (9 csomag, ROLLBACK) · `npm run fn:test` (Deno, 14 teszt) · `npm run fn:check`.

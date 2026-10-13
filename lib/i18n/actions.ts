@@ -1,17 +1,18 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { isLocale, LOCALE_COOKIE } from "./config";
+import { createClient } from "@/utils/supabase/server";
+import { isLocale, LOCALE_COOKIE, LOCALE_COOKIE_OPTIONS } from "./config";
 
-const ONE_YEAR = 60 * 60 * 24 * 365;
-
-// Nyelvváltás: süti. A profiles.locale szinkron (belépve) a B-08 feladatban kerül ide.
+// Nyelvváltás: süti mindig; belépve a profilba is mentjük, hogy az értesítések az új nyelven menjenek (§12.3, §19.3)
 export async function setLocale(locale: string): Promise<{ ok: boolean }> {
   if (!isLocale(locale)) return { ok: false };
-  (await cookies()).set(LOCALE_COOKIE, locale, {
-    path: "/",
-    maxAge: ONE_YEAR,
-    sameSite: "lax",
-  });
+  const cookieStore = await cookies();
+  cookieStore.set(LOCALE_COOKIE, locale, LOCALE_COOKIE_OPTIONS);
+
+  const supabase = createClient(cookieStore);
+  const { data } = await supabase.auth.getClaims();
+  const uid = data?.claims?.sub;
+  if (uid) await supabase.from("profiles").update({ locale }).eq("id", uid);
   return { ok: true };
 }
