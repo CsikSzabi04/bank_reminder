@@ -1,0 +1,9 @@
+{
+  "name": "bank-reminder-db-tools",
+  "private": true,
+  "type": "module",
+  "description": "AI-A eszközök (db:*). Külön függőségek, hogy az alkalmazás package.json-ját ne érintsék.",
+  "devDependencies": {
+    "pg": "^8.13.0"
+  }
+}

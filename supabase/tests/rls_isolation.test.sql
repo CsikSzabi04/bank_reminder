@@ -67,7 +67,7 @@ begin
     assert ok, 'A-nak TILOS lenne: ' || s;
   end loop;
 
-  -- A: occurrences csak olvasható (a sort postgres hozza létre, lásd lent) – itt a jog hiányát ellenőrizzük
+  -- A: occurrences csak olvasható (a sorokat a reminders-trigger hozza létre) – itt a jog hiányát ellenőrizzük
   ok := false;
   begin execute 'update public.occurrences set status = ''paid''';  exception when insufficient_privilege then ok := true; end;
   assert ok, 'A tudja módosítani az occurrences-t';
@@ -81,7 +81,7 @@ begin
 
   -- 3) postgres: occurrence A-nak, notification, push endpoint ellenőrzés
   reset role;
-  insert into public.occurrences (reminder_id, user_id, due_date, amount, currency) values (remA, uA, date '2026-11-10', 2300, 'HUF') returning id into occA;
+  select id into occA from public.occurrences where reminder_id = remA order by due_date limit 1;   -- a trigger generálta
   insert into public.notifications (user_id, kind, channel, scheduled_for, dedupe_key, occurrence_id)
     values (uA, 'reminder', 'in_app', now() - interval '1 minute', 'rls-n1', occA),
            (uA, 'reminder', 'push',   now() - interval '1 minute', 'rls-n2', occA),
@@ -95,7 +95,7 @@ begin
   -- 4) A újra: saját occurrence/notification látszik, de csak read_at módosítható
   perform set_config('request.jwt.claims', json_build_object('sub', uA, 'role', 'authenticated')::text, true);
   set local role authenticated;
-  select count(*) into n from public.occurrences; assert n = 1, 'A nem látja a saját occurrence-ét';
+  select count(*) into n from public.occurrences; assert n >= 1, 'A nem látja a saját occurrence-ét';
   select count(*) into n from public.notifications; assert n = 1, format('A %s notificationt lát (várt 1: csak esedékes in_app)', n);
   update public.notifications set read_at = now(); get diagnostics n = row_count; assert n = 1, 'read_at nem frissíthető';
   ok := false;

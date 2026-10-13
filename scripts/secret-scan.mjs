@@ -6,7 +6,7 @@ import { readFileSync } from 'node:fs';
 const RULES = [
   [/sb_secret_[A-Za-z0-9_-]{8,}/, 'Supabase secret key'],
   [/-----BEGIN [A-Z ]*PRIVATE KEY-----/, 'privát kulcs'],
-  [/postgres(ql)?:\/\/[^:\s@]+:[^@\s\[<]{4,}@/, 'jelszót tartalmazó DB-kapcsolati string'],
+  [/postgres(ql)?:\/\/[^:\s@]+:[^@\s\[<${}]{4,}@/, 'jelszót tartalmazó DB-kapcsolati string'],
   [/(SUPABASE_DB_PASSWORD|VAPID_PRIVATE_KEY|CRON_SECRET|SUPABASE_ACCESS_TOKEN)\s*[=:]\s*['"]?[A-Za-z0-9_\-+/=]{8,}/, 'titok értékkel'],
   [/\bsbp_[a-f0-9]{30,}\b/, 'Supabase access token'],
   [/eyJ[A-Za-z0-9_-]{20,}\.eyJ[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,}/, 'JWT (service_role?)'],

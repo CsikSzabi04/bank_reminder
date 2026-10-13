@@ -14,7 +14,14 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test --project=e2e-mobile --project=e2e-desktop",
-    "test:a11y": "playwright test --project=a11y"
+    "test:a11y": "playwright test --project=a11y",
+    "db:setup": "npm --prefix scripts install --no-audit --no-fund",
+    "db:assert": "node scripts/db.mjs assert",
+    "db:push": "node scripts/db.mjs push",
+    "db:types": "node scripts/db.mjs types",
+    "db:test": "node scripts/db.mjs test",
+    "db:sql": "node scripts/db.mjs sql",
+    "email:build": "node scripts/build-email-templates.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",

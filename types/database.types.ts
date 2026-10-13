@@ -383,6 +383,13 @@ export type Database = {
             referencedColumns: ["id"];
           },
           {
+            foreignKeyName: "notifications_occurrence_id_fkey";
+            columns: ["occurrence_id"];
+            isOneToOne: false;
+            referencedRelation: "v_occurrences";
+            referencedColumns: ["id"];
+          },
+          {
             foreignKeyName: "notifications_reminder_id_fkey";
             columns: ["reminder_id"];
             isOneToOne: false;
@@ -816,10 +823,156 @@ export type Database = {
       };
     };
     Views: {
-      [_ in never]: never;
+      v_occurrences: {
+        Row: {
+          amount: number | null;
+          amount_base: number | null;
+          category_id: string | null;
+          created_at: string | null;
+          currency: string | null;
+          due_date: string | null;
+          id: string | null;
+          is_subscription: boolean | null;
+          overdue: boolean | null;
+          paid_amount: number | null;
+          paid_at: string | null;
+          paid_on: string | null;
+          reminder_id: string | null;
+          reminder_name: string | null;
+          service_slug: string | null;
+          snoozed_until: string | null;
+          status: string | null;
+          user_id: string | null;
+        };
+        ComputedFields: never;
+        Relationships: [
+          {
+            foreignKeyName: "occurrences_reminder_id_fkey";
+            columns: ["reminder_id"];
+            isOneToOne: false;
+            referencedRelation: "reminders";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "reminders_category_id_fkey";
+            columns: ["category_id"];
+            isOneToOne: false;
+            referencedRelation: "categories";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "reminders_service_slug_fkey";
+            columns: ["service_slug"];
+            isOneToOne: false;
+            referencedRelation: "service_catalog";
+            referencedColumns: ["slug"];
+          },
+        ];
+      };
     };
     Functions: {
+      ensure_occurrences: {
+        Args: { p_horizon_days?: number; p_now?: string; p_reminder_id?: string };
+        Returns: number;
+      };
+      ensure_occurrences_all: { Args: { p_now?: string }; Returns: number };
+      fx_convert: {
+        Args: { p_amount: number; p_from: string; p_on: string; p_to: string };
+        Returns: number;
+      };
       is_valid_timezone: { Args: { tz: string }; Returns: boolean };
+      mark_paid: {
+        Args: { p_occurrence_id: string; p_paid_amount?: number; p_paid_on?: string };
+        Returns: {
+          amount: number;
+          created_at: string;
+          currency: string;
+          due_date: string;
+          id: string;
+          paid_amount: number | null;
+          paid_at: string | null;
+          paid_on: string | null;
+          reminder_id: string;
+          snoozed_until: string | null;
+          status: string;
+          user_id: string;
+        };
+        SetofOptions: {
+          from: "*";
+          to: "occurrences";
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
+      mark_unpaid: {
+        Args: { p_occurrence_id: string };
+        Returns: {
+          amount: number;
+          created_at: string;
+          currency: string;
+          due_date: string;
+          id: string;
+          paid_amount: number | null;
+          paid_at: string | null;
+          paid_on: string | null;
+          reminder_id: string;
+          snoozed_until: string | null;
+          status: string;
+          user_id: string;
+        };
+        SetofOptions: {
+          from: "*";
+          to: "occurrences";
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
+      occurrence_dates: {
+        Args: {
+          p_end?: string;
+          p_every: number;
+          p_from: string;
+          p_month_end: boolean;
+          p_start: string;
+          p_to: string;
+          p_unit: string;
+        };
+        Returns: string[];
+      };
+      preview_dates: {
+        Args: {
+          p_count?: number;
+          p_every: number;
+          p_month_end?: boolean;
+          p_start: string;
+          p_unit: string;
+        };
+        Returns: string[];
+      };
+      process_auto_paid: { Args: { p_now?: string }; Returns: number };
+      skip_occurrence: {
+        Args: { p_occurrence_id: string };
+        Returns: {
+          amount: number;
+          created_at: string;
+          currency: string;
+          due_date: string;
+          id: string;
+          paid_amount: number | null;
+          paid_at: string | null;
+          paid_on: string | null;
+          reminder_id: string;
+          snoozed_until: string | null;
+          status: string;
+          user_id: string;
+        };
+        SetofOptions: {
+          from: "*";
+          to: "occurrences";
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
     };
     Enums: {
       [_ in never]: never;
