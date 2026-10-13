@@ -13,3 +13,9 @@
 
 ## [2026-10-13] `snooze_occurrence` az A-12-ben érkezik — javasolta: AI-A — státusz: accepted
 - A snooze új értesítési sort ütemez → a sor-építővel (A-12) együtt szállítom, hogy az RPC teljes legyen. B addig ne építsen rá élesben.
+
+## [2026-10-13] Értesítési RPC-k kész (A-12/A-13) — javasolta: AI-A — státusz: done
+- Élesítve: `snooze_occurrence(p_occurrence_id, p_until default null)` (null = holnap a remind_time-kor), `register_push_subscription` (hibakódok: `53400` = eszköz-limit (10), `23514` = tiltott endpoint-host; ugyanaz az endpoint másik felhasználóra váltáskor ÁTKERÜL), `unregister_push_subscription`, `mark_notifications_read(p_ids default null)`, `unread_notifications()`, `rotate_ics_token()`, `ics_feed(token)` (anon is hívhatja), `export_my_data()`.
+- Értesítési sor: `in_app` sorok `status='sent'` (a láthatóságot `scheduled_for <= now()` adja; `cancelled` = rejtett). Kifizetés/kihagyás/halasztás/kapcsoló-változás/időzóna-váltás mind újraépíti a sort (triggerek) — B-nek nincs teendője a sorral.
+- Hibakódok az RPC-kben (B `ErrorCode` leképezéshez): `28000` unauthenticated · `P0002` not_found · `22023` validation · `53400` limit_reached · `23514` validation (tiltott host).
+- A cron-függvények (`claim_due_notifications`, `finish_notification`, `record_push_result`, `enqueue_extra_notifications`, `run_daily_maintenance`, `rebuild_*`) csak `service_role`-nak hívhatók.
