@@ -167,6 +167,25 @@
       "when": "Mikor szóljunk?",
       "sameDay": "aznap",
       "daysBefore": "{n, plural, one {# nappal előtte} other {# nappal előtte}}"
+    },
+    "status": {
+      "upcoming": "Esedékes",
+      "paid": "Kifizetve",
+      "skipped": "Kihagyva"
+    },
+    "demoBadge": "Minta adat",
+    "notifyOff": "Az értesítés ki van kapcsolva",
+    "paidToast": "{name}: kifizetve",
+    "payFailed": "Nem sikerült menteni. Próbáld újra.",
+    "payAria": "{name} kifizetettnek jelölése",
+    "recurrence": {
+      "once": "egyszeri",
+      "day": "{n, plural, one {naponta} other {# naponta}}",
+      "week": "{n, plural, one {hetente} other {# hetente}}",
+      "month": "{n, plural, one {havonta} other {# havonta}}",
+      "year": "{n, plural, one {évente} other {# évente}}",
+      "monthlyOn": "{day}. napján",
+      "monthEnd": "hónap utolsó napján"
     }
   },
   "analytics": {},

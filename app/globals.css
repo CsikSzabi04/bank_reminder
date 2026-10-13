@@ -25,6 +25,15 @@
   --danger: #d03b3b;
   --danger-text: #b42318;
   --ring: rgb(11 127 112 / 0.4);
+  /* diagram- és kategória-csoport színek (§15.3): a szín az entitást követi; a 8. (piros) nincs kiosztva */
+  --chart-1: #2a78d6;
+  --chart-2: #eb6834;
+  --chart-3: #1baf7a;
+  --chart-4: #eda100;
+  --chart-5: #e87ba4;
+  --chart-6: #008300;
+  --chart-7: #6250d6;
+  --chart-9: #98a2b3;
   --card-shadow:
     0 1px 2px rgb(15 23 32 / 0.04), 0 8px 24px rgb(15 23 32 / 0.06);
 }
@@ -46,6 +55,14 @@
   --warning-text: #fbbf24;
   --danger-text: #f87171;
   --ring: rgb(45 212 191 / 0.5);
+  --chart-1: #3987e5;
+  --chart-2: #d95926;
+  --chart-3: #199e70;
+  --chart-4: #c98500;
+  --chart-5: #d55181;
+  --chart-6: #008300;
+  --chart-7: #9085e9;
+  --chart-9: #6b7686;
   /* sötét módban nincs árnyék, csak 1 px border */
   --card-shadow: none;
 }
@@ -69,6 +86,14 @@
   --color-danger: var(--danger);
   --color-danger-text: var(--danger-text);
   --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-chart-6: var(--chart-6);
+  --color-chart-7: var(--chart-7);
+  --color-chart-9: var(--chart-9);
 
   --radius-card: 16px;
   --radius-control: 12px;

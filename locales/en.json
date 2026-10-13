@@ -167,6 +167,25 @@
       "when": "When should we remind you?",
       "sameDay": "same day",
       "daysBefore": "{n, plural, one {# day before} other {# days before}}"
+    },
+    "status": {
+      "upcoming": "Due",
+      "paid": "Paid",
+      "skipped": "Skipped"
+    },
+    "demoBadge": "Sample data",
+    "notifyOff": "Notifications are turned off",
+    "paidToast": "{name}: marked as paid",
+    "payFailed": "Couldn't save. Please try again.",
+    "payAria": "Mark {name} as paid",
+    "recurrence": {
+      "once": "one-time",
+      "day": "{n, plural, one {daily} other {every # days}}",
+      "week": "{n, plural, one {weekly} other {every # weeks}}",
+      "month": "{n, plural, one {monthly} other {every # months}}",
+      "year": "{n, plural, one {yearly} other {every # years}}",
+      "monthlyOn": "on the {day, selectordinal, one {#st} two {#nd} few {#rd} other {#th}}",
+      "monthEnd": "on the last day of the month"
     }
   },
   "analytics": {},

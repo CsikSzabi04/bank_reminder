@@ -1,8 +1,13 @@
 import { getLocale, getTranslations } from "next-intl/server";
+import { CategoryChip } from "@/components/categories/category-chip";
+import { CategoryIcon } from "@/components/categories/category-icon";
+import { AmountText } from "@/components/ui/amount-text";
 import { LanguageSwitch } from "@/components/shell/language-switch";
 import { ThemeSwitch } from "@/components/shell/theme-switch";
 import { formatMoney } from "@/lib/format";
+import { FIXTURE_CATEGORIES } from "@/lib/fixtures/reminders";
 import type { Locale } from "@/lib/i18n/config";
+import { Demos } from "./demos";
 
 // Fejlesztői játszótér (csak dev). A komponensek állapotai a B-10-től ide kerülnek.
 const SWATCHES = [
@@ -74,6 +79,28 @@ export default async function DevUiPage() {
           ))}
         </ul>
       </section>
+
+      <section>
+        <h2 className={section}>CategoryChip · CategoryIcon · AmountText</h2>
+        <div className="flex flex-wrap gap-2">
+          {Object.values(FIXTURE_CATEGORIES).map((c) => (
+            <CategoryChip key={c.id} category={c} />
+          ))}
+        </div>
+        <div className="mt-4 flex flex-wrap items-center gap-4">
+          {Object.values(FIXTURE_CATEGORIES).map((c) => (
+            <CategoryIcon key={c.id} icon={c.icon} colorSlot={c.colorSlot} />
+          ))}
+        </div>
+        <div className="mt-4 flex flex-wrap items-baseline gap-6">
+          <AmountText amount={128400} currency="HUF" hero />
+          <AmountText amount={2300} currency="HUF" />
+          <AmountText amount={12.5} currency="EUR" />
+          <AmountText amount={9.99} currency="USD" />
+        </div>
+      </section>
+
+      <Demos />
 
       <section>
         <h2 className={section}>Buttons · focus</h2>

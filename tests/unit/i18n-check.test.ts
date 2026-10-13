@@ -29,6 +29,14 @@ describe("i18n:check logika", () => {
     expect(icuArgs("{amount} maradt, {n, plural, one {#} other {#}}")).toEqual(["amount", "n"]);
   });
 
+  it("a plural-ágak puszta szava (one {havonta}) nem argumentum; a beágyazott argumentum igen", () => {
+    expect(icuArgs("{n, plural, one {havonta} other {# havonta}}")).toEqual(["n"]);
+    expect(icuArgs("{n, plural, one {monthly} other {every # months}}")).toEqual(["n"]);
+    expect(icuArgs("{count, plural, one {{name} marad} other {# tétel}}")).toEqual(["count", "name"]);
+    expect(icuArgs("{day, selectordinal, one {#st} two {#nd} few {#rd} other {#th}}")).toEqual(["day"]);
+    expect(icuArgs("Szia {name}! <b>{n}</b>")).toEqual(["n", "name"]);
+  });
+
   it("használt kulcsot a névtérrel együtt oldja fel", () => {
     const src = `const t = useTranslations("nav");\nt("home"); t('more'); t(item.key);`;
     expect(extractUsedKeys(src)).toEqual([{ key: "nav.home" }, { key: "nav.more" }]);

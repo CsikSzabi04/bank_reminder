@@ -1,5 +1,10 @@
 # STATUS  (legújabb fent)
 
+## 2026-10-13 · AI-B · M2 — B-10 kész (alap-komponensek)
+- ✔ **B-10** `BillRow/BillList`, `DueLabel` (ikon+szöveg: lejárt/hamarosan/kifizetve/kihagyva), `RecurrenceText`, `AmountText`, `CategoryIcon/Chip` (§15.3 chart-tokenek világos/sötét), `EmptyState`, `Skeleton*`, `BottomSheet`, `ConfirmDialog`, saját **Toast + Visszavonás**, **PayButton** (optimista, hibánál visszaáll), fixture-ök (`lib/fixtures`) — mind állapotaival a `/dev/ui`-n.
+- Kapuk: 121 unit (mutációra bukó komponens-tesztek) · 76 e2e + axe (`serious/critical` = 0, világos+sötét) · 7 production-e2e · build zöld.
+- Következő: **B-11** emlékeztető-lista, **B-12** űrlap, **B-13** részletek/műveletek (`mark_paid/unpaid/skip/snooze` Server Action-ök), **B-14** dashboard; a gazda a `load_demo_data()`-val tölthet mintát (a UI „Minta adat" jelvénnyel mutatja).
+
 ## 2026-10-13 · AI-A · M3 ZÁRVA — az értesítési rendszer ÉLES (szerver-oldal)
 - ✔ Telepítve az élő projektre: `send-notifications`, `send-test-push`, `delete-account`, `fx-refresh`, `news-ingest` (`verify_jwt=false`, saját hitelesítés). Titkok beállítva (a cron-titok a Vaultban és az Edge secret-ek között azonos érték, VAPID-pár, VAPID_SUBJECT=ideiglenes, APP_BASE_URL=http://localhost:3000). **VAPID publikus kulcs → `.env.local`-ba beírva** (`NEXT_PUBLIC_VAPID_PUBLIC_KEY`); Vercelbe is ugyanez kell (publikus érték).
 - ✔ Éles ellenőrzés: titok nélkül/rossz titokkal 403; JWT nélkül 401; `fx-refresh` 2523 árfolyam betöltve; `news-ingest` 9 forrásból 39 tétel (≈ a helyi próba); **teljes push-lánc** átmeneti teszt-felhasználóval: claim → szöveg → push az Edge-ből az FCM felé (valós FCM-válasz) → halott eszköz letiltva → értesítés lezárva → takarítva. `pg_cron`: 7 job fut (send_notifications percenként, 200-as válaszok).

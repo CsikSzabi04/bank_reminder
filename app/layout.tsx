@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
 import { ThemeProvider } from "@/components/shell/theme-provider";
+import { ToastProvider } from "@/components/ui/toast";
 import { BRAND } from "@/lib/brand";
 import "./globals.css";
 
@@ -36,7 +37,9 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     <html lang={locale} className={inter.variable} suppressHydrationWarning>
       <body>
         <NextIntlClientProvider>
-          <ThemeProvider nonce={nonce}>{children}</ThemeProvider>
+          <ThemeProvider nonce={nonce}>
+            <ToastProvider>{children}</ToastProvider>
+          </ThemeProvider>
         </NextIntlClientProvider>
       </body>
     </html>
