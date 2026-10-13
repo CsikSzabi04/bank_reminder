@@ -157,3 +157,33 @@ for (const [file, tpl] of Object.entries(templates)) {
 }
 writeFileSync(`${dir}/README.md`, readme);
 console.log(`✔ ${Object.keys(templates).length} sablon → ${dir}/`);
+
+// ───── --preview: a Go-sablon kiértékelése mintaadattal (HU+EN) → docs/email-preview/ (gitignore-os). Egyben szintaxis-ellenőrzés. ─────
+if (process.argv.includes('--preview')) {
+  const render = (src, ctx) => {
+    const toks = src.split(/(\{\{[^}]*\}\})/); let i = 0;
+    const val = (tag) => { const m = { '.Data.display_name': ctx.name, '.Email': ctx.email, '.NewEmail': ctx.newEmail, '.OldEmail': ctx.oldEmail, '.SiteURL': ctx.site, '.TokenHash': ctx.hash, '.Token': ctx.token }[tag]; if (m === undefined) throw new Error('ismeretlen változó: ' + tag); return m; };
+    const cond = (c) => { if (c === 'eq .Data.locale "en"') return ctx.locale === 'en'; if (c === '.Data.display_name') return !!ctx.name; throw new Error('ismeretlen feltétel: ' + c); };
+    function parse() {
+      const out = [];
+      while (i < toks.length) {
+        const t = toks[i];
+        if (!t.startsWith('{{')) { out.push(t); i++; continue; }
+        const tag = t.slice(2, -2).trim();
+        if (tag === 'end' || tag === 'else') return { out: out.join(''), stop: tag };
+        i++;
+        if (tag.startsWith('if ')) { const c = cond(tag.slice(3)); const a = parse(); let b = { out: '' }; if (a.stop === 'else') { i++; b = parse(); } i++; out.push(c ? a.out : b.out); }
+        else out.push(val(tag));
+      }
+      return { out: out.join(''), stop: null };
+    }
+    return parse().out;
+  };
+  mkdirSync('docs/email-preview', { recursive: true });
+  for (const [file, tpl] of Object.entries(templates)) for (const locale of ['hu', 'en']) {
+    const html = render(tpl.html, { locale, name: 'Szabi', email: 'szabi@example.com', newEmail: 'uj@example.com', oldEmail: 'regi@example.com', site: 'http://localhost:3000', hash: 'abc123def456', token: '482913' });
+    if (html.includes('{{')) throw new Error(file + ': kiértékeletlen sablon-rész maradt');
+    writeFileSync('docs/email-preview/' + file.replace('.html', '.' + locale + '.html'), html);
+  }
+  console.log('✔ előnézetek → docs/email-preview/ (16 fájl, sablon-szintaxis rendben)');
+}

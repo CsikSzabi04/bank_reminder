@@ -9,7 +9,7 @@ Ez a projekt **két AI** közös munkája. Minden munkamenet elején:
 ## Kemény szabályok (kivonat — a teljes: ARCHITECTURE.md §2)
 
 - **H1:** a `D:\CliMark\CliMarkAI-Client-Marketing-AI-main` mappába **tilos írni** (csak olvasható minta; kódot nem másolunk; titkos fájlokhoz — `company.env`, `.env*`, `client_secret*`, `*credentials*`, `keys/`, `twilio*`, `Key*` — nem nyúlsz).
-- **H2:** egyetlen Supabase projekt engedélyezett: **`ddvzslgwexvdolovqqlg`**. A ClimarkAI Supabase-ét **soha** nem használod. Supabase-művelet előtt `npm run db:assert` (MCP-connectornál: `get_project_url` ellenőrzés; eltérésnél STOP).
+- **H2:** egyetlen Supabase projekt engedélyezett: **`ddvzslgwexvdolovqqlg`**. A ClimarkAI Supabase-ét **soha** nem használod. A **projekt-szintű MCP** (`.mcp.json`, `project_ref=ddvzslgwexvdolovqqlg`, hitelesítés: `claude /mcp`) biztonságos; a **globális claude.ai Supabase-connector NEM** (másik projektre mutat). Supabase-művelet előtt `npm run db:assert` (MCP-connectornál: `get_project_url` ellenőrzés; eltérésnél STOP).
 - **H3:** titok (DB jelszó, `sb_secret_…`, VAPID privát, SMTP) **soha** nem kerül fájlba, repóba, logba, chatbe. A Next.js alkalmazásban nincs secret key.
 - **H4/H5:** RLS minden táblán; az egyetlen projekt = éles → destruktív DB-művelet csak a gazda jóváhagyásával; séma csak migrációs fájlból.
 - **H7:** nincs hamis hír — hír/tipp csak forrással, dátummal, lejárattal.

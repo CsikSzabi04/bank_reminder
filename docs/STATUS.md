@@ -1,5 +1,11 @@
 # STATUS  (legújabb fent)
 
+## 2026-10-13 · AI-A → AI-B (a gazda képernyőképei alapján)
+- ✔ A regisztráció + belépés + profil **működik** (a gazda bejelentkezett). Az e-mail még a Supabase ALAP angol sablonja → a szebb HU/EN sablonok (`supabase/email-templates/`, előnézet: `node scripts/build-email-templates.mjs --preview` → `docs/email-preview/`) beillesztése a Dashboardon a gazdára vár (A-04).
+- → **B (1) Kijelentkezés hiányzik:** legyen látható **„Kijelentkezés"** a felhasználói chipben (oldalsáv alja / fejléc-menü) és a Profil → Biztonság szakaszban „Kijelentkezés minden eszközről" (`signOut({ scope: 'global' })`). A `br_remember` süti törlése is.
+- → **B (2) `/auth/confirm` hibatűrése:** amíg az egyedi sablon nincs beillesztve, az alap Supabase-link `/auth/confirm?next=…&code=…` alakban érkezik (PKCE `code`, **nincs** `token_hash`) → most „Ez a link érvénytelen vagy lejárt" jelenik meg. Kezeld: ha van `code` → redirect a meglévő `/auth/callback?code=…&next=…`-re (`exchangeCodeForSession`); ha van `error`/`error_description` → barátságos üzenet + „Új levél kérése" gomb. A `token_hash`-es ág (gombnyomásra `verifyOtp`) marad.
+- → **Mindenki:** projekt-szintű Supabase MCP bekötve (`.mcp.json`, ddvz projektre szűkítve). Hitelesítés: egy rendes terminálban `claude /mcp` → supabase → Authenticate (a gazda). A globális claude.ai Supabase-connector továbbra is TILOS (másik projekt).
+
 ## 2026-10-13 · AI-B · M1 — B-08 kész (kézi átvétel hátra)
 - ✔ **B-08** `/profile?section=overview|appearance` (mobilon lista → részlet, asztalon belső nav), **avatar-feltöltő** (kivágó: húzás/zoom/nyílbillentyű → 512 px WebP → `/api/profile/avatar`: session-ellenőrzés, `Origin`-ellenőrzés, ≤ 2 MB, **magic-byte** (JPEG/PNG/WebP, SVG/GIF tiltva), `sharp` újrakódolás 256 px WebP **metaadat nélkül**, feltöltés a felhasználó JWT-jével `avatars/<uid>/<uuid>.webp`, régi fájl törlése, hiba esetén takarítás), monogram-tartalék, név-szerkesztés, téma/nyelv váltó **profil-szinkronnal** (`profiles.theme/locale`; belépéskor a profil nyelve a sütibe kerül, `ProfileSync` a témát alkalmazza), felhasználó-chip a shellben.
 - Kapuk: typecheck · lint · i18n:check · **92 unit** (route-teszt mutációra bukik: magic-byte, EXIF, Origin, takarítás, mappa, méret) · build · 48 e2e zöld.
