@@ -246,5 +246,76 @@
     }
   },
   "errors": {},
-  "insights": {}
+  "insights": {},
+  "legal": {
+    "draft": "TERVEZET — ez a szöveg még nem végleges, és nem minősül jogi tanácsnak. A végleges szöveget az üzemeltető hagyja jóvá.",
+    "back": "Vissza",
+    "home": "Kezdőlap",
+    "privacy": {
+      "title": "Adatkezelési tájékoztató",
+      "controller": {
+        "title": "Ki kezeli az adataidat?",
+        "body": "[Az adatkezelő neve és elérhetősége — az üzemeltető tölti ki.]"
+      },
+      "data": {
+        "title": "Milyen adatokat kezelünk?",
+        "body": "Az e-mail címedet, a megjelenítési nevedet, az opcionális profilképedet, az általad felvett emlékeztetőket, kiadásokat, költségkereteket és megtakarítási célokat, az értesítési beállításaidat és az eszközeid értesítési végpontját. Ezenkívül rövid ideig technikai naplók keletkezhetnek a hibák felderítéséhez."
+      },
+      "purpose": {
+        "title": "Mire használjuk?",
+        "body": "A fiókod működtetésére, az emlékeztetők és értesítések kiküldésére, valamint a statisztikák, költségkeretek és spórolási tippek kiszámítására."
+      },
+      "never": {
+        "title": "Mit nem teszünk?",
+        "body": "Nem kérünk banki belépési adatot, és nem férünk hozzá a bankszámládhoz. Nem adjuk el az adataidat, és nem használunk hirdetési követést."
+      },
+      "processors": {
+        "title": "Kik dolgozzák fel az adatokat?",
+        "body": "Az adatbázist, a hitelesítést és a fájltárolást a Supabase, a weboldal kiszolgálását a Vercel végzi. A böngészős értesítések a böngésző gyártójának push-szolgáltatásán (pl. Google, Mozilla, Apple, Microsoft) keresztül érkeznek meg."
+      },
+      "retention": {
+        "title": "Meddig őrizzük?",
+        "body": "A fiókod törléséig. A fiók törlésekor az összes adatod és a profilképed is törlődik."
+      },
+      "rights": {
+        "title": "Milyen jogaid vannak?",
+        "body": "Kérheted az adataid letöltését és a fiókod törlését; ezek a Profil oldalon önállóan is elérhetők lesznek. Panasszal fordulhatsz a nemzeti adatvédelmi hatósághoz."
+      },
+      "cookies": {
+        "title": "Sütik",
+        "body": "Csak a működéshez szükséges sütiket használjuk: a bejelentkezési munkamenetet, a „maradjak bejelentkezve” jelzőt, valamint a nyelv- és témabeállítást. Követő vagy hirdetési süti nincs."
+      }
+    },
+    "terms": {
+      "title": "Általános szerződési feltételek",
+      "service": {
+        "title": "A szolgáltatás",
+        "body": "A Bank Reminder számla- és előfizetés-emlékeztetőket, költségkövetést és spórolási tippeket nyújt. Nem bank, nem fizet helyetted, és nem fér hozzá a bankszámládhoz."
+      },
+      "account": {
+        "title": "Fiók",
+        "body": "A fiókodat te kezeled. Ne add meg másnak a jelszavadat, és ne írj jelszót vagy számlaszámot az emlékeztetők megjegyzés-mezőjébe."
+      },
+      "use": {
+        "title": "Elfogadható használat",
+        "body": "Tilos a szolgáltatás megzavarása, a rendszer túlterhelése vagy mások adatainak jogosulatlan elérése."
+      },
+      "delivery": {
+        "title": "Értesítések",
+        "body": "Az értesítéseket a lehető legnagyobb gonddal küldjük, de a kézbesítést (a böngésző, az eszköz és a hálózat miatt) nem tudjuk garantálni. Fontos határidőknél ne csak az értesítésre hagyatkozz."
+      },
+      "tips": {
+        "title": "Tippek és hírek",
+        "body": "A tippek általános becslések az általad megadott adatok alapján, nem minősülnek pénzügyi tanácsadásnak. A hírek külső kiadóktól származnak, forrással és dátummal; az akciók feltételeit mindig ellenőrizd az üzletnél."
+      },
+      "changes": {
+        "title": "Módosítás",
+        "body": "A feltételeket módosíthatjuk; a lényegi változásról az alkalmazásban tájékoztatunk."
+      },
+      "contact": {
+        "title": "Kapcsolat",
+        "body": "[Az üzemeltető elérhetősége — az üzemeltető tölti ki.]"
+      }
+    }
+  }
 }

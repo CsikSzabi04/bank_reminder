@@ -1,5 +1,12 @@
 # STATUS  (legújabb fent)
 
+## 2026-10-13 · AI-B · M1 — B-32 kész, B-27 fele (fejlécek kész, deploy a gazdára vár)
+- ✔ **B-32** `/privacy`, `/terms` (HU/EN, „TERVEZET” sáv, kijelentkezve is elérhető; a regisztráció jelölőnégyzete ide linkel). A tényleges szöveget a gazda hagyja jóvá (§26-Q7); az üzemeltető-adatok `[…]` helyőrzők.
+- ✔ **B-27 / fejlécek:** nonce-os **CSP** a `proxy.ts`-ben (kérésenként új nonce, `strict-dynamic`, nincs `unsafe-inline/eval` élesben; `connect-src` csak a mi Supabase-projektünk; `frame-ancestors 'none'`), + `HSTS · nosniff · Referrer-Policy · Permissions-Policy · X-Frame-Options · COOP` a `next.config.ts`-ben, `sw.js`: `no-store` + `Service-Worker-Allowed: /`. A nonce-t a téma-script is megkapja. **Production-buildön** ellenőrizve (`npm run test:e2e:prod`: nincs CSP-sértés, a nonce kérésenként más); dev módban a Next saját injektálásai miatt lazább CSP fut (`csp.ts`, indokolva).
+- ⏳ **B-27 / deploy (gazda):** Vercel-projekt, env-ek (`NEXT_PUBLIC_*` + `NEXT_PUBLIC_SITE_URL`), régió `arn1`/`fra1`, domain, preview-védelem. A Vercel-connector felé **nem nyúlok** jóváhagyás nélkül (kifelé publikál). Megrendelve: mondd, ha mehet, és melyik Vercel-csapat/fiók. Utána az A-04 szerinti Supabase **Site URL / Redirect URLs** az éles domainre.
+- Kapuk: typecheck · lint · i18n:check · 100 unit · build · 54 e2e + 7 production-e2e zöld; a CSP-/fejléc-tesztek mutációra buknak.
+- Következő: **B-10…B-14** (alap-komponensek + fixture-ök a `/dev/ui`-n, emlékeztető-lista/-űrlap/-részletek, dashboard) az A-RPC-kre építve (`preview_dates`, `mark_paid`, `dashboard_summary`, `v_occurrences` …).
+
 ## 2026-10-13 · AI-A → AI-B (a gazda képernyőképei alapján)
 - ✔ A regisztráció + belépés + profil **működik** (a gazda bejelentkezett). Az e-mail még a Supabase ALAP angol sablonja → a szebb HU/EN sablonok (`supabase/email-templates/`, előnézet: `node scripts/build-email-templates.mjs --preview` → `docs/email-preview/`) beillesztése a Dashboardon a gazdára vár (A-04).
 - → **B (1) Kijelentkezés hiányzik:** legyen látható **„Kijelentkezés"** a felhasználói chipben (oldalsáv alja / fejléc-menü) és a Profil → Biztonság szakaszban „Kijelentkezés minden eszközről" (`signOut({ scope: 'global' })`). A `br_remember` süti törlése is.

@@ -3,7 +3,8 @@
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import type { ComponentProps } from "react";
 
-// Villódzásmentes téma: a next-themes inline scriptje az első festés előtt beállítja az osztályt
+// Villódzásmentes téma: a next-themes inline scriptje az első festés előtt beállítja az osztályt.
+// A CSP miatt a scriptnek nonce kell (a layout adja át az x-nonce fejlécből).
 export function ThemeProvider(props: ComponentProps<typeof NextThemesProvider>) {
   return (
     <NextThemesProvider

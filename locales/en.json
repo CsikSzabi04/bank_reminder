@@ -246,5 +246,76 @@
     }
   },
   "errors": {},
-  "insights": {}
+  "insights": {},
+  "legal": {
+    "draft": "DRAFT — this text isn't final and isn't legal advice. The operator will approve the final version.",
+    "back": "Back",
+    "home": "Home",
+    "privacy": {
+      "title": "Privacy Policy",
+      "controller": {
+        "title": "Who handles your data?",
+        "body": "[Name and contact details of the data controller — to be filled in by the operator.]"
+      },
+      "data": {
+        "title": "What data do we handle?",
+        "body": "Your email address, display name, optional profile picture, the reminders, expenses, budgets and savings goals you add, your notification settings and your devices' notification endpoints. Short-lived technical logs may also be created to diagnose errors."
+      },
+      "purpose": {
+        "title": "What do we use it for?",
+        "body": "To run your account, send reminders and notifications, and calculate statistics, budgets and saving tips."
+      },
+      "never": {
+        "title": "What we don't do",
+        "body": "We don't ask for banking credentials and can't access your bank account. We don't sell your data and we don't use advertising trackers."
+      },
+      "processors": {
+        "title": "Who processes the data?",
+        "body": "Supabase provides the database, authentication and file storage; Vercel serves the website. Browser notifications are delivered through your browser vendor's push service (e.g. Google, Mozilla, Apple, Microsoft)."
+      },
+      "retention": {
+        "title": "How long do we keep it?",
+        "body": "Until you delete your account. Deleting your account also deletes all your data and your profile picture."
+      },
+      "rights": {
+        "title": "Your rights",
+        "body": "You can request a download of your data and the deletion of your account; both will be available on the Profile page. You can complain to your national data protection authority."
+      },
+      "cookies": {
+        "title": "Cookies",
+        "body": "We only use cookies that are needed to work: your sign-in session, the \"stay signed in\" flag, and your language and theme settings. There are no tracking or advertising cookies."
+      }
+    },
+    "terms": {
+      "title": "Terms of Service",
+      "service": {
+        "title": "The service",
+        "body": "Bank Reminder provides bill and subscription reminders, expense tracking and saving tips. It isn't a bank, doesn't pay for you and can't access your bank account."
+      },
+      "account": {
+        "title": "Your account",
+        "body": "You manage your account. Don't share your password, and don't write passwords or account numbers in a reminder's notes field."
+      },
+      "use": {
+        "title": "Acceptable use",
+        "body": "Don't disrupt the service, overload the system or access other people's data without permission."
+      },
+      "delivery": {
+        "title": "Notifications",
+        "body": "We send notifications with great care, but can't guarantee delivery (because of browsers, devices and networks). For important deadlines, don't rely on notifications alone."
+      },
+      "tips": {
+        "title": "Tips and news",
+        "body": "Tips are general estimates based on the data you enter and aren't financial advice. News comes from outside publishers, with source and date; always check an offer's terms in store."
+      },
+      "changes": {
+        "title": "Changes",
+        "body": "We may change these terms; we'll tell you about significant changes in the app."
+      },
+      "contact": {
+        "title": "Contact",
+        "body": "[The operator's contact details — to be filled in by the operator.]"
+      }
+    }
+  }
 }
