@@ -486,7 +486,50 @@
     "installed": "Telepítve ✔",
     "ios": {
       "step1": "Koppints a Megosztás ikonra",
-      "step2": "Válaszd: Kezdőképernyőhöz adás"
+      "step2": "Válaszd: Kezdőképernyőhöz adás",
+      "title": "Telepítés iPhone-ra és iPadre",
+      "step3": "Koppints a Hozzáadás gombra",
+      "note": "Az értesítésekhez erre szükség van: az appot a Kezdőképernyőről nyisd meg."
+    },
+    "title": "Alkalmazás letöltése",
+    "lead": "A Bank Reminder telepíthető app: nincs áruház, nincs külön letöltés — egy koppintás, és ott van a kezdőképernyőn, értesítésekkel.",
+    "mac": {
+      "title": "Telepítés Macen (Safari)",
+      "step": "Válaszd: Fájl → Hozzáadás a Dockhoz…"
+    },
+    "otherBrowser": "A telepítéshez nyisd meg ezt az oldalt Safariban.",
+    "copyLink": "Link másolása",
+    "copied": "Link kimásolva.",
+    "unsupported": "Ez a böngésző nem tud appot telepíteni — használd Chrome-ot, Edge-et vagy Safarit. Addig a naptár-linkkel is kaphatsz emlékeztetőt.",
+    "setupNotifications": "Értesítések beállítása",
+    "dismiss": "Elrejtés",
+    "cardTitle": "Töltsd le az appot",
+    "cardBody": "Gyorsabb elérés és értesítések minden eszközön.",
+    "qrTitle": "Telepítés telefonra",
+    "qrBody": "Olvasd be a kódot a telefonoddal, és nyisd meg ott az oldalt.",
+    "qrAlt": "QR-kód az oldal címével",
+    "platforms": {
+      "title": "Eszközönként",
+      "android": {
+        "name": "Android (Chrome)",
+        "steps": "Koppints a „Letöltés” gombra, majd a Telepítésre (vagy ⋮ menü → Alkalmazás telepítése)."
+      },
+      "ios": {
+        "name": "iPhone / iPad (Safari)",
+        "steps": "Megosztás ⬆ → Kezdőképernyőhöz adás → Hozzáadás. Utána az appot onnan nyisd meg, és ott kapcsold be az értesítéseket."
+      },
+      "desktop": {
+        "name": "Windows / macOS / Linux (Chrome, Edge)",
+        "steps": "A „Letöltés” gomb, vagy a címsor jobb szélén a telepítés-ikon (⊕)."
+      },
+      "macSafari": {
+        "name": "macOS (Safari 17+)",
+        "steps": "Fájl → Hozzáadás a Dockhoz…"
+      },
+      "firefox": {
+        "name": "Firefox (asztali)",
+        "steps": "Nem telepíthető; használd böngészőlapként (az értesítések működnek)."
+      }
     }
   },
   "errors": {
@@ -571,5 +614,31 @@
         "body": "[Az üzemeltető elérhetősége — az üzemeltető tölti ki.]"
       }
     }
+  },
+  "calendar": {
+    "title": "Naptár",
+    "grid": "Hónap naptára",
+    "dayLabel": "{date}, {count, plural, one {# tétel} other {# tétel}}",
+    "dayEmpty": "{date}",
+    "today": "ma",
+    "noItems": "Ezen a napon nincs esedékesség.",
+    "selected": "Kiválasztott nap: {date}",
+    "feed": {
+      "title": "Naptár-link",
+      "hint": "Add hozzá a telefonod vagy géped naptáralkalmazásához. A naptár néhány óra késéssel frissülhet.",
+      "copy": "Link másolása",
+      "copied": "Link kimásolva.",
+      "copyFailed": "Nem sikerült másolni. Jelöld ki és másold ki kézzel.",
+      "open": "Hozzáadás a naptárhoz",
+      "urlLabel": "Naptár-link",
+      "rotate": "Új naptár-link",
+      "rotateTitle": "Új naptár-linket kérsz?",
+      "rotateBody": "A régi link azonnal érvénytelen lesz, a naptáralkalmazásokban újra hozzá kell adnod az újat.",
+      "rotated": "Új naptár-link kész."
+    }
+  },
+  "pwa": {
+    "updateAvailable": "Új verzió érhető el",
+    "update": "Frissítés"
   }
 }

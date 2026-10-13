@@ -12,9 +12,19 @@ const ARROW = "flex size-11 items-center justify-center rounded-full text-text-2
 const ARROW_OFF = "flex size-11 items-center justify-center rounded-full text-text-muted opacity-40";
 
 // ‹ 2026. október › — linkek (JS nélkül is működik, az állapot az URL-ben él)
-export async function MonthSwitcher({ month, currentMonth, locale }: { month: string; currentMonth: string; locale: Locale }) {
+export async function MonthSwitcher({
+  month,
+  currentMonth,
+  locale,
+  basePath = "/dashboard",
+}: {
+  month: string;
+  currentMonth: string;
+  locale: Locale;
+  basePath?: string;
+}) {
   const t = await getTranslations("dashboard");
-  const href = (m: string) => (m === currentMonth ? "/dashboard" : `/dashboard?month=${m.slice(0, 7)}`);
+  const href = (m: string) => (m === currentMonth ? basePath : `${basePath}?month=${m.slice(0, 7)}`);
   const prev = shiftMonth(month, -1);
   const next = shiftMonth(month, 1);
   const canPrev = Math.abs(monthsBetween(currentMonth, prev)) <= MAX_MONTH_OFFSET;

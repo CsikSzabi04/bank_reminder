@@ -11,6 +11,7 @@ import { BillList, BillRow } from "@/components/reminders/bill-row";
 import { LoadDemoButton } from "@/components/reminders/demo-buttons";
 import { OccurrencePayButton } from "@/components/reminders/occurrence-pay-button";
 import { EmptyState } from "@/components/ui/empty-state";
+import { InstallCard } from "@/components/install/install-card";
 import { getDashboardSummary, resolveMonth } from "@/lib/dashboard";
 import { todayIn } from "@/lib/format";
 import type { Locale } from "@/lib/i18n/config";
@@ -129,6 +130,7 @@ export default async function DashboardPage(props: PageProps<"/dashboard">) {
           </div>
         </div>
       )}
+      <InstallCard />
     </div>
   );
 }

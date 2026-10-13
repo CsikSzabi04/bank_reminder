@@ -17,7 +17,7 @@ for (const file of [".env.local", ".env.e2e.local"]) {
 // Az "authed" projekt a teszt-fiókkal belépve fut (a "setup" projekt menti a session-t); fiók nélkül kimarad.
 const PROD_PORT = 3101;
 const prod = Boolean(process.env.E2E_PROD);
-const PUBLIC_IGNORE = ["**/security.spec.ts", "**/authed/**", "**/auth.setup.ts"];
+const PUBLIC_IGNORE = ["**/security.spec.ts", "**/pwa.spec.ts", "**/authed/**", "**/auth.setup.ts"];
 
 export default defineConfig({
   testDir: "./tests",
@@ -66,6 +66,14 @@ export default defineConfig({
       testDir: "./tests/e2e",
       testMatch: "**/security.spec.ts",
       use: { ...devices["Desktop Chrome"], baseURL: `http://localhost:${PROD_PORT}` },
+    },
+    {
+      // PWA/service worker: csak a production buildben él (dev módban nem regisztrálunk), belépett session-nel
+      name: "pwa",
+      testDir: "./tests/e2e",
+      testMatch: "**/pwa.spec.ts",
+      dependencies: ["setup"],
+      use: { ...devices["Desktop Chrome"], baseURL: `http://localhost:${PROD_PORT}`, storageState: AUTH_FILE },
     },
     {
       name: "a11y",

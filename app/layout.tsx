@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { headers } from "next/headers";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
+import { PwaInit } from "@/components/pwa/pwa-init";
 import { ThemeProvider } from "@/components/shell/theme-provider";
 import { ToastProvider } from "@/components/ui/toast";
 import { BRAND } from "@/lib/brand";
@@ -17,6 +18,17 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: { default: BRAND.name, template: `%s · ${BRAND.name}` },
+  applicationName: BRAND.name,
+  // iOS: a telepített (Kezdőképernyős) app teljes képernyős, a státuszsor alapértelmezett (§13.2)
+  appleWebApp: { capable: true, statusBarStyle: "default", title: BRAND.name },
+  icons: {
+    icon: [{ url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" }],
+    apple: [
+      { url: "/icons/apple-touch-icon.png", sizes: "180x180" },
+      { url: "/icons/apple-touch-icon-167.png", sizes: "167x167" },
+      { url: "/icons/apple-touch-icon-152.png", sizes: "152x152" },
+    ],
+  },
 };
 
 export const viewport: Viewport = {
@@ -38,7 +50,10 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       <body>
         <NextIntlClientProvider>
           <ThemeProvider nonce={nonce}>
-            <ToastProvider>{children}</ToastProvider>
+            <ToastProvider>
+              <PwaInit />
+              {children}
+            </ToastProvider>
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>

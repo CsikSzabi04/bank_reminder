@@ -1,6 +1,7 @@
 import { Bell } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
+import { InstallButton } from "@/components/install/install-button";
 import { LanguageSwitch } from "@/components/shell/language-switch";
 import { ThemeSwitch } from "@/components/shell/theme-switch";
 import { BRAND } from "@/lib/brand";
@@ -17,6 +18,9 @@ export async function AuthShell({ children }: { children: ReactNode }) {
           <p className="text-text-2">{t("auth.tagline")}</p>
         </div>
         <div className="rounded-card border border-border bg-surface p-6 shadow-card">{children}</div>
+        <div className="mt-4 flex justify-center">
+          <InstallButton variant="link" />
+        </div>
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
           <LanguageSwitch />
           <ThemeSwitch />

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Bank Reminder">
+  <rect width="512" height="512" rx="112" fill="#0B7F70"/>
+  <g transform="translate(96 88) scale(13.33)" fill="#fff">
+    <path d="M12 2a1.6 1.6 0 0 0-1.6 1.6v.5A6.5 6.5 0 0 0 5.5 10.4V15L3.7 17.3a1 1 0 0 0 .8 1.7h15a1 1 0 0 0 .8-1.7L18.5 15v-4.6a6.5 6.5 0 0 0-4.9-6.3v-.5A1.6 1.6 0 0 0 12 2z"/>
+    <path d="M9.4 20.2a2.7 2.7 0 0 0 5.2 0z"/>
+  </g>
+  <path d="M215 262l31 31 58-64" fill="none" stroke="#0B7F70" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

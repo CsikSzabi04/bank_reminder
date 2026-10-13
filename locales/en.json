@@ -486,7 +486,50 @@
     "installed": "Installed ✔",
     "ios": {
       "step1": "Tap the Share icon",
-      "step2": "Choose \"Add to Home Screen\""
+      "step2": "Choose \"Add to Home Screen\"",
+      "title": "Install on iPhone and iPad",
+      "step3": "Tap Add",
+      "note": "You need this for notifications: open the app from your Home Screen."
+    },
+    "title": "Download the app",
+    "lead": "Bank Reminder is an installable app: no app store, no separate download — one tap and it's on your home screen, with notifications.",
+    "mac": {
+      "title": "Install on Mac (Safari)",
+      "step": "Choose: File → Add to Dock…"
+    },
+    "otherBrowser": "To install, open this page in Safari.",
+    "copyLink": "Copy link",
+    "copied": "Link copied.",
+    "unsupported": "This browser can't install apps — use Chrome, Edge or Safari. Until then you can still get reminders through the calendar link.",
+    "setupNotifications": "Set up notifications",
+    "dismiss": "Dismiss",
+    "cardTitle": "Get the app",
+    "cardBody": "Faster access and notifications on every device.",
+    "qrTitle": "Install on your phone",
+    "qrBody": "Scan the code with your phone and open the page there.",
+    "qrAlt": "QR code with the page address",
+    "platforms": {
+      "title": "By device",
+      "android": {
+        "name": "Android (Chrome)",
+        "steps": "Tap \"Download\", then Install (or ⋮ menu → Install app)."
+      },
+      "ios": {
+        "name": "iPhone / iPad (Safari)",
+        "steps": "Share ⬆ → Add to Home Screen → Add. Then open the app from there and turn on notifications."
+      },
+      "desktop": {
+        "name": "Windows / macOS / Linux (Chrome, Edge)",
+        "steps": "The \"Download\" button, or the install icon (⊕) at the right end of the address bar."
+      },
+      "macSafari": {
+        "name": "macOS (Safari 17+)",
+        "steps": "File → Add to Dock…"
+      },
+      "firefox": {
+        "name": "Firefox (desktop)",
+        "steps": "Can't be installed; use it as a browser tab (notifications work)."
+      }
     }
   },
   "errors": {
@@ -571,5 +614,31 @@
         "body": "[The operator's contact details — to be filled in by the operator.]"
       }
     }
+  },
+  "calendar": {
+    "title": "Calendar",
+    "grid": "Month calendar",
+    "dayLabel": "{date}, {count, plural, one {# item} other {# items}}",
+    "dayEmpty": "{date}",
+    "today": "today",
+    "noItems": "Nothing is due on this day.",
+    "selected": "Selected day: {date}",
+    "feed": {
+      "title": "Calendar link",
+      "hint": "Add it to your phone's or computer's calendar app. The calendar may update with a delay of a few hours.",
+      "copy": "Copy link",
+      "copied": "Link copied.",
+      "copyFailed": "Couldn't copy. Select it and copy manually.",
+      "open": "Add to calendar",
+      "urlLabel": "Calendar link",
+      "rotate": "New calendar link",
+      "rotateTitle": "Get a new calendar link?",
+      "rotateBody": "The old link stops working immediately; you'll need to add the new one in your calendar apps.",
+      "rotated": "New calendar link ready."
+    }
+  },
+  "pwa": {
+    "updateAvailable": "A new version is available",
+    "update": "Update"
   }
 }

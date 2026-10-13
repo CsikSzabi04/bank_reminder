@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Bank Reminder · offline</title>
+<style>
+  :root { --bg:#fff; --text:#0f1720; --muted:#475569; --primary:#0b7f70; --card:#f6f8fa; --border:#e7eaee; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#0f1216; --text:#f1f5f9; --muted:#cbd5e1; --primary:#2dd4bf; --card:#171b21; --border:#2a313a; } }
+  * { box-sizing: border-box; }
+  body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background:var(--bg); color:var(--text); line-height:1.5; }
+  main { max-width:420px; width:100%; }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:20px; margin-top:16px; }
+  h1 { font-size:24px; margin:0 0 4px; color:var(--primary); }
+  h2 { font-size:18px; margin:0 0 6px; }
+  p { margin:0; color:var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Bank Reminder</h1>
+  <!-- JS-mentes oldal: a nyelvet nem tudjuk kiolvasni, ezért mindkettő látszik -->
+  <section class="card" lang="hu">
+    <h2>Nincs kapcsolat</h2>
+    <p>Az emlékeztetőid biztonságban vannak, és az értesítések ettől még megérkeznek. Próbáld újra, ha van internet.</p>
+  </section>
+  <section class="card" lang="en">
+    <h2>You're offline</h2>
+    <p>Your reminders are safe, and notifications will still arrive. Try again when you're back online.</p>
+  </section>
+</main>
+</body>
+</html>
