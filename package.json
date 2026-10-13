@@ -27,7 +27,7 @@
     "db:secrets": "node scripts/setup-secrets.mjs",
     "gen:vapid": "node scripts/gen-vapid.mjs",
     "fn:test": "npx --yes deno@latest test -A --node-modules-dir=none supabase/functions/_shared/",
-    "fn:check": "npx --yes deno@latest check --node-modules-dir=none supabase/functions/send-notifications/index.ts supabase/functions/send-test-push/index.ts supabase/functions/delete-account/index.ts supabase/functions/fx-refresh/index.ts"
+    "fn:check": "npx --yes deno@latest check --node-modules-dir=none supabase/functions/send-notifications/index.ts supabase/functions/send-test-push/index.ts supabase/functions/delete-account/index.ts supabase/functions/fx-refresh/index.ts supabase/functions/news-ingest/index.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",

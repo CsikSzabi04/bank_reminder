@@ -77,7 +77,8 @@ begin
   assert ok, 'A tud occurrences-t beszúrni';
 
   -- hírek: csak a nem lejárt, nem rejtett
-  select count(*) into n from public.news_items; assert n = 1, format('A híreknél %s sort lát (várt 1)', n);
+  select count(*) into n from public.news_feed(null, 50) where source_key = srcOk; assert n = 1, format('A híreknél %s sort lát (várt 1)', n);
+  ok := false; begin perform count(*) from public.news_items; exception when insufficient_privilege then ok := true; end; assert ok, 'A közvetlenül olvashatja a news_items-t';
 
   -- 3) postgres: occurrence A-nak, notification, push endpoint ellenőrzés
   reset role;

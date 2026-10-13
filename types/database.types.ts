@@ -1185,6 +1185,43 @@ export type Database = {
         };
         Returns: number;
       };
+      news_feed: {
+        Args: {
+          p_before_id?: string;
+          p_before_published?: string;
+          p_limit?: number;
+          p_topic?: string;
+        };
+        Returns: {
+          expires_at: string;
+          freshness: string;
+          id: string;
+          image_url: string;
+          published_at: string;
+          snippet: string;
+          source_key: string;
+          source_name: string;
+          title: string;
+          topic: string;
+          url: string;
+        }[];
+      };
+      news_get: {
+        Args: { p_id: string };
+        Returns: {
+          expires_at: string;
+          freshness: string;
+          id: string;
+          image_url: string;
+          published_at: string;
+          snippet: string;
+          source_key: string;
+          source_name: string;
+          title: string;
+          topic: string;
+          url: string;
+        }[];
+      };
       occurrence_dates: {
         Args: {
           p_end?: string;
