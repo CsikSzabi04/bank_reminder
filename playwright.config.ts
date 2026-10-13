@@ -10,6 +10,8 @@ export default defineConfig({
   reporter: "list",
   use: {
     baseURL: "http://localhost:3000",
+    // a böngésző Accept-Language-e adja az alap nyelvet (§20.1): a tesztek magyar felületet várnak
+    locale: "hu-HU",
     trace: "on-first-retry",
   },
   projects: [

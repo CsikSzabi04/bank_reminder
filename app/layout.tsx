@@ -1,16 +1,42 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
+import { Inter } from "next/font/google";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale } from "next-intl/server";
+import { ThemeProvider } from "@/components/shell/theme-provider";
 import { BRAND } from "@/lib/brand";
 import "./globals.css";
 
+// latin-ext nélkül az ő/ű tartalék betűtípussal jelenne meg
+const inter = Inter({
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
-  title: BRAND.name,
+  title: { default: BRAND.name, template: `%s · ${BRAND.name}` },
 };
 
-// A tokenek, betű (Inter latin-ext), téma és i18n a B-02 / B-03 feladat
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  colorScheme: "light dark",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#FFFFFF" },
+    { media: "(prefers-color-scheme: dark)", color: "#0F1216" },
+  ],
+};
+
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const locale = await getLocale();
   return (
-    <html lang="hu" suppressHydrationWarning>
-      <body>{children}</body>
+    <html lang={locale} className={inter.variable} suppressHydrationWarning>
+      <body>
+        <NextIntlClientProvider>
+          <ThemeProvider>{children}</ThemeProvider>
+        </NextIntlClientProvider>
+      </body>
     </html>
   );
 }

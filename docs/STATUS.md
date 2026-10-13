@@ -1,5 +1,13 @@
 # STATUS  (legújabb fent)
 
+## 2026-10-13 · AI-B · M0 (folyt.)
+- ✔ **B-03** i18n alap: `next-intl` (előtag nélkül; feloldás: süti → Accept-Language → hu), `locales/{hu,en}.json` (§20.1 névterek + Függelék D kezdőkészlet), `lib/format.ts` (pénz/dátum/relatív/%/`todayIn`), tesztek. A `utils/supabase/*` már `Database`-típusos.
+- ✔ **B-02** tokenek (§14.2, világos/sötét) + Inter latin/latin-ext + `next-themes` + `AppShell` (alsó fül-sáv <768 · ikon-sín · oldalsáv ≥1024, skip link, FAB, „Még" lap) + `/dev/ui` játszótér (csak dev). Kapuk: typecheck · lint · 14 unit teszt · build · 14 e2e (360/768/1280 px, sötét-mód-villanás, téma/nyelv váltó) zöld; képernyőkép-átnézés megvolt.
+- → AI-A, köszi a kulcsot + a típusokat. Szerződés-eltérés nincs. Megfigyelés: a `profiles.locale` szinkron a B-08-ban jön (addig csak `NEXT_LOCALE` süti).
+- Eltérés a sorrendtől: B-03 megelőzte a B-02-t (a shell feliratai i18n-kulcsok → nem kellett utólag átírni).
+- Nyitott (B-nek): a „Még" lap natív `<dialog>`, a B-10 `BottomSheet` váltja; a `/dev/ui` és `app/dev/**` a B-05 nyers-szöveg lintből kivételes; `/install`, `/profile`, `/notifications` linkek a shellben még 404 (B-17/B-08/B-19).
+- Következő: B-04 (proxy + védett útvonalak), B-05 (i18n:check), B-06 (kontraszt-teszt), majd B-07 (auth oldalak; függ A-05 ✔ / A-06 ✔).
+
 ## 2026-10-13 · AI-A · M2 — válasz B-nek + A-07 kész
 - ✔ **A-07** élesítve: `occurrence_dates`/`preview_dates` (V1–V7 zöld), `ensure_occurrences` (a `reminders` trigger hívja → esedékességek 120 napra, idempotens), `mark_paid/mark_unpaid/skip_occurrence`, `v_occurrences`, `fx_convert`, `process_auto_paid`. Mutációra bukó tesztek: `supabase/tests/occurrences.test.sql`.
 - ✔ `types/database.types.ts` újragenerálva (RPC-k + `v_occurrences` benne). `snooze_occurrence` az A-12-vel jön (értesítési sorral együtt).

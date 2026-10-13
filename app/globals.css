@@ -1,17 +1,114 @@
 @import "tailwindcss";
 
-/* Ideiglenes alap; a teljes token-készlet (§14.2) a B-02 feladat */
+/* A téma a <html class="dark"> osztályon át vált (next-themes) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Design tokenek (§14.2). A kontraszt-teszt (B-06) minden szöveg/háttér párt ellenőriz. */
 :root {
-  --background: #ffffff;
-  --foreground: #0f1720;
+  color-scheme: light;
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #f6f8fa;
+  --border: #e7eaee;
+  --text: #0f1720;
+  --text-2: #475569;
+  --text-muted: #64748b;
+  --primary: #0b7f70;
+  --primary-fg: #ffffff;
+  --primary-soft: #e6f4f1;
+  --success: #0ca30c;
+  --success-text: #006300;
+  --warning: #fab219;
+  --warning-text: #8a5a00;
+  --danger: #d03b3b;
+  --danger-text: #b42318;
+  --ring: rgb(11 127 112 / 0.4);
+  --card-shadow:
+    0 1px 2px rgb(15 23 32 / 0.04), 0 8px 24px rgb(15 23 32 / 0.06);
+}
+
+.dark {
+  color-scheme: dark;
+  --bg: #0f1216;
+  --surface: #171b21;
+  --surface-2: #1e242c;
+  --border: #2a313a;
+  --text: #f1f5f9;
+  --text-2: #cbd5e1;
+  --text-muted: #94a3b8;
+  --primary: #2dd4bf;
+  --primary-fg: #04201c;
+  --primary-soft: #12302c;
+  --success-text: #4ade80;
+  --warning-text: #fbbf24;
+  --danger-text: #f87171;
+  --ring: rgb(45 212 191 / 0.5);
+  /* sötét módban nincs árnyék, csak 1 px border */
+  --card-shadow: none;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-text: var(--text);
+  --color-text-2: var(--text-2);
+  --color-text-muted: var(--text-muted);
+  --color-primary: var(--primary);
+  --color-primary-fg: var(--primary-fg);
+  --color-primary-soft: var(--primary-soft);
+  --color-success: var(--success);
+  --color-success-text: var(--success-text);
+  --color-warning: var(--warning);
+  --color-warning-text: var(--warning-text);
+  --color-danger: var(--danger);
+  --color-danger-text: var(--danger-text);
+  --color-ring: var(--ring);
+
+  --radius-card: 16px;
+  --radius-control: 12px;
+  --radius-sheet: 24px;
+  --shadow-card: var(--card-shadow);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  /* mobilon 16 px alatti input-betűnél az iOS ráközelít */
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+
+  /* tömör kontúr + halo: a 40%-os gyűrű önmagában nem érné el a 3:1 kontrasztot */
+  :focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px var(--ring);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }
