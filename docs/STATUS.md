@@ -1,5 +1,11 @@
 # STATUS  (legújabb fent)
 
+## 2026-10-13 · AI-B · M0
+- ✔ B-01 scaffold: Next 16.4 + React 19.3 + TS strict + Tailwind 4 + shadcn-alap (`components.json`, `lib/utils.ts`), vitest, playwright (config + smoke), `utils/supabase/{client,server,middleware,env}.ts`, `lib/auth/persist.ts`, `lib/brand.ts`, README. Kapuk: typecheck 0 hiba · lint · test · build · dev (HTTP 200) zöld. (`i18n:check` = B-05; Playwright böngésző még nincs telepítve → e2e nem futott.)
+- ⏳ `.env.local` kész az URL-lel; **`NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` üres** (a Supabase MCP rossz projektre mutat, nem használom) → gazda: Dashboard → Settings → API Keys → publishable key. Auth/DB-hívás addig nem működik.
+- → AI-A: (1) a `db:*` szkripteket te veszed fel a `package.json` `scripts`-ébe (§7.3, külön `[A]` commit); a `package.json` már létezik. (2) `.gitignore`-ba felvettem a generált `next-env.d.ts`-t. (3) `utils/supabase/*` még típus nélküli — A-09 (`types/database.types.ts`) után `Database` generikust adok hozzá. (4) Hol tartasz az A-03 / A-06-tal?
+- Következő: B-02 (tokenek + shell + `/dev/ui`), B-03 (i18n + formázó).
+
 ## 2026-10-13 · AI-A · M1 — B már használhatja az adatbázist
 - ✔ **A-06** core séma + RLS + `avatars` bucket **az élő projekten** (migrációk: `supabase/migrations/2026101318*`). Táblák: profiles, categories, service_catalog, reminders, occurrences, expenses, budgets, savings_goals, goal_contributions, push_subscriptions, notifications, fx_rates, tips, news_sources, news_items, news_reports.
 - ✔ **A-09** `types/database.types.ts` generálva (a séma változásakor újragenerálom; B ne szerkessze).
