@@ -397,10 +397,24 @@ export type Database = {
             referencedColumns: ["id"];
           },
           {
+            foreignKeyName: "notifications_occurrence_id_fkey";
+            columns: ["occurrence_id"];
+            isOneToOne: false;
+            referencedRelation: "v_reminders";
+            referencedColumns: ["next_occurrence_id"];
+          },
+          {
             foreignKeyName: "notifications_reminder_id_fkey";
             columns: ["reminder_id"];
             isOneToOne: false;
             referencedRelation: "reminders";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "notifications_reminder_id_fkey";
+            columns: ["reminder_id"];
+            isOneToOne: false;
+            referencedRelation: "v_reminders";
             referencedColumns: ["id"];
           },
         ];
@@ -455,6 +469,13 @@ export type Database = {
             columns: ["reminder_id"];
             isOneToOne: false;
             referencedRelation: "reminders";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "occurrences_reminder_id_fkey";
+            columns: ["reminder_id"];
+            isOneToOne: false;
+            referencedRelation: "v_reminders";
             referencedColumns: ["id"];
           },
         ];
@@ -881,6 +902,13 @@ export type Database = {
             referencedRelation: "reminders";
             referencedColumns: ["id"];
           },
+          {
+            foreignKeyName: "usage_checks_reminder_id_fkey";
+            columns: ["reminder_id"];
+            isOneToOne: false;
+            referencedRelation: "v_reminders";
+            referencedColumns: ["id"];
+          },
         ];
       };
     };
@@ -955,6 +983,66 @@ export type Database = {
             referencedRelation: "reminders";
             referencedColumns: ["id"];
           },
+          {
+            foreignKeyName: "occurrences_reminder_id_fkey";
+            columns: ["reminder_id"];
+            isOneToOne: false;
+            referencedRelation: "v_reminders";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "reminders_category_id_fkey";
+            columns: ["category_id"];
+            isOneToOne: false;
+            referencedRelation: "categories";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "reminders_service_slug_fkey";
+            columns: ["service_slug"];
+            isOneToOne: false;
+            referencedRelation: "service_catalog";
+            referencedColumns: ["slug"];
+          },
+        ];
+      };
+      v_reminders: {
+        Row: {
+          amount: number | null;
+          auto_paid: boolean | null;
+          category_id: string | null;
+          channels: string[] | null;
+          created_at: string | null;
+          currency: string | null;
+          end_date: string | null;
+          id: string | null;
+          is_active: boolean | null;
+          is_demo: boolean | null;
+          is_subscription: boolean | null;
+          last_paid_on: string | null;
+          month_end: boolean | null;
+          monthly_base: number | null;
+          name: string | null;
+          next_amount: number | null;
+          next_due: string | null;
+          next_occurrence_id: string | null;
+          next_overdue: boolean | null;
+          note: string | null;
+          recur_every: number | null;
+          recur_unit: string | null;
+          remind_enabled: boolean | null;
+          remind_offsets: number[] | null;
+          remind_time: string | null;
+          service_slug: string | null;
+          start_date: string | null;
+          trial_ends_on: string | null;
+          updated_at: string | null;
+          url: string | null;
+          usage_tags: string[] | null;
+          user_id: string | null;
+        };
+        ComputedFields: never;
+        Relationships: [
           {
             foreignKeyName: "reminders_category_id_fkey";
             columns: ["category_id"];
@@ -1292,6 +1380,21 @@ export type Database = {
           isOneToOne: true;
           isSetofReturn: false;
         };
+      };
+      reminder_history: {
+        Args: { p_limit?: number; p_reminder_id: string };
+        Returns: {
+          amount: number;
+          change_pct: number;
+          currency: string;
+          due_date: string;
+          occurrence_id: string;
+          overdue: boolean;
+          paid_amount: number;
+          paid_on: string;
+          prev_amount: number;
+          status: string;
+        }[];
       };
       rotate_ics_token: { Args: Record<PropertyKey, never>; Returns: string };
       run_daily_maintenance: { Args: { p_now?: string }; Returns: Json };

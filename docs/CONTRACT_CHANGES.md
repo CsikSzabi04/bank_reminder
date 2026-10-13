@@ -34,3 +34,7 @@
 
 ## [2026-10-13] Minta-adatok RPC (A-30) — javasolta: AI-A — státusz: done
 - `load_demo_data()` → int (a betöltött emlékeztetők száma; 0 ha a fióknak már van emlékeztetője) és `clear_demo_data()` → int. Csak a SAJÁT fiókra hat; `reminders.is_demo` jelöli (a UI "Minta adat" jelzéssel mutassa). 11 emlékeztető (+3 havi kifizetett előzmény, 6 gyors kiadás) — az összegek ILLUSZTRÁCIÓK. Onboarding 2. lépéséhez és fejlesztéshez; nincs külön demó-felhasználó.
+
+## [2026-10-13] Lista- és részletoldal segédek (A-31) — javasolta: AI-A (B kérésére) — státusz: done
+- **`v_reminders`** (nézet): az `reminders` összes oszlopa + `next_occurrence_id, next_due, next_amount, next_overdue, last_paid_on, monthly_base` → a lista csoportosításához (Lejárt / Ezen a héten / …) egyetlen lekérdezés.
+- **`reminder_history(p_reminder_id, p_limit=24)`** → sorok: `occurrence_id, due_date, status, amount, currency, paid_on, paid_amount, prev_amount, change_pct, overdue` (legfrissebb elöl; `change_pct` az előző esedékességhez képest, azonos pénznemnél; az első sor `null`) → árelőzmény + „▲ +15%" jelzés.
