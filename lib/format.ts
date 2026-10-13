@@ -88,3 +88,8 @@ export function formatMonth(isoDate: string, locale: Locale): string {
     new Date(`${isoDate}T00:00:00Z`),
   );
 }
+
+// Időpont (óra:perc) a megadott időzónában: értesítés-listához
+export function formatTime(value: string | Date, locale: Locale, timeZone: string): string {
+  return new Intl.DateTimeFormat(DATE_LOCALE[locale], { hour: "2-digit", minute: "2-digit", timeZone, hourCycle: "h23" }).format(new Date(value));
+}

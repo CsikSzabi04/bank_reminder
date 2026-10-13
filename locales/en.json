@@ -425,7 +425,125 @@
     "push": {
       "enable": "Turn on notifications on this device",
       "test": "Send a test notification",
-      "brave": "Brave blocks the push service by default — turn on \"Use Google services for push messaging\", then restart."
+      "brave": "Brave blocks the push service by default — turn on \"Use Google services for push messaging\", then restart.",
+      "disable": "Turn off on this device",
+      "on": "Notifications are turned on for this device.",
+      "off": "Notifications aren't turned on for this device.",
+      "enabling": "Turning on…",
+      "enabled": "Notifications turned on.",
+      "disabled": "Notifications turned off on this device.",
+      "reason": {
+        "unsupported": "This browser doesn't support notifications. Try Chrome, Edge or Safari, or use the calendar link.",
+        "ios_not_installed": "On iPhone, first add the app to your Home Screen and open it from there.",
+        "denied": "Notifications are blocked for this site. Allow them by clicking the lock icon in the address bar (Notifications → Allow).",
+        "dismissed": "You didn't allow it — you can turn it on any time.",
+        "subscribe_failed": "Couldn't subscribe. Try again, or use the calendar link.",
+        "server_rejected": "The server didn't accept this device (too many devices?). Remove one from My devices.",
+        "dev_mode": "The service worker is off in development mode. Run: npm run build, then npm start."
+      },
+      "testSent": "Test notification sent (to {sent} of {devices} devices).",
+      "testNone": "There's no active device to send to.",
+      "testRateLimited": "You can send at most 3 tests per minute. Wait a moment.",
+      "testFailed": "The test failed. Check the diagnostics.",
+      "diag": {
+        "title": "Status diagnostics",
+        "https": "HTTPS",
+        "serviceWorker": "Service worker",
+        "installed": "Installed (standalone window)",
+        "permission": "Permission",
+        "subscription": "Subscription in the browser",
+        "server": "The server knows this device",
+        "lastSuccess": "Last successful delivery",
+        "global": "Reminders master switch",
+        "ok": "OK",
+        "fail": "Problem",
+        "warn": "Heads-up",
+        "never": "none yet",
+        "granted": "granted",
+        "denied": "blocked",
+        "prompt": "not asked yet",
+        "na": "not available"
+      }
+    },
+    "title": "Notifications",
+    "bell": "Notifications, {count, plural, one {# unread} other {# unread}}",
+    "empty": {
+      "title": "No notifications",
+      "body": "Reminders and alerts will show up here."
+    },
+    "markAll": "Mark all as read",
+    "unread": "Unread",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "loadFailed": "Notifications aren't available right now.",
+    "text": {
+      "reminderDays": {
+        "title": "{name} — due in {n} days",
+        "body": "{amount} · {date}"
+      },
+      "reminderTomorrow": {
+        "title": "{name} — due tomorrow",
+        "body": "{amount} · {date}"
+      },
+      "reminderToday": {
+        "title": "{name} — due today",
+        "body": "{amount}"
+      },
+      "reminderSnoozed": {
+        "title": "{name} — reminder",
+        "body": "{amount} · {date}"
+      },
+      "overdue": {
+        "title": "{name} — overdue",
+        "body": "Was due {date} ({amount}). Paid it?"
+      },
+      "trialEnd": {
+        "title": "{name} — free trial ends tomorrow",
+        "body": "Cancel today if you don't want it."
+      },
+      "digest": {
+        "title": "Next 7 days: {count} bills, {total}",
+        "body": "{names}"
+      },
+      "test": {
+        "title": "It works! 🎉",
+        "body": "This is a test notification."
+      },
+      "generic": {
+        "title": "Notification",
+        "body": "Open for details."
+      }
+    },
+    "devices": {
+      "title": "My devices",
+      "none": "No device is subscribed yet.",
+      "thisDevice": "This device",
+      "remove": "Remove",
+      "removed": "Device removed.",
+      "removeFailed": "Couldn't remove it.",
+      "lastSuccess": "Last delivery: {date}",
+      "never": "No delivery yet",
+      "disabled": "Disabled",
+      "removeAria": "Remove {label}"
+    },
+    "settings": {
+      "title": "Notification settings",
+      "master": "Reminders on/off",
+      "masterOff": "You won't get notifications about your bills.",
+      "masterOn": "Reminders arrive at the times you set.",
+      "defaults": "Defaults for new reminders",
+      "channels": "Channels",
+      "hideDetails": "Discreet mode",
+      "hideDetailsHint": "The name and amount are hidden on the lock screen.",
+      "digest": "Weekly summary",
+      "digestHint": "On Sundays at 6 pm, about the next 7 days.",
+      "save": "Save",
+      "saving": "Saving…",
+      "saved": "Saved.",
+      "saveFailed": "Couldn't save. Please try again.",
+      "thisDevice": "On this device",
+      "calendar": "Calendar link (reliable fallback)",
+      "calendarHint": "If a notification doesn't arrive for some reason, your calendar app will still remind you."
     }
   },
   "profile": {
@@ -435,7 +553,8 @@
       "label": "Profile sections",
       "overview": "Overview",
       "appearance": "Appearance",
-      "security": "Security"
+      "security": "Security",
+      "notifications": "Notifications"
     },
     "overview": {
       "avatar": {

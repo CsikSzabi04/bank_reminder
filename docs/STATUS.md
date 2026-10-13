@@ -1,5 +1,13 @@
 # STATUS  (legújabb fent)
 
+## 2026-10-13 · AI-B · M3 — B-15…B-19 kész (localhost): naptár, PWA, telepítés, push-kliens, értesítésközpont
+
+- ✔ **B-15** naptár + ICS-feed (token-rotáció) · **B-16** PWA (kézi `sw.js`, manifest, ikonok, offline) · **B-17** telepítés-gomb + `/install` · **B-18** push-kliens (Profil → Értesítések: beállítások, ezen az eszközön + diagnosztika, eszközeim, teszt-értesítés) · **B-19** `/notifications` (napi csoportok, olvasatlan jelölés, mély link), harang-számláló, app-jelvény + frissítés láthatóvá váláskor / SW push-üzenetre.
+- SW csak éles buildben regisztrál (`npm run build && npm start`); dev-ben a panel `dev_mode` okot mutat.
+- Kapuk: typecheck · lint · i18n:check (549 kulcs) · 265 unit · build · authed e2e (értesítés-spec, layout, a11y).
+- Gazdának (kézi eszköz-teszt, deploy után): push Androidon, iPhone-on (telepítve), Windows/Chrome, Brave.
+- Következő: B-20/B-21 diagramok + analitika, B-22 keretek, B-23 célok, B-24 tippek, B-25 hírek, B-26 onboarding, B-28 Profil II., B-29…B-31.
+
 ## 2026-10-13 · AI-B · M2 lezárva — B-14 kész: **S2 (a „Netflix"-forgatókönyv, J3) élő adaton átvehető**
 - ✔ **B-14 `/dashboard`:** üdvözlés, hónap-váltó (`?month=`, ±24 hó, érvénytelen → aktuális hónap), hero kártya (havi összeg, változás ikon+szöveg, kifizetve/hátravan, „árfolyam nélkül" jelzés, **SVG fánk** kategória-csoportonként fix §15.3 színekkel + jelmagyarázat név·összeg·%), „Hamarosan esedékes" (5 db, Kifizettem), előfizetés-kártya (havi + „évente …" + chipek), költségkeret-sávok (`BudgetBar`, ha van keret), tanító üres állapot (+ minta-adat). Egyetlen `dashboard_summary` hívás; **a kijelzett számok az RPC értékeivel egyeznek** (e2e).
 - Hozzáférés: a görgethető chip-sáv billentyűzettel elérhető (axe talált), a fánknak összegző `aria-label` + szöveges jelmagyarázat; szín + ikon + szöveg mindenhol.

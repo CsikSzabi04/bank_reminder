@@ -6,6 +6,7 @@ import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
 import { AvatarUploader } from "@/components/profile/avatar-uploader";
 import { NameForm } from "@/components/profile/name-form";
+import { NotificationsSection } from "@/components/profile/notifications-section";
 import { SecuritySection } from "@/components/profile/security-section";
 import { isProfileSection, ProfileNav, type ProfileSection } from "@/components/profile/profile-nav";
 import { LanguageSwitch } from "@/components/shell/language-switch";
@@ -116,6 +117,7 @@ export default async function ProfilePage(props: PageProps<"/profile">) {
           </Link>
           {current === "overview" && <Overview profile={profile} locale={locale} />}
           {current === "appearance" && <Appearance />}
+          {current === "notifications" && <NotificationsSection userId={profile.id} />}
           {current === "security" && <SecuritySection />}
         </div>
       </div>

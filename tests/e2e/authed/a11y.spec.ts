@@ -14,6 +14,11 @@ test.beforeAll(async () => {
   await purgeReminders(db.client);
   await db.client.rpc("load_demo_data");
   reminderId = (await db.client.from("reminders").select("id").eq("name", "Netflix").single()).data!.id;
+  // egy mára esedékes tétel, hogy az értesítés-lista ne üres állapotot vizsgáljon
+  const today = (await db.client.rpc("user_today")).data as string;
+  await db.client
+    .from("reminders")
+    .insert({ name: "Értesítés-teszt", amount: 1234, currency: "HUF", start_date: today, recur_unit: "month", recur_every: 1, remind_offsets: [0], remind_time: "00:00:00" });
 });
 test.afterAll(async () => {
   await purgeReminders(db.client);
@@ -33,8 +38,11 @@ const PAGES: [string, () => string][] = [
   ["Új emlékeztető", () => "/reminders/new"],
   ["Emlékeztető szerkesztése", () => `/reminders/${reminderId}/edit`],
   ["Emlékeztető részletei", () => `/reminders/${reminderId}`],
+  ["Naptár", () => "/calendar"],
+  ["Értesítések", () => "/notifications"],
   ["Profil", () => "/profile"],
   ["Profil · Megjelenés", () => "/profile?section=appearance"],
+  ["Profil · Értesítések", () => "/profile?section=notifications"],
   ["Profil · Biztonság", () => "/profile?section=security"],
   ["404", () => "/reminders/00000000-0000-4000-8000-000000000000"],
 ];

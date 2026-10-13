@@ -16,7 +16,7 @@ const ICON_BTN =
 // Reszponzív váz (§14.3): <768 alsó fül-sáv · 768–1023 ikon-sín · ≥1024 oldalsáv (248 px)
 export type ShellUser = { id: string; name: string | null; avatarUrl: string | null };
 
-export async function AppShell({ children, user }: { children: ReactNode; user?: ShellUser }) {
+export async function AppShell({ children, user, unread = 0 }: { children: ReactNode; user?: ShellUser; unread?: number }) {
   const t = await getTranslations();
   const avatarAlt = t("profile.overview.avatar.alt", { name: user?.name ?? "" });
 
@@ -76,8 +76,17 @@ export async function AppShell({ children, user }: { children: ReactNode; user?:
         <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-border bg-bg/90 px-4 backdrop-blur md:px-6 lg:justify-end lg:px-8">
           <span className="text-lg font-semibold lg:hidden">{BRAND.name}</span>
           <div className="flex items-center gap-1">
-            <Link href="/notifications" aria-label={t("nav.notifications")} className={ICON_BTN}>
+            <Link
+              href="/notifications"
+              aria-label={unread > 0 ? t("notifications.bell", { count: unread }) : t("nav.notifications")}
+              className={`${ICON_BTN} relative`}
+            >
               <Bell className="size-5" aria-hidden />
+              {unread > 0 && (
+                <span aria-hidden className="absolute top-1.5 right-1.5 flex min-w-4.5 items-center justify-center rounded-full bg-danger px-1 text-[0.6875rem] leading-4.5 font-semibold text-white">
+                  {unread > 9 ? "9+" : unread}
+                </span>
+              )}
             </Link>
             <Link href="/profile" aria-label={t("nav.profile")} className={`${ICON_BTN} lg:hidden`}>
               {user ? (

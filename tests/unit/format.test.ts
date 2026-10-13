@@ -7,6 +7,7 @@ import {
   formatRelativeDay,
   formatMonth,
   formatShortDate,
+  formatTime,
   todayIn,
 } from "@/lib/format";
 
@@ -93,5 +94,13 @@ describe("formatMonth", () => {
     expect(norm(formatMonth("2026-10-01", "hu"))).toBe("2026. október");
     expect(norm(formatMonth("2026-10-01", "en"))).toBe("October 2026");
     expect(norm(formatMonth("2026-01-01", "hu"))).toBe("2026. január");
+  });
+});
+
+describe("formatTime", () => {
+  it("az adott időzónában formáz (nyári/téli idő)", () => {
+    expect(formatTime("2026-10-13T07:00:00Z", "hu", "Europe/Budapest")).toBe("09:00");
+    expect(formatTime("2026-11-10T08:00:00Z", "hu", "Europe/Budapest")).toBe("09:00");
+    expect(formatTime("2026-10-13T23:30:00Z", "en", "UTC")).toBe("23:30");
   });
 });

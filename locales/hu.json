@@ -425,7 +425,125 @@
     "push": {
       "enable": "Értesítések bekapcsolása ezen az eszközön",
       "test": "Teszt-értesítés küldése",
-      "brave": "A Brave alapból tiltja a push-szolgáltatást — kapcsold be a „Use Google services for push messaging” beállítást, majd indítsd újra."
+      "brave": "A Brave alapból tiltja a push-szolgáltatást — kapcsold be a „Use Google services for push messaging” beállítást, majd indítsd újra.",
+      "disable": "Kikapcsolás ezen az eszközön",
+      "on": "Az értesítések be vannak kapcsolva ezen az eszközön.",
+      "off": "Az értesítések nincsenek bekapcsolva ezen az eszközön.",
+      "enabling": "Bekapcsolás…",
+      "enabled": "Az értesítések bekapcsolva.",
+      "disabled": "Az értesítések kikapcsolva ezen az eszközön.",
+      "reason": {
+        "unsupported": "Ez a böngésző nem támogatja az értesítéseket. Próbáld Chrome-ban, Edge-ben vagy Safariban, vagy használd a naptár-linket.",
+        "ios_not_installed": "iPhone-on az értesítéshez először add hozzá az appot a Kezdőképernyőhöz, és onnan nyisd meg.",
+        "denied": "Az értesítések le vannak tiltva ennél az oldalnál. Engedélyezd a böngésző címsorában a zár-ikonra kattintva (Értesítések → Engedélyez).",
+        "dismissed": "Nem engedélyezted — bármikor bekapcsolhatod.",
+        "subscribe_failed": "Nem sikerült a feliratkozás. Próbáld újra, vagy használd a naptár-linket.",
+        "server_rejected": "A szerver nem fogadta el az eszközt (túl sok eszköz?). Távolíts el egyet az Eszközeim listából.",
+        "dev_mode": "Fejlesztői módban a service worker ki van kapcsolva. Futtasd: npm run build, majd npm start."
+      },
+      "testSent": "Teszt-értesítés elküldve ({sent}/{devices} eszközre).",
+      "testNone": "Nincs aktív eszköz, ahová küldhetnénk.",
+      "testRateLimited": "Percenként legfeljebb 3 teszt küldhető. Várj egy kicsit.",
+      "testFailed": "A teszt nem sikerült. Nézd meg a diagnosztikát.",
+      "diag": {
+        "title": "Állapot-diagnosztika",
+        "https": "HTTPS",
+        "serviceWorker": "Service worker",
+        "installed": "Telepítve (önálló ablak)",
+        "permission": "Engedély",
+        "subscription": "Feliratkozás a böngészőben",
+        "server": "A szerver ismeri az eszközt",
+        "lastSuccess": "Utolsó sikeres kézbesítés",
+        "global": "Emlékeztetők főkapcsolója",
+        "ok": "Rendben",
+        "fail": "Hiba",
+        "warn": "Figyelem",
+        "never": "még nem volt",
+        "granted": "megadva",
+        "denied": "letiltva",
+        "prompt": "még nem kértük",
+        "na": "nem elérhető"
+      }
+    },
+    "title": "Értesítések",
+    "bell": "Értesítések, {count, plural, one {# olvasatlan} other {# olvasatlan}}",
+    "empty": {
+      "title": "Nincs értesítésed",
+      "body": "Itt jelennek meg az emlékeztetők és a figyelmeztetések."
+    },
+    "markAll": "Mind olvasottnak jelölése",
+    "unread": "Olvasatlan",
+    "today": "Ma",
+    "yesterday": "Tegnap",
+    "loadFailed": "Az értesítések most nem érhetők el.",
+    "text": {
+      "reminderDays": {
+        "title": "{name} — {n} nap múlva esedékes",
+        "body": "{amount} · {date}"
+      },
+      "reminderTomorrow": {
+        "title": "{name} — holnap esedékes",
+        "body": "{amount} · {date}"
+      },
+      "reminderToday": {
+        "title": "{name} — ma esedékes",
+        "body": "{amount}"
+      },
+      "reminderSnoozed": {
+        "title": "{name} — emlékeztető",
+        "body": "{amount} · {date}"
+      },
+      "overdue": {
+        "title": "{name} — lejárt",
+        "body": "{date} óta várja a befizetést ({amount}). Kifizetted?"
+      },
+      "trialEnd": {
+        "title": "{name} — holnap lejár az ingyenes próba",
+        "body": "Ha nem kéred, mondd le még ma."
+      },
+      "digest": {
+        "title": "Következő 7 nap: {count} tétel, {total}",
+        "body": "{names}"
+      },
+      "test": {
+        "title": "Működik! 🎉",
+        "body": "Ez egy teszt-értesítés."
+      },
+      "generic": {
+        "title": "Értesítés",
+        "body": "Nyisd meg a részletekért."
+      }
+    },
+    "devices": {
+      "title": "Eszközeim",
+      "none": "Még egy eszköz sincs feliratkozva.",
+      "thisDevice": "Ez az eszköz",
+      "remove": "Eltávolítás",
+      "removed": "Eszköz eltávolítva.",
+      "removeFailed": "Nem sikerült eltávolítani.",
+      "lastSuccess": "Utolsó kézbesítés: {date}",
+      "never": "Még nem volt kézbesítés",
+      "disabled": "Letiltva",
+      "removeAria": "{label} eltávolítása"
+    },
+    "settings": {
+      "title": "Értesítési beállítások",
+      "master": "Emlékeztetők be/ki",
+      "masterOff": "Nem kapsz értesítést a számláidról.",
+      "masterOn": "Az emlékeztetők a beállított időpontban érkeznek.",
+      "defaults": "Alapértelmezések új emlékeztetőkhöz",
+      "channels": "Csatornák",
+      "hideDetails": "Diszkrét mód",
+      "hideDetailsHint": "A zárolt képernyőn nem látszik a név és az összeg.",
+      "digest": "Heti összefoglaló",
+      "digestHint": "Vasárnap 18:00-kor a következő 7 nap tételeiről.",
+      "save": "Mentés",
+      "saving": "Mentés…",
+      "saved": "Elmentve.",
+      "saveFailed": "Nem sikerült menteni. Próbáld újra.",
+      "thisDevice": "Ezen az eszközön",
+      "calendar": "Naptár-link (biztos tartalék)",
+      "calendarHint": "Ha az értesítés valamiért nem megy, a naptáralkalmazásod is emlékeztet."
     }
   },
   "profile": {
@@ -435,7 +553,8 @@
       "label": "Profil szakaszai",
       "overview": "Áttekintés",
       "appearance": "Megjelenés",
-      "security": "Biztonság"
+      "security": "Biztonság",
+      "notifications": "Értesítések"
     },
     "overview": {
       "avatar": {
