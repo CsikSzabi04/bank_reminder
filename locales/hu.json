@@ -39,7 +39,8 @@
     "news": "Hírek",
     "more": "Még",
     "profile": "Profil",
-    "notifications": "Értesítések"
+    "notifications": "Értesítések",
+    "signOut": "Kijelentkezés"
   },
   "auth": {
     "login": {
@@ -141,7 +142,9 @@
       "body": "Koppints a gombra a folytatáshoz. Ez a közbenső lépés védi a linket az automatikus levélellenőrzőktől.",
       "continue": "Folytatás",
       "pending": "Ellenőrzés…",
-      "invalid": "Ez a link érvénytelen vagy lejárt."
+      "invalid": "Ez a link érvénytelen vagy lejárt.",
+      "newLink": "Új levél kérése",
+      "errorGeneric": "Nem sikerült megerősíteni a linket. Kérj új levelet, vagy próbáld újra."
     }
   },
   "dashboard": {
@@ -198,7 +201,8 @@
     "sections": {
       "label": "Profil szakaszai",
       "overview": "Áttekintés",
-      "appearance": "Megjelenés"
+      "appearance": "Megjelenés",
+      "security": "Biztonság"
     },
     "overview": {
       "avatar": {
@@ -235,6 +239,13 @@
       "zoom": "Nagyítás",
       "confirm": "Használom",
       "loadError": "A képet nem sikerült megnyitni."
+    },
+    "security": {
+      "title": "Biztonság",
+      "signOut": "Kijelentkezés ezen az eszközön",
+      "signOutHint": "Az értesítéseid ettől még megérkeznek erre az eszközre.",
+      "signOutAll": "Kijelentkezés minden eszközről",
+      "signOutAllHint": "Minden eszközön újra be kell majd lépned, ahol most be vagy jelentkezve."
     }
   },
   "install": {

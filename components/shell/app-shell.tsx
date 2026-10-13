@@ -6,6 +6,7 @@ import { Avatar } from "@/components/profile/avatar";
 import { BRAND } from "@/lib/brand";
 import { Fab } from "./fab";
 import { MoreSheet } from "./more-sheet";
+import { SignOutButton } from "./sign-out-button";
 import { NavLink } from "./nav-link";
 import { BOTTOM_NAV, SIDE_NAV } from "./nav-items";
 
@@ -65,6 +66,9 @@ export async function AppShell({ children, user }: { children: ReactNode; user?:
             )}
             <span className="truncate">{user?.name || t("nav.profile")}</span>
           </Link>
+          {user && (
+            <SignOutButton className="flex min-h-11 w-full items-center gap-3 rounded-control px-3 text-sm font-medium text-text-2 hover:bg-surface-2" />
+          )}
         </div>
       </aside>
 

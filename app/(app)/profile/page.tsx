@@ -6,6 +6,7 @@ import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
 import { AvatarUploader } from "@/components/profile/avatar-uploader";
 import { NameForm } from "@/components/profile/name-form";
+import { SecuritySection } from "@/components/profile/security-section";
 import { isProfileSection, ProfileNav, type ProfileSection } from "@/components/profile/profile-nav";
 import { LanguageSwitch } from "@/components/shell/language-switch";
 import { ThemeSwitch } from "@/components/shell/theme-switch";
@@ -113,7 +114,9 @@ export default async function ProfilePage(props: PageProps<"/profile">) {
             <ChevronLeft className="size-4" aria-hidden />
             {t("back")}
           </Link>
-          {current === "overview" ? <Overview profile={profile} locale={locale} /> : <Appearance />}
+          {current === "overview" && <Overview profile={profile} locale={locale} />}
+          {current === "appearance" && <Appearance />}
+          {current === "security" && <SecuritySection />}
         </div>
       </div>
     </div>

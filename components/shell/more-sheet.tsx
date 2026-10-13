@@ -1,9 +1,10 @@
 "use client";
 
-import { Download, Ellipsis, User, X } from "lucide-react";
+import { Download, Ellipsis, LogOut, User, X } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useRef } from "react";
+import { signOut } from "@/lib/auth/sign-out";
 import { cn } from "@/lib/utils";
 import { MORE_NAV } from "./nav-items";
 
@@ -70,6 +71,14 @@ export function MoreSheet() {
                 <Download className="size-5 text-text-2" aria-hidden />
                 {t("install.cta")}
               </Link>
+            </li>
+            <li>
+              <form action={signOut}>
+                <button type="submit" className={cn(row, "w-full")}>
+                  <LogOut className="size-5 text-text-2" aria-hidden />
+                  {t("nav.signOut")}
+                </button>
+              </form>
             </li>
           </ul>
         </nav>

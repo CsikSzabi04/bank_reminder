@@ -39,7 +39,8 @@
     "news": "News",
     "more": "More",
     "profile": "Profile",
-    "notifications": "Notifications"
+    "notifications": "Notifications",
+    "signOut": "Log out"
   },
   "auth": {
     "login": {
@@ -141,7 +142,9 @@
       "body": "Tap the button to continue. This extra step protects the link from automatic email scanners.",
       "continue": "Continue",
       "pending": "Checking…",
-      "invalid": "This link is invalid or has expired."
+      "invalid": "This link is invalid or has expired.",
+      "newLink": "Request a new email",
+      "errorGeneric": "Couldn't confirm the link. Request a new email or try again."
     }
   },
   "dashboard": {
@@ -198,7 +201,8 @@
     "sections": {
       "label": "Profile sections",
       "overview": "Overview",
-      "appearance": "Appearance"
+      "appearance": "Appearance",
+      "security": "Security"
     },
     "overview": {
       "avatar": {
@@ -235,6 +239,13 @@
       "zoom": "Zoom",
       "confirm": "Use photo",
       "loadError": "Couldn't open that image."
+    },
+    "security": {
+      "title": "Security",
+      "signOut": "Log out on this device",
+      "signOutHint": "Your notifications will still arrive on this device.",
+      "signOutAll": "Log out of all devices",
+      "signOutAllHint": "You'll need to log in again on every device where you're currently signed in."
     }
   },
   "install": {

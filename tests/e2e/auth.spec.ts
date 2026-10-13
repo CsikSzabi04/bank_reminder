@@ -115,3 +115,23 @@ test.describe("jelszó-visszaállítás és megerősítés", () => {
     await expect(page.getByRole("button", { name: /Újraküldés \d+ mp múlva/ })).toBeDisabled();
   });
 });
+
+test.describe("/auth/confirm — a Supabase alap sablonjának formái", () => {
+  test("?code=… (PKCE) a callback-útvonalra megy; ha a csere nem sikerül, lejárt-üzenet a belépésen", async ({ page }) => {
+    test.skip(!!process.env.CI, "élő Supabase kell");
+    await page.goto("/auth/confirm?code=hamis-kod-123&next=/dashboard");
+    await expect(page).toHaveURL(/\/login\?error=linkExpired$/);
+    await expect(alertOf(page)).toContainText("A link lejárt");
+  });
+
+  test("?error=…&error_code=otp_expired barátságos üzenet + új levél kérése", async ({ page }) => {
+    await page.goto("/auth/confirm?error=access_denied&error_code=otp_expired&error_description=Email+link+is+invalid+or+has+expired");
+    await expect(alertOf(page)).toContainText("A link lejárt");
+    await expect(page.getByRole("link", { name: "Új levél kérése" })).toHaveAttribute("href", /\/check-email/);
+  });
+
+  test("ismeretlen hibakód általános üzenetet ad", async ({ page }) => {
+    await page.goto("/auth/confirm?error=server_error&error_code=unexpected_failure");
+    await expect(alertOf(page)).toContainText("Nem sikerült megerősíteni");
+  });
+});
