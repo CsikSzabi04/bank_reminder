@@ -44,18 +44,26 @@ export function checkParity(hu, en) {
   return errors;
 }
 
-// Egy forrásfájlban a fordító-változók (const t = useTranslations("ns")) és a t("kulcs") hívások
+// Egy forrásfájlban a fordító-változók (const t = useTranslations("ns")) és a t("kulcs") hívások.
+// Ugyanaz a változónév több függvényben is szerepelhet más névtérrel → a hívás a legközelebbi
+// MEGELŐZŐ deklarációhoz tartozik.
 export function extractUsedKeys(source) {
   const used = []; // { key } teljes kulcs | { prefix } dinamikus
-  const translators = new Map();
+  const declarations = new Map(); // név → [{ index, ns }]
   const decl = /const\s+(\w+)\s*=\s*(?:await\s+)?(?:useTranslations|getTranslations)\(\s*(?:["']([^"']*)["'])?\s*\)/g;
-  for (const m of source.matchAll(decl)) translators.set(m[1], m[2] ?? "");
-  for (const [name, ns] of translators) {
+  for (const m of source.matchAll(decl)) {
+    const list = declarations.get(m[1]) ?? [];
+    list.push({ index: m.index, ns: m[2] ?? "" });
+    declarations.set(m[1], list);
+  }
+  for (const [name, list] of declarations) {
     const call = new RegExp(`(?<![\\w.])${name}\\(\\s*(["'\`])([^"'\`]*)\\1`, "g");
     for (const m of source.matchAll(call)) {
+      const owner = [...list].reverse().find((d) => d.index < m.index);
+      if (!owner) continue;
       const raw = m[2];
       const dyn = raw.indexOf("${");
-      const full = (rel) => (ns ? `${ns}.${rel}` : rel);
+      const full = (rel) => (owner.ns ? `${owner.ns}.${rel}` : rel);
       if (dyn === -1) used.push({ key: full(raw) });
       else if (dyn > 0) used.push({ prefix: full(raw.slice(0, dyn)) });
     }

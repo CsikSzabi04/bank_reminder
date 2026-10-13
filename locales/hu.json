@@ -46,23 +46,102 @@
       "title": "Üdv újra!",
       "submit": "Belépés",
       "stay": "Maradjak bejelentkezve",
-      "forgot": "Elfelejtett jelszó?"
+      "forgot": "Elfelejtett jelszó?",
+      "pending": "Belépés…",
+      "noAccount": "Nincs még fiókod?"
     },
     "signup": {
       "title": "Hozd létre a fiókodat",
       "submit": "Regisztráció",
-      "accept": "Elfogadom az Adatkezelési tájékoztatót és az ÁSZF-et"
+      "accept": "Elfogadom az Adatkezelési tájékoztatót és az ÁSZF-et",
+      "pending": "Regisztráció…",
+      "acceptRich": "Elfogadom az <privacy>Adatkezelési tájékoztatót</privacy> és az <terms>ÁSZF</terms>-et",
+      "hasAccount": "Már van fiókod?"
     },
     "checkEmail": {
       "title": "Nézd meg a leveled 📬",
       "body": "Ha az e-mail cím még nincs regisztrálva, küldtünk egy megerősítő levelet. A link 1 óráig érvényes.",
-      "resend": "Levél újraküldése"
+      "resend": "Levél újraküldése",
+      "resendIn": "Újraküldés {seconds} mp múlva",
+      "resent": "Elküldtük újra. Nézd meg a leveleződ (a spam mappát is).",
+      "expired": "A link lejárt vagy már felhasználták. Kérj újat az alábbi gombbal.",
+      "backToLogin": "Vissza a belépéshez"
     },
     "error": {
-      "invalidCredentials": "Hibás e-mail vagy jelszó."
+      "invalidCredentials": "Hibás e-mail vagy jelszó.",
+      "emailNotConfirmed": "Az e-mail címed még nincs megerősítve.",
+      "weakPassword": "Ez a jelszó túl gyenge. Válassz hosszabbat, betűkkel és számokkal.",
+      "tooManyEmails": "Kicsit várj, mielőtt újra kérnél levelet.",
+      "tooManyRequests": "Túl sok próbálkozás. Várj egy kicsit, és próbáld újra.",
+      "linkExpired": "A link lejárt vagy már felhasználták. Kérj újat.",
+      "samePassword": "Az új jelszó nem egyezhet a régivel.",
+      "generic": "Hopp, valami elromlott. Próbáld újra."
     },
     "reset": {
-      "sent": "Ha létezik ilyen fiók, küldtünk egy levelet a visszaállításhoz."
+      "sent": "Ha létezik ilyen fiók, küldtünk egy levelet a visszaállításhoz.",
+      "title": "Új jelszó beállítása",
+      "submit": "Jelszó mentése",
+      "pending": "Mentés…",
+      "signOutOthers": "Kijelentkezés minden más eszközről"
+    },
+    "tagline": "Soha többé elfelejtett számla",
+    "tabs": {
+      "label": "Belépés vagy regisztráció",
+      "login": "Belépés",
+      "signup": "Regisztráció"
+    },
+    "field": {
+      "email": "E-mail",
+      "password": "Jelszó",
+      "displayName": "Név",
+      "language": "Nyelv",
+      "newPassword": "Új jelszó",
+      "confirmPassword": "Új jelszó még egyszer",
+      "error": {
+        "required": "Ezt a mezőt ki kell töltened.",
+        "invalidEmail": "Adj meg érvényes e-mail címet.",
+        "tooLong": "Ez a szöveg túl hosszú.",
+        "passwordLength": "A jelszó legalább 8 karakter legyen.",
+        "passwordLetter": "A jelszóban legyen legalább egy betű.",
+        "passwordDigit": "A jelszóban legyen legalább egy szám.",
+        "mismatch": "A két jelszó nem egyezik.",
+        "acceptRequired": "A regisztrációhoz el kell fogadnod a feltételeket."
+      }
+    },
+    "password": {
+      "show": "Jelszó megjelenítése",
+      "hide": "Jelszó elrejtése",
+      "strength": {
+        "label": "Jelszó erőssége",
+        "weak": "Gyenge",
+        "ok": "Megfelelő",
+        "strong": "Erős"
+      },
+      "req": {
+        "title": "A jelszóban legyen:",
+        "length": "legalább 8 karakter",
+        "letter": "legalább egy betű",
+        "digit": "legalább egy szám",
+        "met": "teljesül",
+        "unmet": "nem teljesül"
+      }
+    },
+    "forgot": {
+      "title": "Elfelejtett jelszó",
+      "body": "Add meg az e-mail címed, és küldünk egy linket az új jelszó beállításához.",
+      "submit": "Link küldése",
+      "pending": "Küldés…",
+      "back": "Vissza a belépéshez"
+    },
+    "confirm": {
+      "titleSignup": "Erősítsd meg az e-mail címed",
+      "titleRecovery": "Jelszó-visszaállítás",
+      "titleEmailChange": "E-mail cím módosítása",
+      "titleDefault": "Megerősítés",
+      "body": "Koppints a gombra a folytatáshoz. Ez a közbenső lépés védi a linket az automatikus levélellenőrzőktől.",
+      "continue": "Folytatás",
+      "pending": "Ellenőrzés…",
+      "invalid": "Ez a link érvénytelen vagy lejárt."
     }
   },
   "dashboard": {

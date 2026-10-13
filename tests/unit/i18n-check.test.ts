@@ -41,6 +41,14 @@ describe("i18n:check logika", () => {
     expect(extractUsedKeys(src)).toEqual([{ key: "nav.home" }, { key: "common.save" }]);
   });
 
+  it("ugyanaz a változónév más névtérrel külön függvényben: a legközelebbi megelőző deklaráció számít", () => {
+    const src = [
+      'async function a() { const t = await getTranslations("auth.checkEmail"); return t("title"); }',
+      'async function b() { const t = await getTranslations("auth"); return t("tagline"); }',
+    ].join(" ");
+    expect(extractUsedKeys(src)).toEqual([{ key: "auth.checkEmail.title" }, { key: "auth.tagline" }]);
+  });
+
   it("dinamikus kulcsnál az előtagot ellenőrzi", () => {
     const used = extractUsedKeys("const t = useTranslations();\nt(`nav.${key}`)");
     expect(used).toEqual([{ prefix: "nav." }]);

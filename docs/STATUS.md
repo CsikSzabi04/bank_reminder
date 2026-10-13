@@ -1,5 +1,15 @@
 # STATUS  (legújabb fent)
 
+## 2026-10-13 · AI-B · M1 — B-04…B-07 kész, B-09 kész (B-08 következik)
+- ✔ **B-04** `proxy.ts` + `decideAccess` (védett → `/login?next=…`, `/api/*` → 401 JSON, belépve `/login`→`/dashboard`, `/` átirányít), `Cache-Control: private, no-store` hitelesített válaszon, `safeNext`, `/api/health`.
+- ✔ **B-05** `npm run i18n:check` (HU/EN paritás, ICU-argumentumok, használt-de-hiányzó kulcs) + `react/jsx-no-literals` lint + `.github/workflows/ci.yml`. ✔ **B-06** kontraszt-teszt a valódi tokenekre — **2 spec-token javítva** (lásd DECISIONS).
+- ✔ **B-07** `/login /signup /check-email /forgot-password /reset-password /auth/confirm /auth/callback` + Server Action-ök (`signIn/signUp/resendConfirmation/requestPasswordReset/updatePassword/confirmOtp/signOut`), jelszó-erősség, „Maradjak bejelentkezve” (PWA-ban rejtett), 60 mp újraküldés, hibaleképezés (§10.8). Az `auth/confirm` a tokent csak gombnyomásra használja fel.
+- ✔ **B-09** guard-tesztek (`applyPersistence`, `safeNext` támadó bemenetek, `mapAuthError`, auth-sémák, route-döntés) — mind **mutációval ellenőrizve** (a `safeNext`-tesztből kimaradt a tab/újsor-trükk, pótolva).
+- Kapuk: typecheck 0 hiba · lint · i18n:check · 69 unit teszt · build · 46 e2e (360/1280 px) zöld. Élő Supabase ellen futott: hibás belépés → „Hibás e-mail vagy jelszó”, hamis token → „lejárt” oldal.
+- ⏳ **B-07 átvételi kritérium (J1/J2/J8 valódi levéllel) KÉZI**, a gazdára vár: az alap Supabase SMTP csak csapattag-címre küld (2/óra, Q2). Teendő: `npm run dev` → `/signup` (csapattag-cím) → levél megérkezik → gomb → `/auth/confirm` → „Folytatás” → belépve. Utána jelszó-visszaállítás: `/forgot-password`. Én nem küldök levelet idegen/valós címre.
+- → **AI-A:** (1) a regisztráció `data: { display_name, locale }`-t küld, `emailRedirectTo` = `{origin}/auth/confirm?next=/onboarding`; az e-mail sablonok `token_hash` + `type` linkjeit az `/auth/confirm` fogadja (`signup|recovery|email_change|magiclink|invite|email`). (2) Kérés: a Dashboardon a **Redirect URLs** között legyen `http://localhost:3000/**` (A-04), különben a regisztráció `emailRedirectTo` hibára futhat.
+- Következő: **B-08** (Profil I.: avatar-feltöltő, téma/nyelv szinkron `profiles`-szal), majd B-27 (Vercel), B-32 (jogi helyőrzők), B-10 (alap-komponensek).
+
 ## 2026-10-13 · AI-A · M3 — értesítési rendszer: kód kész, telepítésre vár
 - ✔ **A-12/A-13** élesítve: DST-helyes értesítési sor, claim/finish/retry, snooze, push-regisztráció, ICS, export (lásd CONTRACT_CHANGES). **A-18 (1/2)**: pg_cron + SQL-jobok élnek (napi karbantartás, 5 percenkénti extra-sorok, takarítás).
 - ✔ **A-15/A-16/A-17/A-19/A-20** kód kész + Deno-tesztek zöldek (RFC 8291 független visszafejtés, HU/EN szövegek, SSRF-allowlist) + `deno check` tiszta: `send-notifications`, `send-test-push`, `delete-account`, `fx-refresh`. **Még NINCS telepítve** (a CLI nincs bejelentkezve).

@@ -46,23 +46,102 @@
       "title": "Welcome back",
       "submit": "Log in",
       "stay": "Stay signed in",
-      "forgot": "Forgot password?"
+      "forgot": "Forgot password?",
+      "pending": "Logging in…",
+      "noAccount": "Don't have an account yet?"
     },
     "signup": {
       "title": "Create your account",
       "submit": "Sign up",
-      "accept": "I accept the Privacy Policy and Terms"
+      "accept": "I accept the Privacy Policy and Terms",
+      "pending": "Signing up…",
+      "acceptRich": "I accept the <privacy>Privacy Policy</privacy> and <terms>Terms</terms>",
+      "hasAccount": "Already have an account?"
     },
     "checkEmail": {
       "title": "Check your inbox 📬",
       "body": "If this email isn't registered yet, we've sent a confirmation link. It's valid for 1 hour.",
-      "resend": "Resend email"
+      "resend": "Resend email",
+      "resendIn": "Resend in {seconds} s",
+      "resent": "Sent again. Check your inbox (and the spam folder).",
+      "expired": "The link has expired or was already used. Request a new one below.",
+      "backToLogin": "Back to log in"
     },
     "error": {
-      "invalidCredentials": "Wrong email or password."
+      "invalidCredentials": "Wrong email or password.",
+      "emailNotConfirmed": "Your email address isn't confirmed yet.",
+      "weakPassword": "That password is too weak. Pick a longer one with letters and numbers.",
+      "tooManyEmails": "Please wait a moment before requesting another email.",
+      "tooManyRequests": "Too many attempts. Wait a bit and try again.",
+      "linkExpired": "The link has expired or was already used. Request a new one.",
+      "samePassword": "The new password can't be the same as the old one.",
+      "generic": "Oops, something went wrong. Please try again."
     },
     "reset": {
-      "sent": "If an account exists, we've emailed you a reset link."
+      "sent": "If an account exists, we've emailed you a reset link.",
+      "title": "Set a new password",
+      "submit": "Save password",
+      "pending": "Saving…",
+      "signOutOthers": "Sign out of all other devices"
+    },
+    "tagline": "Never miss a bill again",
+    "tabs": {
+      "label": "Log in or sign up",
+      "login": "Log in",
+      "signup": "Sign up"
+    },
+    "field": {
+      "email": "Email",
+      "password": "Password",
+      "displayName": "Name",
+      "language": "Language",
+      "newPassword": "New password",
+      "confirmPassword": "New password again",
+      "error": {
+        "required": "Please fill in this field.",
+        "invalidEmail": "Enter a valid email address.",
+        "tooLong": "This text is too long.",
+        "passwordLength": "Your password needs at least 8 characters.",
+        "passwordLetter": "Your password needs at least one letter.",
+        "passwordDigit": "Your password needs at least one number.",
+        "mismatch": "The two passwords don't match.",
+        "acceptRequired": "You need to accept the terms to sign up."
+      }
+    },
+    "password": {
+      "show": "Show password",
+      "hide": "Hide password",
+      "strength": {
+        "label": "Password strength",
+        "weak": "Weak",
+        "ok": "Good",
+        "strong": "Strong"
+      },
+      "req": {
+        "title": "Your password needs:",
+        "length": "at least 8 characters",
+        "letter": "at least one letter",
+        "digit": "at least one number",
+        "met": "met",
+        "unmet": "not met"
+      }
+    },
+    "forgot": {
+      "title": "Forgot password",
+      "body": "Enter your email and we'll send you a link to set a new password.",
+      "submit": "Send link",
+      "pending": "Sending…",
+      "back": "Back to log in"
+    },
+    "confirm": {
+      "titleSignup": "Confirm your email",
+      "titleRecovery": "Password reset",
+      "titleEmailChange": "Change email address",
+      "titleDefault": "Confirmation",
+      "body": "Tap the button to continue. This extra step protects the link from automatic email scanners.",
+      "continue": "Continue",
+      "pending": "Checking…",
+      "invalid": "This link is invalid or has expired."
     }
   },
   "dashboard": {
