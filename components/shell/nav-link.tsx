@@ -11,7 +11,7 @@ type Variant = "bottom" | "rail" | "sidebar";
 const BASE =
   "relative flex items-center rounded-control text-sm font-medium transition-colors";
 const IDLE = "text-text-2 hover:bg-surface-2";
-const ACTIVE = "bg-primary-soft text-primary";
+const ACTIVE = "bg-primary-soft text-primary-text";
 
 const LAYOUT: Record<Variant, string> = {
   // 44×44 px-es célméret (§14.14)

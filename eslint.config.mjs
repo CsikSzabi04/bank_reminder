@@ -5,6 +5,18 @@ import nextTs from "eslint-config-next/typescript";
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
+  // H8: felhasználói szöveg csak fordítási kulcson át; nyers JSX-szöveg tilos.
+  // Írásjelek/szimbólumok (elválasztók) megengedettek; a fejlesztői játszótér és a tesztek kivételek.
+  {
+    files: ["app/**/*.tsx", "components/**/*.tsx"],
+    ignores: ["app/dev/**"],
+    rules: {
+      "react/jsx-no-literals": [
+        "error",
+        { noStrings: false, ignoreProps: true, allowedStrings: ["·", "—", "–", "/", "|", "•", "…", ":", "(", ")", "-"] },
+      ],
+    },
+  },
   globalIgnores([
     ".next/**",
     "out/**",

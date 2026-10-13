@@ -12,10 +12,12 @@
   --border: #e7eaee;
   --text: #0f1720;
   --text-2: #475569;
-  --text-muted: #64748b;
+  --text-muted: #617288; /* a spec #64748B-je a surface-2-n 4,47:1 volt */
   --primary: #0b7f70;
   --primary-fg: #ffffff;
   --primary-soft: #e6f4f1;
+  /* márka-szín szövegként halvány háttéren (a --primary ott 4,34:1) */
+  --primary-text: #0a7a6c;
   --success: #0ca30c;
   --success-text: #006300;
   --warning: #fab219;
@@ -39,6 +41,7 @@
   --primary: #2dd4bf;
   --primary-fg: #04201c;
   --primary-soft: #12302c;
+  --primary-text: #2dd4bf;
   --success-text: #4ade80;
   --warning-text: #fbbf24;
   --danger-text: #f87171;
@@ -58,6 +61,7 @@
   --color-primary: var(--primary);
   --color-primary-fg: var(--primary-fg);
   --color-primary-soft: var(--primary-soft);
+  --color-primary-text: var(--primary-text);
   --color-success: var(--success);
   --color-success-text: var(--success-text);
   --color-warning: var(--warning);
