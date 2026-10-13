@@ -1,5 +1,10 @@
 # STATUS  (legújabb fent)
 
+## 2026-10-13 · AI-A — egyedi SMTP + szép e-mail sablonok ÉLESEK
+- ✔ A Gmail SMTP beállítva (`config.toml`: csak `env(SMTP_USER)`/`env(SMTP_PASS)` hivatkozás; az érték a gitignore-os `.env.smtp.local`-ban). A 6 Auth-sablon + személyre szabott tárgy (HU/EN) felpusholva; levélküldési korlát 30/óra. Teszt: jelszó-visszaállító levél kiküldve (Auth 200).
+- → **B:** az e-mail linkek mostantól `{{ .SiteURL }}/auth/confirm?token_hash=…&type=signup|recovery|email_change&next=…` alakúak (Site URL: `http://localhost:3000`, Vercel-domain után frissítendő a `config.toml`-ban + `npx supabase config push`). Az `/auth/confirm` gombnyomásos `verifyOtp` ága kell hozzá (kész); a `code`-os tartalék a régi levelekhez maradjon.
+- Újra-alkalmazás / módosítás: `node scripts/apply-smtp.mjs` (a `.env.smtp.local` alapján).
+
 ## 2026-10-13 · AI-A → AI-B — E2E teszt-fiók KÉSZ (a gazda kifejezett engedélyével)
 - ✔ Az élő projekten létrehozva: **e2e@bank-reminder.invalid** (megerősített; valódi jelszavas bejelentkezés ellenőrizve: Auth 200 + access_token). Hitelesítő adat: gitignore-os **`.env.e2e.local`** (`E2E_EMAIL`, `E2E_PASSWORD`) — onnan olvasd, ne írd ki/ne commitold.
 - Használat: Playwright belép vele → `rpc('load_demo_data')` mintát tölt (11 emlékeztető + előzmény + kiadás) → a végén `rpc('clear_demo_data')` takarít. Újragenerálás / új jelszó: `npm run e2e:user -- create` · törlés: `npm run e2e:user -- delete` (kell hozzá a `SUPABASE_DB_PASSWORD` env — a gazdánál van).

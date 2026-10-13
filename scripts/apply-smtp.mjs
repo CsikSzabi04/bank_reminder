@@ -17,24 +17,35 @@ const host = env.SMTP_HOST || 'smtp.gmail.com'; const port = Number(env.SMTP_POR
 
 copyFileSync('supabase/config.toml', 'supabase/config.toml.bak');
 let s = readFileSync('supabase/config.toml', 'utf8');
-if (!s.includes('[auth.email.smtp]')) {
-  s = s.replace(/\n\[auth\.sms\]/, `\n[auth.email.smtp]\nenabled = true\nhost = "${host}"\nport = ${port}\nuser = "env(SMTP_USER)"\npass = "env(SMTP_PASS)"\nadmin_email = "env(SMTP_USER)"\nsender_name = "Bank Reminder"\n\n[auth.sms]`);
-  if (!s.includes('[auth.email.smtp]')) { console.error('✖ nem találtam a beszúrási pontot a config.toml-ban'); process.exit(3); }
+const push = () => {
+  const r = spawnSync('npx', ['--yes', 'supabase@latest', 'config', 'push', '--project-ref', REF], {
+    shell: process.platform === 'win32', encoding: 'utf8', input: 'y\nn\n', env: { ...process.env, SMTP_USER: user, SMTP_PASS: pass },
+  });
+  const out = r.stdout + '\n' + r.stderr;
+  const ok = !(/"_tag":"Error"|ConfigPush.*Error|unexpected status/i.test(out) || r.status !== 0);
+  return { ok, err: (out.match(/unexpected status \d+:.{0,600}/s)?.[0]?.replace(/\\"/g, '"') ?? out.slice(-500)) };
+};
+const fail = (step, err) => { copyFileSync('supabase/config.toml.bak', 'supabase/config.toml'); console.error('✖ ' + step + ' sikertelen — a config.toml visszaállítva. Hiba:\n' + err); process.exit(4); };
+
+// 1. lépés: csak az egyedi SMTP (az API egyetlen kérésben validál: sablon csak már beállított egyedi SMTP mellett engedett)
+const HAS_SMTP = /^\[auth\.email\.smtp\]/m;
+if (!HAS_SMTP.test(s)) {
+  s = s.replace(/\n\[auth\.sms\]/, '\n[auth.email.smtp]\nenabled = true\nhost = "' + host + '"\nport = ' + port + '\nuser = "env(SMTP_USER)"\npass = "env(SMTP_PASS)"\nadmin_email = "env(SMTP_USER)"\nsender_name = "Bank Reminder"\n\n[auth.sms]');
+  if (!HAS_SMTP.test(s)) { console.error('✖ nem találtam a beszúrási pontot a config.toml-ban'); process.exit(3); }
 }
-// sablonok kikommentelése (az alap SMTP-vel a platform visszautasítja; egyedi SMTP-vel engedett)
-s = s.replace(/^# (\[auth\.email\.template\.[a-z_]+\]|subject = .*|content_path = .*)$/gm, '$1');
-// egyedi SMTP mellett a levélküldési korlát emelhető (alap: 2/óra)
+writeFileSync('supabase/config.toml', s);
+let r = push();
+if (!r.ok) fail('Az SMTP beállítása', r.err);
+console.log('✔ 1/2 egyedi SMTP beállítva');
+copyFileSync('supabase/config.toml', 'supabase/config.toml.bak');
+
+// 2. lépés: sablonok (CSAK a saját jelölt blokkunk kommentje szűnik meg) + magasabb levélküldési korlát
+const marker = s.indexOf('# --- E-mail sablonok');
+if (marker < 0) fail('A sablon-blokk megtalálása', 'nincs jelölő a config.toml-ban');
+s = s.slice(0, marker) + s.slice(marker).replace(/^# (\[auth\.email\.template\.[a-z_]+\]|subject = .*|content_path = .*)$/gm, '$1');
 s = s.replace(/(\[auth\.rate_limit\][\s\S]*?\n)email_sent = \d+/, '$1email_sent = 30');
 writeFileSync('supabase/config.toml', s);
-
-const r = spawnSync('npx', ['--yes', 'supabase@latest', 'config', 'push', '--project-ref', REF], {
-  shell: process.platform === 'win32', encoding: 'utf8', input: 'y\nn\n', env: { ...process.env, SMTP_USER: user, SMTP_PASS: pass },
-});
-const out = `${r.stdout}\n${r.stderr}`;
-if (/"_tag":"Error"|ConfigPush.*Error|unexpected status/i.test(out) || r.status !== 0) {
-  copyFileSync('supabase/config.toml.bak', 'supabase/config.toml');
-  console.error('✖ A config push sikertelen — a config.toml visszaállítva. Hiba:\n' + (out.match(/"message":"[^"]{0,300}/)?.[0] ?? out.slice(-400)));
-  process.exit(4);
-}
-console.log('✔ Egyedi SMTP + e-mail sablonok felpusholva. (A config.toml csak env(SMTP_*) hivatkozást tartalmaz.)');
+r = push();
+if (!r.ok) fail('A sablonok élesítése', r.err);
+console.log('✔ 2/2 e-mail sablonok + levélküldési korlát felpusholva (a config.toml csak env(SMTP_*) hivatkozást tartalmaz)');
 console.log('  A következő regisztrációs / jelszó-visszaállító levél már a Bank Reminder sablonjával megy ki.');

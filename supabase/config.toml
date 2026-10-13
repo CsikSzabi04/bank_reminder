@@ -137,7 +137,7 @@ enabled = true
 # This feature is only available on the hosted platform.
 [storage.analytics]
 enabled = true
-max_namespaces = 5
+max_namespaces = 10
 max_tables = 10
 max_catalogs = 2
 
@@ -197,7 +197,7 @@ password_requirements = "letters_digits"
 
 [auth.rate_limit]
 # Number of emails that can be sent per hour. Requires auth.email.smtp to be enabled.
-email_sent = 2
+email_sent = 30
 # Number of SMS messages that can be sent per hour. Requires auth.sms to be enabled.
 sms_sent = 30
 # Number of anonymous sign-ins that can be made per hour per IP address. Requires enable_anonymous_sign_ins = true.
@@ -254,6 +254,15 @@ otp_expiry = 3600
 # enabled = true
 # subject = "Your password has been changed"
 # content_path = "./supabase/templates/password_changed_notification.html"
+
+[auth.email.smtp]
+enabled = true
+host = "smtp.gmail.com"
+port = 465
+user = "env(SMTP_USER)"
+pass = "env(SMTP_PASS)"
+admin_email = "env(SMTP_USER)"
+sender_name = "Bank Reminder"
 
 [auth.sms]
 # Allow/disallow new user signups via SMS to your project.
@@ -429,21 +438,21 @@ verify_jwt = false
 
 # --- E-mail sablonok: a Supabase ingyenes csomagja az ALAP e-mail szolgáltatóval NEM engedi az egyedi sablont (400). ---
 # Engedélyezés: állíts be egyedi SMTP-t ([auth.email.smtp] + `pass = "env(SMTP_PASS)"`), majd vedd ki a kommentet az alábbi blokkokból és: npx supabase config push --project-ref ddvzslgwexvdolovqqlg
-# [auth.email.template.confirmation]
-# subject = '{{ if eq .Data.locale "en" }}Welcome to Bank Reminder{{ if .Data.display_name }}, {{ .Data.display_name }}{{ end }} — confirm your email{{ else }}Üdv a Bank Reminderben{{ if .Data.display_name }}, {{ .Data.display_name }}{{ end }}! Erősítsd meg az e-mailed{{ end }}'
-# content_path = "./supabase/email-templates/confirm-signup.html"
-# [auth.email.template.recovery]
-# subject = '{{ if eq .Data.locale "en" }}Reset your Bank Reminder password{{ else }}Jelszó-visszaállítás — Bank Reminder{{ end }}'
-# content_path = "./supabase/email-templates/recovery.html"
-# [auth.email.template.email_change]
-# subject = "E-mail cím módosítása · Confirm your new email"
-# content_path = "./supabase/email-templates/email-change.html"
-# [auth.email.template.reauthentication]
-# subject = "Megerősítő kód · Your verification code"
-# content_path = "./supabase/email-templates/reauthentication.html"
-# [auth.email.template.magic_link]
-# subject = "Belépés · Sign in"
-# content_path = "./supabase/email-templates/magic-link.html"
-# [auth.email.template.invite]
-# subject = "Meghívó · You're invited"
-# content_path = "./supabase/email-templates/invite.html"
+[auth.email.template.confirmation]
+subject = '{{ if eq .Data.locale "en" }}Welcome to Bank Reminder{{ if .Data.display_name }}, {{ .Data.display_name }}{{ end }} — confirm your email{{ else }}Üdv a Bank Reminderben{{ if .Data.display_name }}, {{ .Data.display_name }}{{ end }}! Erősítsd meg az e-mailed{{ end }}'
+content_path = "./supabase/email-templates/confirm-signup.html"
+[auth.email.template.recovery]
+subject = '{{ if eq .Data.locale "en" }}Reset your Bank Reminder password{{ else }}Jelszó-visszaállítás — Bank Reminder{{ end }}'
+content_path = "./supabase/email-templates/recovery.html"
+[auth.email.template.email_change]
+subject = "E-mail cím módosítása · Confirm your new email"
+content_path = "./supabase/email-templates/email-change.html"
+[auth.email.template.reauthentication]
+subject = "Megerősítő kód · Your verification code"
+content_path = "./supabase/email-templates/reauthentication.html"
+[auth.email.template.magic_link]
+subject = "Belépés · Sign in"
+content_path = "./supabase/email-templates/magic-link.html"
+[auth.email.template.invite]
+subject = "Meghívó · You're invited"
+content_path = "./supabase/email-templates/invite.html"
