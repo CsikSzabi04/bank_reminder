@@ -592,6 +592,7 @@ export type Database = {
           end_date: string | null;
           id: string;
           is_active: boolean;
+          is_demo: boolean;
           is_subscription: boolean;
           month_end: boolean;
           name: string;
@@ -620,6 +621,7 @@ export type Database = {
           end_date?: string | null;
           id?: string;
           is_active?: boolean;
+          is_demo?: boolean;
           is_subscription?: boolean;
           month_end?: boolean;
           name: string;
@@ -647,6 +649,7 @@ export type Database = {
           end_date?: string | null;
           id?: string;
           is_active?: boolean;
+          is_demo?: boolean;
           is_subscription?: boolean;
           month_end?: boolean;
           name?: string;
@@ -1095,6 +1098,7 @@ export type Database = {
         };
       };
       cleanup_old_data: { Args: Record<PropertyKey, never>; Returns: Json };
+      clear_demo_data: { Args: Record<PropertyKey, never>; Returns: number };
       compute_tips: { Args: { p_now?: string; p_user: string }; Returns: number };
       dashboard_summary: { Args: { p_month?: string }; Returns: Json };
       enqueue_extra_notifications: { Args: { p_now?: string }; Returns: number };
@@ -1126,6 +1130,7 @@ export type Database = {
         }[];
       };
       is_valid_timezone: { Args: { tz: string }; Returns: boolean };
+      load_demo_data: { Args: Record<PropertyKey, never>; Returns: number };
       mark_notifications_read: { Args: { p_ids?: string[] }; Returns: number };
       mark_paid: {
         Args: { p_occurrence_id: string; p_paid_amount?: number; p_paid_on?: string };
@@ -1234,6 +1239,7 @@ export type Database = {
         };
         Returns: string[];
       };
+      ops_health: { Args: Record<PropertyKey, never>; Returns: Json };
       preview_dates: {
         Args: {
           p_count?: number;
