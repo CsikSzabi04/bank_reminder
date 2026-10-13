@@ -150,7 +150,31 @@
   "dashboard": {
     "hello": "Hi, {name}!",
     "monthTotal": "Monthly spending",
-    "upcoming": "Due soon"
+    "upcoming": "Due soon",
+    "all": "All",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "monthLabel": "Month",
+    "deltaUp": "{pct} more than last month",
+    "deltaDown": "{pct} less than last month",
+    "deltaFlat": "Same as last month",
+    "deltaNone": "No data for last month",
+    "paid": "Paid",
+    "remaining": "Still to pay",
+    "unconverted": "{count, plural, one {# item without an exchange rate was left out of the totals} other {# items without an exchange rate were left out of the totals}}",
+    "chartLabel": "Spending by category group: {summary}",
+    "chartTable": "Table",
+    "chartGroup": "Group",
+    "chartAmount": "Amount",
+    "chartShare": "Share",
+    "noUpcoming": "Nothing due soon.",
+    "subscriptions": "Subscriptions",
+    "perMonth": "{amount}/mo",
+    "yearly": "{amount} a year",
+    "subscriptionsCount": "{count, plural, one {# subscription} other {# subscriptions}}",
+    "budgets": "Budgets",
+    "emptyTitle": "Welcome to Bank Reminder!",
+    "emptyBody": "Add your first bill or subscription and we'll remind you in time. Or try it with sample data."
   },
   "reminders": {
     "new": "New reminder",
@@ -361,10 +385,27 @@
       "edit": "Edit"
     }
   },
-  "analytics": {},
+  "analytics": {
+    "groups": {
+      "subscriptions": "Subscriptions",
+      "housing": "Housing & utilities",
+      "telecom": "Phone & internet",
+      "insurance_tax": "Insurance & taxes",
+      "loans_fees": "Loans & fees",
+      "everyday": "Everyday",
+      "lifestyle": "Lifestyle & family",
+      "other": "Other"
+    }
+  },
   "budgets": {
     "left": "{amount} left",
-    "over": "{amount} over"
+    "over": "{amount} over",
+    "state": {
+      "ok": "On track",
+      "watch": "Close to the limit",
+      "over": "Over budget"
+    },
+    "spentOf": "{spent} / {limit}"
   },
   "savings": {},
   "tips": {

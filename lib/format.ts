@@ -81,3 +81,10 @@ export function formatShortDate(isoDate: string, locale: Locale): string {
     new Date(`${isoDate}T00:00:00Z`),
   );
 }
+
+// "2026. október" / "October 2026" (a hónap első napjából); a napot nem csúsztatja az időzóna
+export function formatMonth(isoDate: string, locale: Locale): string {
+  return new Intl.DateTimeFormat(DATE_LOCALE[locale], { year: "numeric", month: "long", timeZone: "UTC" }).format(
+    new Date(`${isoDate}T00:00:00Z`),
+  );
+}

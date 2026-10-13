@@ -150,7 +150,31 @@
   "dashboard": {
     "hello": "Szia, {name}!",
     "monthTotal": "Havi kiadás",
-    "upcoming": "Hamarosan esedékes"
+    "upcoming": "Hamarosan esedékes",
+    "all": "Mind",
+    "prevMonth": "Előző hónap",
+    "nextMonth": "Következő hónap",
+    "monthLabel": "Hónap",
+    "deltaUp": "{pct} többet az előző hónapnál",
+    "deltaDown": "{pct} kevesebbet az előző hónapnál",
+    "deltaFlat": "Ugyanannyi, mint az előző hónapban",
+    "deltaNone": "Nincs előző havi adat",
+    "paid": "Kifizetve",
+    "remaining": "Hátravan",
+    "unconverted": "{count, plural, one {# tétel árfolyam nélkül kimaradt az összegből} other {# tétel árfolyam nélkül kimaradt az összegből}}",
+    "chartLabel": "Kiadás kategória-csoportonként: {summary}",
+    "chartTable": "Táblázat",
+    "chartGroup": "Csoport",
+    "chartAmount": "Összeg",
+    "chartShare": "Arány",
+    "noUpcoming": "Nincs közelgő esedékesség.",
+    "subscriptions": "Előfizetések",
+    "perMonth": "{amount}/hó",
+    "yearly": "évente {amount}",
+    "subscriptionsCount": "{count, plural, one {# előfizetés} other {# előfizetés}}",
+    "budgets": "Költségkeretek",
+    "emptyTitle": "Üdv a Bank Reminderben!",
+    "emptyBody": "Vedd fel az első számládat vagy előfizetésedet, és mi időben szólunk. Vagy próbáld ki mintaadatokkal."
   },
   "reminders": {
     "new": "Új emlékeztető",
@@ -361,10 +385,27 @@
       "edit": "Szerkesztés"
     }
   },
-  "analytics": {},
+  "analytics": {
+    "groups": {
+      "subscriptions": "Előfizetések",
+      "housing": "Lakhatás és rezsi",
+      "telecom": "Telefon és internet",
+      "insurance_tax": "Biztosítás és adó",
+      "loans_fees": "Hitel és díjak",
+      "everyday": "Mindennapi",
+      "lifestyle": "Életmód és család",
+      "other": "Egyéb"
+    }
+  },
   "budgets": {
     "left": "{amount} maradt",
-    "over": "{amount} túllépés"
+    "over": "{amount} túllépés",
+    "state": {
+      "ok": "Rendben",
+      "watch": "Közel a kerethez",
+      "over": "Túllépés"
+    },
+    "spentOf": "{spent} / {limit}"
   },
   "savings": {},
   "tips": {

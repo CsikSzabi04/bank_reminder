@@ -9,7 +9,7 @@ test.describe.configure({ mode: "serial" });
 
 test("a belépett shell a Kijelentkezés gombot és a profil-chipet mutatja", async ({ page }) => {
   await page.goto("/dashboard");
-  await expect(page.getByRole("heading", { name: "Főoldal" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: /^Szia, / })).toBeVisible();
   await expect(page.getByRole("button", { name: "Kijelentkezés" })).toBeVisible();
   await expect(page.getByRole("link", { name: "Értesítések" })).toBeVisible();
 });

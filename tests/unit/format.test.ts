@@ -5,6 +5,7 @@ import {
   formatMoneyCompact,
   formatPercent,
   formatRelativeDay,
+  formatMonth,
   formatShortDate,
   todayIn,
 } from "@/lib/format";
@@ -84,5 +85,13 @@ describe("formatShortDate", () => {
     expect(norm(formatShortDate("2026-11-10", "hu"))).toBe("nov. 10.");
     expect(norm(formatShortDate("2026-11-10", "en"))).toBe("10 Nov");
     expect(norm(formatShortDate("2026-01-01", "hu"))).toBe("jan. 1.");
+  });
+});
+
+describe("formatMonth", () => {
+  it("hónapnév évvel, időzóna-független", () => {
+    expect(norm(formatMonth("2026-10-01", "hu"))).toBe("2026. október");
+    expect(norm(formatMonth("2026-10-01", "en"))).toBe("October 2026");
+    expect(norm(formatMonth("2026-01-01", "hu"))).toBe("2026. január");
   });
 });

@@ -20,7 +20,8 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t("title") };
 }
 
-const BTN_PRIMARY = "inline-flex min-h-11 items-center gap-2 rounded-control bg-primary px-4 text-sm font-medium text-primary-fg";
+// a display-t a használat adja (az `hidden md:inline-flex` ütközne egy beégetett inline-flex-szel)
+const BTN_PRIMARY = "min-h-11 items-center gap-2 rounded-control bg-primary px-4 text-sm font-medium text-primary-fg";
 
 export default async function RemindersPage(props: PageProps<"/reminders">) {
   const t = await getTranslations("reminders");
@@ -45,7 +46,7 @@ export default async function RemindersPage(props: PageProps<"/reminders">) {
       <div className="flex flex-col gap-4">
         <h1 className="text-2xl font-semibold">{t("title")}</h1>
         <EmptyState icon={Bell} title={t("empty.title")} body={t("empty.body")}>
-          <Link href="/reminders/new" className={BTN_PRIMARY}>
+          <Link href="/reminders/new" className={`${BTN_PRIMARY} inline-flex`}>
             <Plus className="size-4" aria-hidden />
             {t("new")}
           </Link>
