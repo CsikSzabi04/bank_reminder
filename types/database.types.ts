@@ -180,6 +180,13 @@ export type Database = {
             referencedRelation: "savings_goals";
             referencedColumns: ["id"];
           },
+          {
+            foreignKeyName: "goal_contributions_goal_id_fkey";
+            columns: ["goal_id"];
+            isOneToOne: false;
+            referencedRelation: "savings_goals_progress";
+            referencedColumns: ["id"];
+          },
         ];
       };
       news_items: {
@@ -823,6 +830,27 @@ export type Database = {
       };
     };
     Views: {
+      savings_goals_progress: {
+        Row: {
+          archived_at: string | null;
+          color_slot: number | null;
+          created_at: string | null;
+          currency: string | null;
+          icon: string | null;
+          id: string | null;
+          months_left: number | null;
+          name: string | null;
+          needed_per_month: number | null;
+          pct: number | null;
+          reached: boolean | null;
+          saved: number | null;
+          target_amount: number | null;
+          target_date: string | null;
+          user_id: string | null;
+        };
+        ComputedFields: never;
+        Relationships: [];
+      };
       v_items: {
         Row: {
           amount_base: number | null;
@@ -945,6 +973,28 @@ export type Database = {
           total: number;
         }[];
       };
+      budget_status: {
+        Args: { p_month?: string };
+        Returns: {
+          budget_id: string;
+          category_id: string;
+          committed: number;
+          forecast: number;
+          left: number;
+          monthly_limit: number;
+          spent: number;
+          state: string;
+          suggested_limit: number;
+        }[];
+      };
+      budget_suggestions: {
+        Args: { p_month?: string };
+        Returns: {
+          category_id: string;
+          suggested_limit: number;
+        }[];
+      };
+      call_edge_function: { Args: { p_name: string }; Returns: number };
       cancel_occurrence_notifications: {
         Args: { p_now?: string; p_occ: string };
         Returns: undefined;
@@ -977,6 +1027,7 @@ export type Database = {
           isSetofReturn: true;
         };
       };
+      cleanup_old_data: { Args: Record<PropertyKey, never>; Returns: Json };
       dashboard_summary: { Args: { p_month?: string }; Returns: Json };
       enqueue_extra_notifications: { Args: { p_now?: string }; Returns: number };
       ensure_occurrences: {
