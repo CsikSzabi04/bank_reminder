@@ -84,7 +84,7 @@ export function SignupForm() {
       </div>
 
       <div className="flex flex-col gap-1">
-        <label className="flex items-start gap-3 text-sm">
+        <label className="flex min-h-11 items-start gap-3 py-1.5 text-sm">
           <input
             type="checkbox"
             name="accept"

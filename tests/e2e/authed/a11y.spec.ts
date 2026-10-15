@@ -1,5 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
+import { smallTargets } from "../support/a11y";
+import { overflowingElements } from "../support/layout";
 import { cleanBudget, cleanGoals, hasE2eAccount, purgeReminders, seedBudget, seedGoal, userClient } from "../support/db";
 
 test.skip(!hasE2eAccount(), "nincs .env.e2e.local (teszt-fiók)");
@@ -70,16 +72,27 @@ const PAGES: [string, () => string][] = [
   ["404", () => "/reminders/00000000-0000-4000-8000-000000000000"],
 ];
 
-for (const scheme of ["light", "dark"] as const) {
-  test.describe(scheme, () => {
-    test.use({ colorScheme: scheme });
+// Három menet: asztali világos / sötét, és mobil (360 px) — utóbbin az érintési cél-méret (≥ 44 px) és a túlcsordulás is ellenőrzött
+const MODES = [
+  { name: "light", scheme: "light", viewport: null },
+  { name: "dark", scheme: "dark", viewport: null },
+  { name: "mobil 360 px", scheme: "light", viewport: { width: 360, height: 740 } },
+] as const;
+
+for (const mode of MODES) {
+  test.describe(mode.name, () => {
+    test.use({ colorScheme: mode.scheme, ...(mode.viewport ? { viewport: mode.viewport } : {}) });
     for (const [name, url] of PAGES) {
-      test(`${name}: nincs serious/critical axe-hiba`, async ({ page }) => {
+      test(`${name}: nincs serious/critical axe-hiba${mode.viewport ? ", cél-méret ≥ 44 px, nincs túlcsordulás" : ""}`, async ({ page }) => {
         await page.goto(url());
         await expect(page.locator("main")).toBeVisible();
         // a témát a next-themes a rendszer-beállításból veszi; megvárjuk a hidratálást
         await page.waitForFunction(() => !!sessionStorage.getItem("br_profile_synced"));
         expect(await serious(page)).toEqual([]);
+        if (mode.viewport) {
+          expect(await smallTargets(page, 44)).toEqual([]);
+          expect(await overflowingElements(page)).toEqual([]);
+        }
       });
     }
   });

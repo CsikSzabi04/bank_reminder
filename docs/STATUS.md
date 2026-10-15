@@ -1,5 +1,11 @@
 # STATUS  (legújabb fent)
 
+## 2026-10-15 · AI-B · M7 — B-29 kész (localhoston): a11y-átfutás
+
+- Automata: minden belépett oldal axe-ja asztali világos/sötét + **mobil 360 px** (cél-méret ≥ 44 px, nincs túlcsordulás); a kijelentkezve elérhető oldalak 4 menetben; billentyűzet-teszt (Tab-sorrend, ugrás a tartalomra, látható fókusz, dialógus-csapda + fókusz-visszaadás, aria-live toast); 320 px-es reflow. Javítások: calendar-rács rés, ViewToggle 44 px, aláírás/regisztráció jelölőnégyzet, nyilvános fejléc-link, előfizetés-lista link.
+- ☐ **Kézi (gazda / eszközön):** VoiceOver (iOS) és TalkBack egy-egy átfutás: Főoldal → új emlékeztető → kifizetés → Profil → Értesítések.
+- Következő: B-30 teljes E2E-csomag (J1–J4), B-31 finomítás + CHANGELOG, majd a localhost-átvétel és a GitHub/Vercel (a gazda jóváhagyásával).
+
 ## 2026-10-15 · AI-B · M4 — B-28 kész (localhoston): Profil II.
 
 - **Pénzügyek:** alap-pénznem, időzóna (automatikus felismerés + kézi), opcionális havi jövedelem; saját kategóriák (név HU/EN, ikon, színcsoport, típus) létrehozás/szerkesztés/törlés. **Biztonság:** jelszó- és e-mail-módosítás (+ kijelentkezés mindenhonnan). **Adataim:** JSON/CSV export (CSV-injekció-védelemmel), fiók törlése (szöveges megerősítés, Edge Function, `/goodbye`). **Névjegy:** verzió, jogi linkek, „nem bank" szöveg, visszajelzés. **Megjelenés:** kontrasztosabb diagramok (textúra) + kevesebb mozgás (eszköz-szintű).

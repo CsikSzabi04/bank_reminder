@@ -12,7 +12,7 @@ export default async function PublicLayout({ children }: LayoutProps<"/">) {
     <div className="min-h-dvh bg-bg">
       <header className="border-b border-border">
         <div className="mx-auto flex h-14 max-w-2xl items-center justify-between px-4">
-          <Link href="/" className="font-semibold">
+          <Link href="/" className="flex min-h-11 items-center font-semibold">
             {BRAND.name}
           </Link>
           <Link href="/login" className="flex min-h-11 items-center gap-1.5 text-sm font-medium text-primary-text">

@@ -81,12 +81,12 @@ export default async function CalendarPage(props: PageProps<"/calendar">) {
       <div className="grid gap-5 lg:grid-cols-12">
         <div className="flex min-w-0 flex-col gap-5 lg:col-span-7">
           <section aria-label={t("grid")} className="rounded-card border border-border bg-surface p-3 shadow-card sm:p-4">
-            <div className="grid grid-cols-7 gap-1 text-center text-xs font-medium text-text-2" aria-hidden>
+            <div className="grid grid-cols-7 gap-0.5 text-center text-xs font-medium text-text-2" aria-hidden>
               {weekdays.map((w) => (
                 <span key={w} className="py-1">{w}</span>
               ))}
             </div>
-            <div className="mt-1 grid grid-cols-7 gap-1">
+            <div className="mt-1 grid grid-cols-7 gap-0.5">
               {monthGrid(month).flat().map((day, i) => {
                 if (!day) return <span key={`pad-${i}`} />;
                 const items = byDay.get(day) ?? [];
@@ -98,6 +98,7 @@ export default async function CalendarPage(props: PageProps<"/calendar">) {
                     key={day}
                     href={`/calendar?${monthQuery}day=${day}`}
                     aria-label={label}
+                    data-dense-target
                     aria-current={day === today ? "date" : undefined}
                     className={cn(
                       "flex min-h-12 flex-col items-center justify-center gap-1 rounded-control border text-sm tabular-nums",

@@ -38,7 +38,7 @@ export async function SubscriptionCosts({
           {rows.map((r) => (
             <li key={r.reminder_id} className="flex flex-col gap-1">
               <div className="flex flex-wrap items-baseline justify-between gap-x-4 text-sm">
-                <Link href={`/reminders/${r.reminder_id}`} className="min-w-0 truncate font-medium hover:underline">
+                <Link href={`/reminders/${r.reminder_id}`} className="flex min-h-11 min-w-11 items-center truncate font-medium hover:underline">
                   {r.name}
                 </Link>
                 <span className="tabular-nums text-text-2">

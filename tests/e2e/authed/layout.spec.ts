@@ -28,7 +28,9 @@ test.afterAll(async () => {
   await purgeReminders(db.client);
 });
 
+// a 320 px a 200%-os nagyítás megfelelője 640 px-es ablakon (WCAG 1.4.10 reflow): itt sem lehet vízszintes görgetés
 const SIZES = [
+  { width: 320, height: 640 },
   { width: 360, height: 740 },
   { width: 768, height: 900 },
   { width: 1280, height: 800 },

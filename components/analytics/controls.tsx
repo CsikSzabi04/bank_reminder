@@ -43,7 +43,7 @@ export async function ViewToggle(state: State) {
             <Link
               href={analyticsHref({ ...state, view: v })}
               aria-current={state.view === v ? "true" : undefined}
-              className={cn("flex min-h-10 items-center rounded-full px-4 text-sm font-medium", state.view === v ? "bg-primary text-primary-fg" : "text-text-2 hover:bg-surface-2")}
+              className={cn("flex min-h-11 items-center rounded-full px-4 text-sm font-medium", state.view === v ? "bg-primary text-primary-fg" : "text-text-2 hover:bg-surface-2")}
             >
               {t(`view.${v}`)}
             </Link>
