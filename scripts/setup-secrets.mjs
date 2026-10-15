@@ -3,9 +3,11 @@
 // Előfeltétel: `npx supabase login` (a gazda egyszer) + SUPABASE_DB_PASSWORD környezeti változó. Titok NEM kerül fájlba/konzolra:
 // a Supabase CLI-nek ideiglenes env-fájlon át adjuk át, majd azonnal töröljük.
 //   node scripts/setup-secrets.mjs [--subject mailto:x@y.z|https://domain] [--app-url https://domain] [--rotate-vapid] [--rotate-cron]
+//   --enable-key <fájl.pem> [--enable-app-id <uuid>] [--dry-run]   (A-47) Enable Banking: ENABLE_APP_ID + ENABLE_PRIVATE_KEY Edge secret. A kulcsfájl PKCS#8 („PRIVATE KEY"),
+//        az App ID a fájlnév végi UUID (vagy --enable-app-id). A kulcs tartalma SOHA nem íródik ki; --dry-run: csak ellenőriz, nem tölt fel (DB-jelszó sem kell).
 import { spawnSync } from 'node:child_process';
-import { randomBytes } from 'node:crypto';
-import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { randomBytes, webcrypto } from 'node:crypto';
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { generateVapid } from './gen-vapid.mjs';
@@ -14,6 +16,25 @@ const REF = 'ddvzslgwexvdolovqqlg';
 const args = process.argv.slice(2);
 const opt = (n) => (args.includes(n) ? args[args.indexOf(n) + 1] : undefined);
 const run = (a, o = {}) => spawnSync('npx', ['--yes', 'supabase@latest', ...a], { shell: process.platform === 'win32', encoding: 'utf8', ...o });
+
+// ── Enable Banking kulcs (A-47): még a DB-hívások előtt ellenőrizzük, hogy a hiba ne félúton jöjjön
+const enableSecrets = {};
+if (opt('--enable-key')) {
+  const file = opt('--enable-key');
+  let pem;
+  try { pem = readFileSync(file, 'utf8'); } catch { console.error('✖ Az Enable-kulcsfájl nem olvasható:', file); process.exit(5); }
+  const kind = /-----BEGIN ([A-Z ]+)-----/.exec(pem)?.[1];
+  if (kind !== 'PRIVATE KEY') { console.error(`✖ A kulcs formátuma „${kind ?? '?'}", PKCS#8 („BEGIN PRIVATE KEY") kell.`); process.exit(5); }
+  const body = pem.replace(/-----[^-]+-----/g, '').replace(/\s+/g, '');   // egysoros base64: az env-fájl nem bírja a sortörést
+  const appId = opt('--enable-app-id') ?? /([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\.pem$/i.exec(file)?.[1];
+  if (!appId) { console.error('✖ Az App ID nem olvasható a fájlnévből (…<uuid>.pem): add meg --enable-app-id-vel.'); process.exit(5); }
+  try { await webcrypto.subtle.importKey('pkcs8', Buffer.from(body, 'base64'), { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, false, ['sign']); }
+  catch { console.error('✖ A kulcs nem importálható (nem érvényes PKCS#8 RSA-kulcs).'); process.exit(5); }
+  enableSecrets.ENABLE_APP_ID = appId;
+  enableSecrets.ENABLE_PRIVATE_KEY = body;
+  console.log(`✔ Enable-kulcs rendben (App ID ${appId}; a kulcs értéke nem kerül kiírásra)`);
+  if (args.includes('--dry-run')) { console.log('ℹ --dry-run: nem töltöttem fel semmit.'); process.exit(0); }
+}
 
 const pw = process.env.SUPABASE_DB_PASSWORD;
 if (!pw) { console.error('✖ SUPABASE_DB_PASSWORD hiányzik (csak a shellben, fájlba soha).'); process.exit(2); }
@@ -54,6 +75,7 @@ try {
   if (opt('--app-url')) toSet.APP_BASE_URL = opt('--app-url');
 } finally { await c.end(); }
 
+Object.assign(toSet, enableSecrets);
 if (Object.keys(toSet).length) {
   const dir = mkdtempSync(join(tmpdir(), 'br-'));
   const file = join(dir, 'secrets.env');
