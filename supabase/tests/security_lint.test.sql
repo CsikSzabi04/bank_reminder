@@ -26,7 +26,7 @@ begin
   select string_agg(p.proname, ', ') into names from pg_proc p join pg_namespace ns on ns.oid = p.pronamespace
    where ns.nspname = 'public' and p.proname in ('claim_due_notifications', 'finish_notification', 'record_push_result', 'enqueue_extra_notifications', 'run_daily_maintenance',
          'rebuild_notification_queue', 'rebuild_notification_queue_all', 'compute_tips', 'refresh_tips_all', 'ensure_occurrences', 'ensure_occurrences_all', 'process_auto_paid',
-         'call_edge_function', 'cleanup_old_data', 'ops_health', 'handle_new_user', 'budget_status_for', 'cancel_occurrence_notifications', 'tip_cfg', 'expenses_tombstone', 'expenses_guard_flags', 'check_budget_alert', 'expenses_budget_alert', 'start_bank_connect', 'consume_bank_connect_state', 'finish_bank_connection', 'revoke_bank_connection')
+         'call_edge_function', 'cleanup_old_data', 'ops_health', 'handle_new_user', 'budget_status_for', 'cancel_occurrence_notifications', 'tip_cfg', 'expenses_tombstone', 'expenses_guard_flags', 'check_budget_alert', 'expenses_budget_alert', 'start_bank_connect', 'consume_bank_connect_state', 'finish_bank_connection', 'revoke_bank_connection', 'match_merchant_category')
      and (has_function_privilege('anon', p.oid, 'execute') or has_function_privilege('authenticated', p.oid, 'execute'));
   assert names is null, 'klienstől hívható háttér-függvény(ek): ' || names;
 

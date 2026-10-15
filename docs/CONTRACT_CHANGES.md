@@ -5,6 +5,15 @@
 
 ---
 
+## [2026-10-15] Atomi besorolás-RPC-k + kereskedő-szabályok (A-42) — javasolta: AI-A (az AI-B kérésére) — státusz: proposed
+- **Új RPC-k (authenticated, `security invoker` → az RLS és az oszlop-jogok érvényesek):**
+  - `classify_bank_transaction(p_transaction uuid, p_category uuid, p_remember boolean default false)` → `jsonb {classified: int, rule_id: uuid|null}`. Egy tranzakció: előbb a kiadás, aztán a főkönyvi sor besorolódik; `p_remember = true` esetén a tétel `merchant_key`-éből **saját szabály** készül (ha már van ilyen kulcs, annak a kategóriája frissül), és a még besorolatlan, nem elvetett, **azonos kereskedőt tartalmazó** tételek (≤ 200, a `merchant_key` tartalmazza a szabály-kulcsot) is besorolódnak. Hibák (SQLSTATE → B-kód): `BR404` → `not_found` (idegen/ismeretlen/elvetett tétel vagy nem látható kategória), `BR422` → `no_merchant_key` (nincs ≥ 2 karakteres `merchant_key` a szabályhoz). **A hiba nem hagy részleges írást** (egy függvény = egy tranzakció).
+  - `dismiss_bank_transaction(p_transaction uuid)` → `void`. „Ez nem kiadás": a kapcsolt kiadás törlődik (a tombstone a sort `dismissed`-re állítja), kiadás nélküli tétel is `dismissed` lesz. `BR404`, ha nincs/idegen.
+- **Szerver-oldali illesztés (service_role, nem a kliensé):** `match_merchant_category(p_user, p_key, p_hit)` → kategória-id vagy null. Sorrend: a felhasználó **saját szabálya mindig megelőzi** a rendszer-javaslatot (akkor is, ha rövidebb), azon belül a hosszabb kulcs, végül a régebbi; találatkor `hits` + 1.
+- **Rendszer-szabályok (`user_id IS NULL`, csak olvashatók):** ~23 jól ismert márka, ≥ 4 karakteres normalizált kulccsal — **javaslat, nem tény**, a valódi bank-szövegminták (G-4) után bővítendő.
+- **Kulcs-alak:** `merchant_key` = `match_key` = a B-oldali `normalizeMerchantKey` eredménye; a Deno-oldali (`_shared/merchant.ts`) ugyanazokat a vektorokat teljesíti (`tests/unit/bank-rules.test.ts` ↔ `merchant.test.ts`). A `merchant_key` a szerveré (a kliens nem írhatja). Legfeljebb 60 karakter.
+- B teendője: a `classifyTransactionCore` / `dismissTransactionCore` válthat az RPC-kre (a hibakód-leképezés fent); a jelenlegi többlépcsős kliens-írás is működik tovább. Törő?: nem (új).
+
 ## [2026-10-15] B-41: a bank-hívások B-oldali elvárásai (A-41 / A-47 / A-48-hoz) — javasolta: AI-B — státusz: **accepted** (A-47 ✔; `request_bank_sync` az A-48-cal)
 - **Miért:** a B-41 (`/bank` Bank-összekötés szakasz, `/bank/callback`) ezekre a hívás-alakokra épült, a tesztjei fake-kel fedik őket (`tests/unit/bank-connect.test.ts`, `bank-callback-route.test.ts`). **Eltérés esetén az A szóljon** (vagy a B igazít) — egyoldalúan egyik fél sem változtat.
 - **Edge Function-ök** (POST, JSON, a felhasználó JWT-jével; a B `supabase.functions.invoke`-kal hívja):

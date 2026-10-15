@@ -39,8 +39,8 @@ begin
   insert into public.expenses (user_id, amount, currency, spent_on, category_id) values (uA, 4500, 'HUF', current_date, catSys) returning id into expA;
   insert into public.bank_transactions (user_id, connection_id, source, status, amount, currency, booked_on, merchant, fingerprint, expense_id)
     values (uA, connA, 'bank', 'booked', 4500, 'HUF', current_date, 'Tesco', repeat('1', 32), expA) returning id into txA;
-  insert into public.merchant_rules (user_id, match_key, category_id) values (null, 'tesco', catSys) returning id into ruleSys;
-  insert into public.merchant_rules (user_id, match_key, category_id) values (uA, 'aldi', catSys);   -- A tartós szabálya: B-nek nem látszhat
+  insert into public.merchant_rules (user_id, match_key, category_id) values (null, 'zzsys', catSys) returning id into ruleSys;   -- zz-kulcs: ne ütközzön az A-42 rendszer-szabályaival
+  insert into public.merchant_rules (user_id, match_key, category_id) values (uA, 'zzaldi', catSys);   -- A tartós szabálya: B-nek nem látszhat
 
   -- 2) kényszerek (postgres)
   foreach s in array array[
@@ -68,7 +68,7 @@ begin
   exception when unique_violation then ok := true; end;
   assert ok, 'egy tételhez két tétel is párosulhat (1:1 sérül)';
   ok := false;
-  begin insert into public.merchant_rules (user_id, match_key, category_id) values (null, 'tesco', catSys);
+  begin insert into public.merchant_rules (user_id, match_key, category_id) values (null, 'zzsys', catSys);
   exception when unique_violation then ok := true; end;
   assert ok, 'azonos rendszer-szabály kétszer bekerült';
   -- az új értesítés-fajták bekerülnek
@@ -82,7 +82,7 @@ begin
   select count(*) into n from public.ingest_events;       assert n = 2, 'A nem látja az eseményeit';
   select count(*) into n from public.bank_connections;    assert n = 1, 'A nem látja a kapcsolatát';
   select count(*) into n from public.bank_transactions;   assert n = 2, 'A nem látja a tételeit';
-  select count(*) into n from public.merchant_rules;      assert n = 2, 'A nem látja a rendszer- és a saját szabályát';
+  select count(*) into n from public.merchant_rules where match_key like 'zz%';      assert n = 2, 'A nem látja a rendszer- és a saját szabályát';
   select prefix into v from public.ingest_tokens;         assert v = 'abcdef', 'A prefix nem olvasható';
   select count(*) into n from public.bank_connections where status = 'active' and accounts -> 0 ->> 'iban_last4' = '6581'; assert n = 1, 'a számla-lista nem olvasható';
 
@@ -127,13 +127,13 @@ begin
   begin execute format('update public.bank_transactions set category_id = %L where id = %L', catB, txA);
   exception when insufficient_privilege or check_violation or foreign_key_violation then ok := true; end;
   assert ok, 'A más felhasználó kategóriájára sorolt át';
-  insert into public.merchant_rules (match_key, category_id) values ('lidl', catSys) returning id into ruleA;      -- user_id = auth.uid() az alapértékből
-  select count(*) into n from public.merchant_rules; assert n = 3, 'A nem látja az új saját szabályát';
-  update public.merchant_rules set match_key = 'lidl2' where id = ruleA; get diagnostics n = row_count; assert n = 1, 'A nem módosíthatja a saját szabályát';
+  insert into public.merchant_rules (match_key, category_id) values ('zzlidl', catSys) returning id into ruleA;      -- user_id = auth.uid() az alapértékből
+  select count(*) into n from public.merchant_rules where match_key like 'zz%'; assert n = 3, 'A nem látja az új saját szabályát';
+  update public.merchant_rules set match_key = 'zzlidl2' where id = ruleA; get diagnostics n = row_count; assert n = 1, 'A nem módosíthatja a saját szabályát';
   update public.merchant_rules set match_key = 'hack' where id = ruleSys; get diagnostics n = row_count; assert n = 0, 'A módosíthatja a rendszer-szabályt';
   delete from public.merchant_rules where id = ruleSys; get diagnostics n = row_count; assert n = 0, 'A törölheti a rendszer-szabályt';
   ok := false;
-  begin insert into public.merchant_rules (match_key, category_id) values ('lidl2', catSys); exception when unique_violation then ok := true; end;
+  begin insert into public.merchant_rules (match_key, category_id) values ('zzlidl2', catSys); exception when unique_violation then ok := true; end;
   assert ok, 'azonos kulcsú saját szabály kétszer bekerült';
   delete from public.merchant_rules where id = ruleA; get diagnostics n = row_count; assert n = 1, 'A nem törölheti a saját szabályát';
 
@@ -164,7 +164,7 @@ begin
     assert n = 0, format('B látja A %s sorait', s);
   end loop;
   select count(*) into n from public.ingest_tokens; assert n = 0, 'B látja A tokenjeit';
-  select count(*) into n from public.merchant_rules; assert n = 1, format('B %s szabályt lát (várt 1: csak a rendszer)', n);
+  select count(*) into n from public.merchant_rules where match_key like 'zz%'; assert n = 1, format('B %s szabályt lát (várt 1: csak a rendszer)', n);
   update public.bank_transactions set dismissed = false; get diagnostics n = row_count; assert n = 0, 'B módosíthatja A tételét';
   update public.merchant_rules set match_key = 'hack'; get diagnostics n = row_count; assert n = 0, 'B módosíthat szabályt';
   delete from public.merchant_rules; get diagnostics n = row_count; assert n = 0, 'B törölhet szabályt';
