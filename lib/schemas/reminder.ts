@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { checkBankMatch } from "@/lib/bank/match";
 
 // Az űrlap értékei (§14.6). A zod-üzenetek hibakódok: a UI a `reminders.form.error.<kód>` kulcsra képezi le.
 
@@ -71,10 +72,14 @@ export const reminderSchema = z
     autoPaid: checkbox,
     note: optional(z.string().max(500, "noteTooLong")),
     url: optional(z.string().max(2000, "tooLong").regex(/^https?:\/\/\S+$/i, "urlInvalid")),
+    // Bank-egyeztetés kulcsszó (A-48): a normalizált alak 2–60 karakter; a hiba a mező alatt jelenik meg
+    bankMatch: optional(z.string().max(120, "tooLong")),
     usageTags: z.array(z.enum(USAGE_TAGS, "invalid")).max(10, "tooManyOffsets"),
   })
   .superRefine((v, ctx) => {
     if (v.endDate && v.endDate < v.startDate) ctx.addIssue({ code: "custom", path: ["endDate"], message: "endBeforeStart" });
+    const match = checkBankMatch(v.bankMatch);
+    if (!match.ok) ctx.addIssue({ code: "custom", path: ["bankMatch"], message: match.reason });
     // "custom" módban kell egység; az ismétlődés nélküli (once) tételnek nincs értelme gyakoriságnak
     if (v.recurrence === "custom" && !v.recurUnit) ctx.addIssue({ code: "custom", path: ["recurUnit"], message: "invalid" });
   });

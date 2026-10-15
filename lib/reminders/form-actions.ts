@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import type { ActionState } from "@/lib/action-state";
+import { bankMatchPatch, checkBankMatch } from "@/lib/bank/match";
 import { validationFailure } from "@/lib/auth/server-utils";
 import { todayIn } from "@/lib/format";
 import { readReminderForm, reminderSchema, toRecurrence, RECUR_UNITS, RECURRENCE_MODES } from "@/lib/schemas/reminder";
@@ -25,6 +26,7 @@ export async function saveReminder(
   const parsed = reminderSchema.safeParse(readReminderForm(formData));
   if (!parsed.success) return validationFailure(parsed.error);
   const v = parsed.data;
+  const match = checkBankMatch(v.bankMatch); // a séma már ellenőrizte; itt a normalizált érték kell
 
   const supabase = createClient(await cookies());
   const { data: auth } = await supabase.auth.getClaims();
@@ -62,6 +64,8 @@ export async function saveReminder(
     note: v.note ?? null,
     url: v.url ?? null,
     usage_tags: v.usageTags,
+    // csak ha van mit írni (kitöltött, vagy korábban volt és most törölték): az oszlop a db:push előtt még nincs a DB-ben
+    ...bankMatchPatch(match.ok ? match.value : null, formData.get("bankMatchWas") === "1"),
   };
 
   const query = reminderId

@@ -13,12 +13,15 @@ type Props = Omit<InputHTMLAttributes<HTMLInputElement>, "id" | "className"> & {
   translateError?: (code: string | undefined) => string;
   /** a címke melletti kiegészítő szöveg (pl. "opcionális") */
   hint?: string;
+  /** hosszabb magyarázat a mező alatt (aria-describedby-jal kötve) */
+  description?: string;
 };
 
 // Címke + beviteli mező + hiba a mező alatt (aria-describedby, aria-invalid)
-export function TextField({ label, errors, adornment, translateError, hint, ...input }: Props) {
+export function TextField({ label, errors, adornment, translateError, hint, description, ...input }: Props) {
   const id = useId();
   const errorId = `${id}-error`;
+  const descriptionId = `${id}-description`;
   const authErrorText = useFieldErrorText();
   const errorText = translateError ?? authErrorText;
   const invalid = Boolean(errors?.length);
@@ -34,7 +37,7 @@ export function TextField({ label, errors, adornment, translateError, hint, ...i
           {...input}
           id={id}
           aria-invalid={invalid || undefined}
-          aria-describedby={invalid ? errorId : undefined}
+          aria-describedby={[description ? descriptionId : null, invalid ? errorId : null].filter(Boolean).join(" ") || undefined}
           className={cn(
             "min-h-12 w-full rounded-control border border-border bg-surface-2 px-4 text-text placeholder:text-text-muted",
             "aria-invalid:border-danger",
@@ -43,6 +46,11 @@ export function TextField({ label, errors, adornment, translateError, hint, ...i
         />
         {adornment && <div className="absolute inset-y-0 right-1 flex items-center">{adornment}</div>}
       </div>
+      {description && (
+        <p id={descriptionId} className="text-sm text-text-2">
+          {description}
+        </p>
+      )}
       {invalid && (
         <p id={errorId} className="flex items-start gap-1.5 text-sm text-danger-text">
           <AlertCircle className="mt-0.5 size-4 shrink-0" aria-hidden />

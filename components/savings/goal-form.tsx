@@ -12,7 +12,7 @@ import { saveGoal } from "@/lib/savings/actions";
 import { GOAL_COLOR_SLOTS, GOAL_ICONS, GOAL_ICON_KEYS } from "@/lib/savings/icons";
 import { cn } from "@/lib/utils";
 
-export type GoalFormValues = { name: string; target: string; targetDate: string; icon: string; colorSlot: number };
+export type GoalFormValues = { name: string; target: string; targetDate: string; icon: string; colorSlot: number; bankMatch: string };
 
 // Új / szerkesztett cél. A pénznem az alap-pénznem (nem választható); az ikon és a szín rádió-csoport (billentyűvel is állítható).
 export function GoalForm({ goalId, initial, minDate }: { goalId: string | null; initial: GoalFormValues; minDate: string }) {
@@ -41,6 +41,22 @@ export function GoalForm({ goalId, initial, minDate }: { goalId: string | null; 
         errors={fe?.targetDate}
         translateError={errorText}
       />
+      <TextField
+        name="bankMatch"
+        autoComplete="off"
+        autoCapitalize="none"
+        spellCheck={false}
+        maxLength={120}
+        label={t("bankMatch")}
+        hint={t("optional")}
+        description={t("bankMatchHint")}
+        value={v.bankMatch}
+        onChange={(e) => patch({ bankMatch: e.target.value })}
+        errors={fe?.bankMatch}
+        translateError={errorText}
+      />
+      {/* a szerver ebből tudja, hogy a kulcsszó korábban be volt állítva (törlésnél null-t kell írni) */}
+      <input type="hidden" name="bankMatchWas" value={initial.bankMatch ? "1" : "0"} />
 
       <fieldset className="flex flex-col gap-2">
         <legend className="mb-1 text-sm font-medium text-text-2">{t("icon")}</legend>

@@ -67,7 +67,7 @@ export function ReminderForm({
 
   const patch = (p: Partial<FormValues>) => setValues((v) => ({ ...v, ...p }));
   const fe = (state && !state.ok ? state.fieldErrors : undefined) ?? {};
-  const moreErrors = Boolean(fe.endDate || fe.trialEndsOn || fe.note || fe.url);
+  const moreErrors = Boolean(fe.endDate || fe.trialEndsOn || fe.note);
 
   // a "Továbbiak" szakasz zárva hibát rejthetne → hibánál kinyitjuk
   useEffect(() => {
@@ -171,6 +171,34 @@ export function ReminderForm({
             ))}
           </select>
         </label>
+        {/* A link jól látható (nem a „Továbbiak" alatt): a listán, a Főoldalon és a részleten „Megnyitás ↗" gomb lesz belőle */}
+        <TextField
+          name="url"
+          type="url"
+          inputMode="url"
+          autoComplete="off"
+          label={t("url")}
+          description={t("urlHint")}
+          value={values.url}
+          onChange={(e) => patch({ url: e.target.value })}
+          errors={fe.url}
+          translateError={errorText}
+        />
+        <TextField
+          name="bankMatch"
+          autoComplete="off"
+          autoCapitalize="none"
+          spellCheck={false}
+          maxLength={120}
+          label={`${t("bankMatch")} (${tc("optional")})`}
+          description={t("bankMatchHint")}
+          value={values.bankMatch}
+          onChange={(e) => patch({ bankMatch: e.target.value })}
+          errors={fe.bankMatch}
+          translateError={errorText}
+        />
+        {/* a szerver ebből tudja, hogy a kulcsszó korábban be volt állítva (törlésnél null-t kell írni) */}
+        <input type="hidden" name="bankMatchWas" value={initial.bankMatch ? "1" : "0"} />
       </section>
 
       <section className={SECTION}>
@@ -296,16 +324,6 @@ export function ReminderForm({
             value={values.endDate}
             onChange={(e) => patch({ endDate: e.target.value })}
             errors={fe.endDate}
-            translateError={errorText}
-          />
-          <TextField
-            name="url"
-            type="url"
-            inputMode="url"
-            label={t("url")}
-            value={values.url}
-            onChange={(e) => patch({ url: e.target.value })}
-            errors={fe.url}
             translateError={errorText}
           />
           <div className="flex flex-col gap-1.5">

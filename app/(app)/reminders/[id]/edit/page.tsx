@@ -6,6 +6,7 @@ import { ReminderForm } from "@/components/reminders/form/reminder-form";
 import { todayIn } from "@/lib/format";
 import type { Locale } from "@/lib/i18n/config";
 import { getCurrentProfile } from "@/lib/profile/queries";
+import { getBankMatch } from "@/lib/bank/match-queries";
 import { getFormReference, getReminderForEdit } from "@/lib/reminders/form-data";
 import { valuesFromReminder } from "@/lib/reminders/form-values";
 
@@ -24,7 +25,7 @@ export default async function EditReminderPage(props: PageProps<"/reminders/[id]
   if (!profile) redirect(`/login?next=${encodeURIComponent(`/reminders/${id}/edit`)}`);
 
   // az RLS miatt idegen azonosítóra nincs találat → 404 (nem árulja el, hogy létezik-e)
-  const [reminder, reference] = await Promise.all([getReminderForEdit(id), getFormReference(locale, profile.id)]);
+  const [reminder, reference, bankMatch] = await Promise.all([getReminderForEdit(id), getFormReference(locale, profile.id), getBankMatch("reminders", id)]);
   if (!reminder) notFound();
 
   return (
@@ -32,7 +33,7 @@ export default async function EditReminderPage(props: PageProps<"/reminders/[id]
       <h1 className="text-2xl font-semibold">{t("titleEdit")}</h1>
       <ReminderForm
         reminderId={id}
-        initial={valuesFromReminder(reminder)}
+        initial={valuesFromReminder(reminder, bankMatch)}
         categories={reference.categories}
         catalog={reference.catalog}
         today={todayIn(reference.timezone)}

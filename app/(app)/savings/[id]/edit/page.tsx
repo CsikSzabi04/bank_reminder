@@ -6,6 +6,7 @@ import { getTranslations } from "next-intl/server";
 import { z } from "zod";
 import { GoalForm } from "@/components/savings/goal-form";
 import { todayIn } from "@/lib/format";
+import { getBankMatch } from "@/lib/bank/match-queries";
 import { getCurrentProfile } from "@/lib/profile/queries";
 import { getGoal } from "@/lib/savings/queries";
 import { addDays } from "@/lib/tz";
@@ -21,7 +22,7 @@ export default async function EditGoalPage(props: PageProps<"/savings/[id]/edit"
   if (!z.uuid().safeParse(id).success) notFound();
   const profile = await getCurrentProfile();
   if (!profile) redirect(`/login?next=${encodeURIComponent(`/savings/${id}/edit`)}`);
-  const goal = await getGoal(id);
+  const [goal, bankMatch] = await Promise.all([getGoal(id), getBankMatch("savings_goals", id)]);
   if (!goal) notFound();
 
   return (
@@ -35,7 +36,7 @@ export default async function EditGoalPage(props: PageProps<"/savings/[id]/edit"
         <GoalForm
           goalId={id}
           minDate={addDays(todayIn(profile.timezone), 1)}
-          initial={{ name: goal.name, target: String(goal.target), targetDate: goal.targetDate ?? "", icon: goal.icon, colorSlot: goal.colorSlot }}
+          initial={{ name: goal.name, target: String(goal.target), targetDate: goal.targetDate ?? "", icon: goal.icon, colorSlot: goal.colorSlot, bankMatch }}
         />
       </div>
     </div>

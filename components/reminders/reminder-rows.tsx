@@ -1,6 +1,7 @@
 import type { CategoryView } from "@/lib/category-icons";
 import type { ListItem } from "@/lib/reminders/group";
 import { BillList, BillRow } from "./bill-row";
+import { OpenLink } from "./open-link";
 import { NotifyToggle } from "./notify-toggle";
 import { OccurrencePayButton } from "./occurrence-pay-button";
 import { RecurrenceText } from "./recurrence-text";
@@ -35,6 +36,7 @@ export function ReminderRows({
           demo={r.is_demo}
           notifyOff={!r.remind_enabled}
           subtitle={<RecurrenceText unit={r.recur_unit} every={r.recur_every} startDate={r.start_date} monthEnd={r.month_end} />}
+          link={<OpenLink url={r.url} name={r.name} />}
           action={
             <>
               {next && r.is_active && <OccurrencePayButton occurrenceId={next.id} name={r.name} />}

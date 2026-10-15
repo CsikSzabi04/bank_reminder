@@ -5,11 +5,13 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { ConsentBanner } from "@/components/bank/consent-banner";
+import { HomeSyncLine } from "@/components/bank/home-sync-line";
 import { BudgetBar } from "@/components/budgets/budget-bar";
 import { HeroCard } from "@/components/dashboard/hero-card";
 import { MonthSwitcher } from "@/components/dashboard/month-switcher";
 import { SubscriptionsCard } from "@/components/dashboard/subscriptions-card";
 import { BillList, BillRow } from "@/components/reminders/bill-row";
+import { OpenLink } from "@/components/reminders/open-link";
 import { LoadDemoButton } from "@/components/reminders/demo-buttons";
 import { OccurrencePayButton } from "@/components/reminders/occurrence-pay-button";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -20,7 +22,7 @@ import { getDashboardSummary, resolveMonth } from "@/lib/dashboard";
 import { todayIn } from "@/lib/format";
 import type { Locale } from "@/lib/i18n/config";
 import { getCurrentProfile } from "@/lib/profile/queries";
-import { getCategories } from "@/lib/reminders/queries";
+import { getCategories, getReminderUrls } from "@/lib/reminders/queries";
 import { first } from "@/lib/search-params";
 import { getTopTip } from "@/lib/tips/queries";
 
@@ -50,6 +52,8 @@ export default async function DashboardPage(props: PageProps<"/dashboard">) {
     getCategories(locale),
     profile.tips_enabled ? getTopTip(today) : Promise.resolve(null),
   ]);
+  // a „Hamarosan esedékes" sorok külső hivatkozásai egy lekérdezéssel (a RPC nem hozza az URL-t)
+  const urls = await getReminderUrls(summary?.upcoming.map((u) => u.reminder_id) ?? []);
   const name = profile.display_name || profile.email.split("@")[0];
 
   return (
@@ -68,6 +72,9 @@ export default async function DashboardPage(props: PageProps<"/dashboard">) {
       {/* a bank-hozzáférés lejárata (≤ 30 nap): nem várakoztatja a Főoldalt */}
       <Suspense fallback={null}>
         <ConsentBanner timeZone={profile.timezone} />
+      </Suspense>
+      <Suspense fallback={null}>
+        <HomeSyncLine />
       </Suspense>
 
       {!summary ? (
@@ -112,6 +119,7 @@ export default async function DashboardPage(props: PageProps<"/dashboard">) {
                       today={today}
                       status="upcoming"
                       category={u.category_id ? categories.get(u.category_id) : null}
+                      link={<OpenLink url={urls.get(u.reminder_id)} name={u.name} />}
                       action={<OccurrencePayButton occurrenceId={u.occurrence_id} name={u.name} />}
                     />
                   ))}

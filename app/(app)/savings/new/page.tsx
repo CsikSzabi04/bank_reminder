@@ -50,6 +50,7 @@ export default async function NewGoalPage(props: PageProps<"/savings/new">) {
             targetDate: "",
             icon: defaults.icon,
             colorSlot: defaults.colorSlot,
+            bankMatch: "",
           }}
         />
       </div>

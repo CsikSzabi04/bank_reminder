@@ -1,6 +1,6 @@
 // A /bank oldal szakaszai (advanced.md §8.1). Az aktív szakasz az URL-ben él (`?section=…`),
 // így megosztható és frissítés-biztos — mint a Profilnál.
-export const BANK_SECTIONS = ["overview", "android", "rules"] as const;
+export const BANK_SECTIONS = ["overview", "transactions", "android", "rules"] as const;
 export type BankSection = (typeof BANK_SECTIONS)[number];
 
 export const isBankSection = (value: string | undefined): value is BankSection =>

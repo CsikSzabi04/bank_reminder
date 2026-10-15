@@ -58,6 +58,7 @@ const PAGES: [string, () => string][] = [
   ["Hír részletei", () => `/news/${newsId}`],
   ["Bank-összekötés", () => "/bank"],
   ["Bank · Összekötés", () => "/bank?section=overview"],
+  ["Bank · Tranzakciók", () => "/bank?section=transactions"],
   ["Bank · Android", () => "/bank?section=android"],
   ["Bank · Szabályok", () => "/bank?section=rules"],
   ["Bank · Összekötés hibaüzenettel", () => "/bank?section=overview&result=error&reason=state_invalid"],

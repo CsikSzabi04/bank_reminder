@@ -39,7 +39,7 @@ test("jogosultság nélkül (alapeset) az Android-szakasz a nyitó oldal, az ös
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto("/bank");
   const nav = page.getByRole("navigation", { name: SECTIONS });
-  for (const name of ["Összekötés", "Android-értesítések", "Szabályok"]) {
+  for (const name of ["Összekötés", "Tranzakciók", "Android-értesítések", "Szabályok"]) {
     await expect(nav.getByRole("link", { name })).toBeVisible();
   }
   await expect(nav.getByRole("link", { name: "Android-értesítések" })).toHaveAttribute("aria-current", "page");
@@ -194,7 +194,8 @@ test.describe("Android-szakasz (B-43)", () => {
     const tokens = page.getByRole("heading", { level: 3, name: "Webhook-token" });
     await expect(comingSoon.or(tokens)).toBeVisible();
     await expect(page.getByRole("heading", { level: 3, name: /Natív Android-app/ })).toBeVisible();
-    await expect(page.getByRole("alert")).toHaveCount(0);
+    // a Next útvonal-bemondója (üres role="alert") időnként ott van: csak a szöveges hibaüzenet számít
+    await expect(page.getByRole("alert").filter({ hasText: /\S/ })).toHaveCount(0);
   });
 
   test("mobilon sincs túlcsordulás", async ({ page }) => {
@@ -216,6 +217,49 @@ test.describe("Android-szakasz (B-43)", () => {
     await page.goto("/bank?section=android");
     await expect(page.getByRole("heading", { level: 3, name: /Natív Android-app/ })).toBeVisible();
     await expect(page.getByRole("note")).toHaveCount(0);
+  });
+});
+
+// A-48: Tranzakciók szakasz. A banki szinkron új oszlopai (db:push után) nélkül „még nem elérhető", utána üres vagy tételes állapot —
+// mindkettő helyes; a szűrők és a lapozás nem törhetnek el, és nincs túlcsordulás.
+test.describe("Tranzakciók (A-48)", () => {
+  const unavailable = (page: import("@playwright/test").Page) => page.getByRole("heading", { level: 2, name: "A banki szinkron még nem érhető el" });
+  const empty = (page: import("@playwright/test").Page) => page.getByRole("heading", { level: 2, name: "Még nincs banki tétel" });
+
+  test("a szakasz hibamentesen betöltődik (még nem elérhető VAGY üres/tételes állapot), aria-current a navban", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto("/bank?section=transactions");
+    const nav = page.getByRole("navigation", { name: SECTIONS });
+    await expect(nav.getByRole("link", { name: "Tranzakciók" })).toHaveAttribute("aria-current", "page");
+    await expect(unavailable(page).or(empty(page)).or(page.getByText(/ tétel$/).first())).toBeVisible();
+    // a Next útvonal-bemondója (üres role="alert") időnként ott van: csak a szöveges hibaüzenet számít
+    await expect(page.getByRole("alert").filter({ hasText: /\S/ })).toHaveCount(0);
+  });
+
+  test("a szűrő-paraméterek (irány, hónap, keresés, lap) érvénytelen értékkel sem törnek el", async ({ page }) => {
+    await page.goto("/bank?section=transactions&direction=bármi&month=2026-13&page=-3&q=%2C)(x.eq.1");
+    await expect(page.getByRole("heading", { level: 1, name: "Bank-összekötés" })).toBeVisible();
+    // a Next útvonal-bemondója (üres role="alert") időnként ott van: csak a szöveges hibaüzenet számít
+    await expect(page.getByRole("alert").filter({ hasText: /\S/ })).toHaveCount(0);
+    await expect(page.locator("main")).not.toContainText("Application error");
+  });
+
+  test("ha a szinkron él: a szűrő-űrlap elérhető és a keresés az URL-be kerül", async ({ page }) => {
+    await page.goto("/bank?section=transactions");
+    const form = page.getByRole("form", { name: "Szűrők" });
+    test.skip((await form.count()) === 0, "a banki szinkron oszlopai még nincsenek az adatbázisban");
+    await page.getByLabel("Keresés").fill("tesco");
+    await page.getByRole("button", { name: "Szűrés" }).click();
+    await expect(page).toHaveURL(/section=transactions/);
+    await expect(page).toHaveURL(/q=tesco/);
+    await expect(page.getByRole("link", { name: "Szűrők törlése" })).toBeVisible();
+  });
+
+  test("mobilon nincs túlcsordulás", async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 740 });
+    await page.goto("/bank?section=transactions");
+    await expect(page.getByRole("link", { name: "Vissza a bank-oldalhoz" })).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0);
   });
 });
 

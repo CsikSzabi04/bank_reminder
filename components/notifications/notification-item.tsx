@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { OpenLink } from "@/components/reminders/open-link";
 import { markNotificationsRead } from "@/lib/push/actions";
 import { cn } from "@/lib/utils";
 
@@ -13,6 +14,8 @@ export function NotificationItem({
   body,
   time,
   url,
+  externalUrl,
+  externalName,
 }: {
   id: string;
   unread: boolean;
@@ -21,6 +24,9 @@ export function NotificationItem({
   body: string;
   time: string;
   url: string;
+  /** az emlékeztető külső hivatkozása („Megnyitás ↗"); csak számla-értesítésnél */
+  externalUrl?: string;
+  externalName?: string;
 }) {
   const router = useRouter();
   return (
@@ -45,6 +51,11 @@ export function NotificationItem({
         </span>
         <time className="shrink-0 text-sm text-text-muted">{time}</time>
       </a>
+      {externalUrl && (
+        <div className="px-4 pb-3 pl-9">
+          <OpenLink url={externalUrl} name={externalName ?? ""} />
+        </div>
+      )}
     </li>
   );
 }

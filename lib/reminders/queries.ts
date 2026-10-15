@@ -27,7 +27,7 @@ export async function getReminderList(): Promise<ListItem[]> {
     supabase
       .from("reminders")
       .select(
-        "id, name, amount, currency, category_id, is_subscription, recur_unit, recur_every, start_date, month_end, remind_enabled, is_active, is_demo",
+        "id, name, amount, currency, category_id, is_subscription, recur_unit, recur_every, start_date, month_end, remind_enabled, is_active, is_demo, url",
       )
       .order("name"),
     supabase
@@ -44,4 +44,13 @@ export async function getReminderList(): Promise<ListItem[]> {
     next.set(o.reminder_id, { id: o.id, due_date: o.due_date, amount: o.amount, currency: o.currency });
   }
   return (reminders.data ?? []).map((reminder: ListReminder) => ({ reminder, next: next.get(reminder.id) ?? null }));
+}
+
+// Több emlékeztető külső hivatkozása egy lekérdezéssel (a Főoldal „Hamarosan esedékes" soraihoz, az értesítésekhez):
+// azonosító → URL, csak ahol van. A megjelenítés előtt a `safeExternalUrl` (OpenLink) még egyszer szűr.
+export async function getReminderUrls(ids: string[]): Promise<Map<string, string>> {
+  const unique = [...new Set(ids.filter(Boolean))];
+  if (unique.length === 0) return new Map();
+  const { data } = await (await client()).from("reminders").select("id, url").in("id", unique).not("url", "is", null);
+  return new Map((data ?? []).flatMap((r) => (r.url ? [[r.id, r.url] as const] : [])));
 }

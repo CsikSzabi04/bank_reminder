@@ -9,6 +9,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { formatDate, formatMoney, formatTime, todayIn } from "@/lib/format";
 import type { Locale } from "@/lib/i18n/config";
 import { describeNotification } from "@/lib/notification-text";
+import { getReminderUrls } from "@/lib/reminders/queries";
 import { getCurrentProfile } from "@/lib/profile/queries";
 import { addDays } from "@/lib/tz";
 import { createClient } from "@/utils/supabase/server";
@@ -33,6 +34,8 @@ export default async function NotificationsPage() {
     .order("scheduled_for", { ascending: false })
     .limit(100);
   const rows = data ?? [];
+  // a számla-értesítésekhez a „Megnyitás ↗" (az emlékeztető külső hivatkozása), egy lekérdezéssel
+  const urls = await getReminderUrls(rows.flatMap((r) => (r.reminder_id ? [r.reminder_id] : [])));
 
   const tz = profile.timezone;
   const today = todayIn(tz);
@@ -85,6 +88,8 @@ export default async function NotificationsPage() {
                       body={t(`text.${v.key}.body`, values)}
                       time={formatTime(r.scheduled_for, locale, tz)}
                       url={v.url}
+                      externalUrl={r.reminder_id ? urls.get(r.reminder_id) : undefined}
+                      externalName={v.values.name ?? ""}
                     />
                   );
                 })}

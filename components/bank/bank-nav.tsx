@@ -1,4 +1,4 @@
-import { ChevronRight, Landmark, ListChecks, Smartphone, type LucideIcon } from "lucide-react";
+import { ChevronRight, Landmark, ListChecks, Receipt, Smartphone, type LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { BANK_SECTIONS, type BankSection } from "@/lib/bank/sections";
@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 
 const ICONS: Record<BankSection, LucideIcon> = {
   overview: Landmark,
+  transactions: Receipt,
   android: Smartphone,
   rules: ListChecks,
 };

@@ -29,8 +29,8 @@ describe("interpretBankAccess (advanced.md §2.1)", () => {
 });
 
 describe("bank-szakaszok", () => {
-  it("3 szakasz, ismeretlen érték nem szakasz", () => {
-    expect(BANK_SECTIONS).toEqual(["overview", "android", "rules"]);
+  it("4 szakasz, ismeretlen érték nem szakasz", () => {
+    expect(BANK_SECTIONS).toEqual(["overview", "transactions", "android", "rules"]);
     expect(isBankSection("android")).toBe(true);
     for (const bad of [undefined, "", "Android", "profile", "overview ", "__proto__"]) {
       expect(isBankSection(bad)).toBe(false);

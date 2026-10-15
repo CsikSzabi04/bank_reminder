@@ -274,8 +274,13 @@
         "urlInvalid": "A link http:// vagy https:// címmel kezdődjön.",
         "noteTooLong": "A megjegyzés legfeljebb 500 karakter lehet.",
         "invalid": "Ez az érték nem érvényes.",
-        "insufficient": "Ennél többet nem vehetsz ki."
-      }
+        "insufficient": "Ennél többet nem vehetsz ki.",
+        "bankMatchShort": "A kulcsszó legalább 2 betű vagy szám legyen.",
+        "bankMatchLong": "A kulcsszó legfeljebb 60 karakter lehet."
+      },
+      "urlHint": "Például a vásárlás vagy a fizetés oldala — a listán, a Főoldalon és a részleten „Megnyitás” gomb lesz belőle.",
+      "bankMatch": "Bank-egyeztetés kulcsszó",
+      "bankMatchHint": "Nem kötelező. A banki tételben szereplő szó, pl. „anthropic” a Claude-hoz — így a bankból érkező tétel kifizeti ezt az esedékességet. Ékezet- és kisbetű-független."
     },
     "status": {
       "upcoming": "Esedékes",
@@ -388,7 +393,10 @@
       "subscription": "Előfizetés",
       "paused": "Szüneteltetve",
       "edit": "Szerkesztés"
-    }
+    },
+    "openLink": "Megnyitás",
+    "openLinkAria": "{name} megnyitása új lapon ({host})",
+    "paidFromBank": "Kifizetve a bankszámláról ({date})"
   },
   "analytics": {
     "title": "Analitika",
@@ -539,7 +547,8 @@
       "label": "Bank-oldal szakaszai",
       "overview": "Összekötés",
       "android": "Android-értesítések",
-      "rules": "Szabályok"
+      "rules": "Szabályok",
+      "transactions": "Tranzakciók"
     },
     "overview": {
       "title": "Bank-összekötés",
@@ -825,7 +834,64 @@
       "p3": "Ami nem sorolható be magától, a „Szabályok” szakasz „Besorolásra vár” listájára kerül. Az „Ezt mindig így” szabályt hoz létre.",
       "p4": "A bank-hozzáférés lejár (legfeljebb a bank által engedett ideig). Lejárat előtt kötelező értesítéseket kapsz — ezek nem kapcsolhatók ki —, és a bank saját appjában újra jóvá kell hagynod.",
       "p5": "A keret elfogyásáról értesítünk (a Profilban kikapcsolható). Az app nem bank, nem indít fizetést és nem tanácsol."
-    }
+    },
+    "tx": {
+      "title": "Tranzakciók",
+      "intro": "A bankodból behúzott tételek. Mindegyik pontosan egyszer számít: kifizet egy esedékes számlát, megtakarítási befizetés lesz, vagy kiadás. A jóváírások csak megjelennek.",
+      "lastSync": {
+        "never": "Még nem volt szinkron.",
+        "ok": "Utolsó szinkron: {when} — sikeres",
+        "failed": "Utolsó szinkron: {when} — nem sikerült"
+      },
+      "unavailable": {
+        "title": "A banki szinkron még nem érhető el",
+        "body": "A tételek a szinkron élesítése után jelennek meg itt."
+      },
+      "empty": {
+        "title": "Még nincs banki tétel",
+        "body": "Az első szinkron után a bankodból behúzott tételek itt jelennek meg. A „Frissítés most” gombbal indíthatod."
+      },
+      "emptyFiltered": "Nincs a szűrőnek megfelelő tétel.",
+      "filters": {
+        "label": "Szűrők",
+        "account": "Számla",
+        "accountAll": "Minden számla",
+        "direction": "Irány",
+        "directionAll": "Mind",
+        "debit": "Terhelés",
+        "credit": "Jóváírás",
+        "month": "Hónap",
+        "q": "Keresés",
+        "qHint": "A másik fél neve vagy a közlemény",
+        "apply": "Szűrés",
+        "clear": "Szűrők törlése"
+      },
+      "count": "{total, plural, one {# tétel} other {# tétel}}",
+      "pager": {
+        "label": "Lapozás",
+        "newer": "Újabbak",
+        "older": "Régebbiek",
+        "page": "{page}. oldal"
+      },
+      "row": {
+        "unknownWho": "Ismeretlen másik fél",
+        "debit": "Terhelés",
+        "credit": "Jóváírás",
+        "account": "Számla: {name}"
+      },
+      "outcome": {
+        "credit": "Jóváírás",
+        "bill": "Számla kifizetve: {name}",
+        "billUnknown": "Számla kifizetve",
+        "saving": "Megtakarítás: {name}",
+        "savingUnknown": "Megtakarítás",
+        "expense": "Kiadás",
+        "uncategorized": "Besorolásra vár",
+        "dismissed": "Nem kiadás (elvetve)",
+        "pending": "Feldolgozásra vár"
+      }
+    },
+    "homeSync": "Bank: utolsó szinkron {when} — az elmúlt 24 órában {count, plural, =0 {nincs új tétel} one {# új tétel} other {# új tétel}}"
   },
   "savings": {
     "title": "Megtakarítás",
@@ -889,7 +955,9 @@
     "entryAdd": "Befizetés",
     "entryWithdraw": "Kivét",
     "deleteEntry": "Tétel törlése ({date})",
-    "entryDeleted": "A tétel törölve."
+    "entryDeleted": "A tétel törölve.",
+    "bankMatch": "Bank-egyeztetés kulcsszó",
+    "bankMatchHint": "Nem kötelező. Ha egy banki terhelés szövegében szerepel ez a szó, megtakarítási befizetésként könyveljük (kiadás nem lesz belőle). Ékezet- és kisbetű-független."
   },
   "tips": {
     "title": "Tippek",

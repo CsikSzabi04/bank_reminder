@@ -274,8 +274,13 @@
         "urlInvalid": "The link must start with http:// or https://.",
         "noteTooLong": "The note can be at most 500 characters.",
         "invalid": "This value isn't valid.",
-        "insufficient": "You cannot withdraw more than you have saved."
-      }
+        "insufficient": "You cannot withdraw more than you have saved.",
+        "bankMatchShort": "The keyword must be at least 2 letters or digits.",
+        "bankMatchLong": "The keyword can be at most 60 characters."
+      },
+      "urlHint": "For example the purchase or payment page — it becomes an “Open” button on the list, the Home page and the details.",
+      "bankMatch": "Bank matching keyword",
+      "bankMatchHint": "Optional. A word that appears in the bank item, e.g. “anthropic” for Claude — so the item from the bank pays this bill. Accents and case don't matter."
     },
     "status": {
       "upcoming": "Due",
@@ -388,7 +393,10 @@
       "subscription": "Subscription",
       "paused": "Paused",
       "edit": "Edit"
-    }
+    },
+    "openLink": "Open",
+    "openLinkAria": "Open {name} in a new tab ({host})",
+    "paidFromBank": "Paid from the bank account ({date})"
   },
   "analytics": {
     "title": "Analytics",
@@ -539,7 +547,8 @@
       "label": "Bank sync sections",
       "overview": "Connection",
       "android": "Android notifications",
-      "rules": "Rules"
+      "rules": "Rules",
+      "transactions": "Transactions"
     },
     "overview": {
       "title": "Bank sync",
@@ -825,7 +834,64 @@
       "p3": "Whatever can't be sorted automatically goes to the “Waiting to be sorted” list in the Rules section. “Always do this” creates a rule.",
       "p4": "The bank access expires (after at most the period the bank allows). You get required notifications before it does — they can't be turned off — and you have to approve again in the bank's own app.",
       "p5": "We notify you when a budget runs out (you can turn this off in your Profile). The app isn't a bank, never initiates payments and gives no advice."
-    }
+    },
+    "tx": {
+      "title": "Transactions",
+      "intro": "Items pulled from your bank. Each counts exactly once: it pays a bill that was due, becomes a savings contribution, or is an expense. Credits are only shown.",
+      "lastSync": {
+        "never": "No sync yet.",
+        "ok": "Last sync: {when} — succeeded",
+        "failed": "Last sync: {when} — failed"
+      },
+      "unavailable": {
+        "title": "Bank sync isn't available yet",
+        "body": "Items will show up here once the sync goes live."
+      },
+      "empty": {
+        "title": "No bank items yet",
+        "body": "After the first sync, the items pulled from your bank appear here. You can start it with “Refresh now”."
+      },
+      "emptyFiltered": "No items match the filter.",
+      "filters": {
+        "label": "Filters",
+        "account": "Account",
+        "accountAll": "All accounts",
+        "direction": "Direction",
+        "directionAll": "All",
+        "debit": "Debit",
+        "credit": "Credit",
+        "month": "Month",
+        "q": "Search",
+        "qHint": "The other party's name or the reference",
+        "apply": "Filter",
+        "clear": "Clear filters"
+      },
+      "count": "{total, plural, one {# item} other {# items}}",
+      "pager": {
+        "label": "Pagination",
+        "newer": "Newer",
+        "older": "Older",
+        "page": "Page {page}"
+      },
+      "row": {
+        "unknownWho": "Unknown counterparty",
+        "debit": "Debit",
+        "credit": "Credit",
+        "account": "Account: {name}"
+      },
+      "outcome": {
+        "credit": "Credit",
+        "bill": "Bill paid: {name}",
+        "billUnknown": "Bill paid",
+        "saving": "Savings: {name}",
+        "savingUnknown": "Savings",
+        "expense": "Expense",
+        "uncategorized": "Waiting to be sorted",
+        "dismissed": "Not an expense (dismissed)",
+        "pending": "Waiting to be processed"
+      }
+    },
+    "homeSync": "Bank: last sync {when} — {count, plural, =0 {no new items} one {# new item} other {# new items}} in the last 24 hours"
   },
   "savings": {
     "title": "Savings",
@@ -889,7 +955,9 @@
     "entryAdd": "Contribution",
     "entryWithdraw": "Withdrawal",
     "deleteEntry": "Delete entry ({date})",
-    "entryDeleted": "Entry deleted."
+    "entryDeleted": "Entry deleted.",
+    "bankMatch": "Bank matching keyword",
+    "bankMatchHint": "Optional. If a bank debit contains this word, it is recorded as a savings contribution (not an expense). Accents and case don't matter."
   },
   "tips": {
     "title": "Tips",

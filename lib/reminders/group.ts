@@ -15,6 +15,8 @@ export type ListReminder = {
   remind_enabled: boolean;
   is_active: boolean;
   is_demo: boolean;
+  // külső hivatkozás (pl. a vásárlás oldala) — a „Megnyitás ↗” gombhoz
+  url: string | null;
 };
 
 export type ListOccurrence = {

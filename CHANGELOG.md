@@ -13,6 +13,9 @@ Haladó kör: automatikus kiadás-felismerés bankból és értesítésből, azo
 - **Kötelező lejárat-értesítések:** 30/23/16/9/2/1/0 nappal a lejárat előtt, nem kapcsolhatók ki (`ConsentTimeline`, Főoldal-sáv ≤ 30 napnál, kapcsoló nélküli sor a Profil → Értesítésekben).
 - **Keret-riasztás:** értesítés, ha egy kategória havi kerete közel van a kimerüléshez vagy elfogyott; „Keret-riasztások" kapcsoló a Profilban.
 - **Kereskedő-szabályok és „Besorolásra vár":** besorolás, „Ezt mindig így" (saját szabály + a várakozó azonos kereskedős tételek), „Ez nem kiadás" (nem tér vissza), szabály-CRUD, beépített javaslatok (javaslatként jelölve).
+- **Tranzakciók** szakasz (`/bank?section=transactions`): a bank minden tétele — mit lett belőle (számla kifizetve / megtakarítás / kiadás + besorolás / jóváírás), szűrők, utolsó szinkron + „Frissítés most"; a Főoldalon egy „Bank: utolsó szinkron" sor.
+- **Emlékeztető-link:** a Link mező az űrlap fő részében, „Megnyitás ↗" a Főoldalon, a listán, a részleten és az értesítésben (csak http/https, új lapon).
+- **Bank-egyeztetés kulcsszó** (emlékeztető és megtakarítási cél): a banki terhelés a kulcsszó alapján kifizeti a számlát, illetve megtakarítási befizetésként könyvelődik; „Kifizetve a bankszámláról" jelzés az esedékességen.
 - **Keretek:** az automatikusan felvett tételek „Automatikus" / „Ideiglenes" jelvényt kapnak; a kiadás törlése visszavonható.
 - **Értesítések:** új fajták a központban (`budget`, `bank_consent`); a service worker a „Kifizettem/Halaszt" gombot csak számla-értesítésnél engedi.
 - **Tesztek:** titok-őr (forrás + build kliens-csomag), callback-védelem, számla-típusok, hibaleképezés, A/B `merchant_key` paritás, élő DB-s e2e (szabály-CRUD, RPC-k), 360 px-es túlcsordulás-őr a komponens-játszótéren.

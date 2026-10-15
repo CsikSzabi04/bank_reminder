@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ChevronLeft, Pencil, TrendingDown, TrendingUp } from "lucide-react";
+import { ChevronLeft, Landmark, Pencil, TrendingDown, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
@@ -9,13 +9,16 @@ import { CategoryIcon } from "@/components/categories/category-icon";
 import { DueLabel } from "@/components/reminders/due-label";
 import { DetailMenu } from "@/components/reminders/detail-menu";
 import { OccurrencePayButton } from "@/components/reminders/occurrence-pay-button";
+import { OpenLink } from "@/components/reminders/open-link";
 import { RecurrenceText } from "@/components/reminders/recurrence-text";
 import { AmountText } from "@/components/ui/amount-text";
 import { formatDate, formatMoney, formatPercent, todayIn } from "@/lib/format";
 import type { Locale } from "@/lib/i18n/config";
 import { getCurrentProfile } from "@/lib/profile/queries";
 import { getReminderDetail, nextOccurrence, type HistoryRow } from "@/lib/reminders/detail";
+import { getBankPaidOccurrences } from "@/lib/reminders/bank-paid";
 import { getCategories } from "@/lib/reminders/queries";
+import { safeExternalUrl } from "@/lib/safe-url";
 
 export async function generateMetadata(props: PageProps<"/reminders/[id]">): Promise<Metadata> {
   const { id } = await props.params;
@@ -41,6 +44,9 @@ export default async function ReminderDetailPage(props: PageProps<"/reminders/[i
   const [{ reminder, history }, categories] = await Promise.all([getReminderDetail(id), getCategories(locale)]);
   if (!reminder) notFound(); // az RLS miatt idegen azonosítóra sincs találat
   const today = todayIn(profile.timezone);
+  // „Kifizetve a bankszámláról": mely esedékességekhez van banki tétel (A-48)
+  const bankPaid = await getBankPaidOccurrences(history.map((h) => h.occurrence_id));
+  const linkUrl = safeExternalUrl(reminder.url);
   const category = reminder.category_id ? categories.get(reminder.category_id) : undefined;
   const next = nextOccurrence(history);
   const upcoming = history.filter((h) => h.status === "upcoming").sort((a, b) => (a.due_date < b.due_date ? -1 : 1));
@@ -82,6 +88,7 @@ export default async function ReminderDetailPage(props: PageProps<"/reminders/[i
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-2">
+            <OpenLink url={reminder.url} name={reminder.name} />
             {next && reminder.is_active && <OccurrencePayButton occurrenceId={next.occurrence_id} name={reminder.name} />}
             <Link
               href={`/reminders/${reminder.id}/edit`}
@@ -125,12 +132,12 @@ export default async function ReminderDetailPage(props: PageProps<"/reminders/[i
               <dd className="font-medium">{td("autoPaid")}</dd>
             </div>
           )}
-          {reminder.url && (
+          {linkUrl && (
             <div className="sm:col-span-2">
               <dt className="text-sm text-text-2">{td("link")}</dt>
               <dd className="break-all font-medium">
-                <a href={reminder.url} target="_blank" rel="noopener noreferrer" className="text-primary-text underline">
-                  {reminder.url}
+                <a href={linkUrl} target="_blank" rel="noopener noreferrer" className="text-primary-text underline">
+                  {linkUrl}
                 </a>
               </dd>
             </div>
@@ -152,7 +159,7 @@ export default async function ReminderDetailPage(props: PageProps<"/reminders/[i
           </h2>
           <ul className="divide-y divide-border">
             {upcoming.map((h) => (
-              <HistoryItem key={h.occurrence_id} row={h} today={today} locale={locale} timeZone={profile.timezone} />
+              <HistoryItem key={h.occurrence_id} row={h} today={today} locale={locale} timeZone={profile.timezone} bankPaidOn={bankPaid.get(h.occurrence_id)} />
             ))}
           </ul>
         </section>
@@ -167,7 +174,7 @@ export default async function ReminderDetailPage(props: PageProps<"/reminders/[i
         ) : (
           <ul className="divide-y divide-border">
             {past.map((h) => (
-              <HistoryItem key={h.occurrence_id} row={h} today={today} locale={locale} timeZone={profile.timezone} showChange />
+              <HistoryItem key={h.occurrence_id} row={h} today={today} locale={locale} timeZone={profile.timezone} bankPaidOn={bankPaid.get(h.occurrence_id)} showChange />
             ))}
           </ul>
         )}
@@ -181,15 +188,19 @@ async function HistoryItem({
   today,
   locale,
   timeZone,
+  bankPaidOn,
   showChange,
 }: {
   row: HistoryRow;
   today: string;
   locale: Locale;
   timeZone: string;
+  // a banki tétel könyvelési napja, ha az esedékességet a bankszámláról fizették ki
+  bankPaidOn?: string;
   showChange?: boolean;
 }) {
   const td = await getTranslations("reminders.detail");
+  const tr = await getTranslations("reminders");
   const change = row.change_pct;
   // az árváltozást az SQL számolja (reminder_history.change_pct); itt csak formázzuk (H9)
   const pct = change === null ? null : formatPercent(Math.abs(change) / 100, locale);
@@ -200,6 +211,12 @@ async function HistoryItem({
         <DueLabel status={row.status} dueDate={row.due_date} today={today} hideFarDate />
         {row.status === "paid" && row.paid_on && (
           <span className="text-sm text-text-2">{td("paidOn", { date: formatDate(row.paid_on, locale, timeZone) })}</span>
+        )}
+        {bankPaidOn && (
+          <span className="flex items-center gap-1.5 text-sm font-medium text-primary-text">
+            <Landmark className="size-4" aria-hidden />
+            {tr("paidFromBank", { date: formatDate(bankPaidOn, locale, timeZone) })}
+          </span>
         )}
       </div>
       <div className="flex flex-col items-end gap-0.5">

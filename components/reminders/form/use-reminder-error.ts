@@ -19,6 +19,8 @@ const CODES = [
   "invalidTime",
   "urlInvalid",
   "noteTooLong",
+  "bankMatchShort",
+  "bankMatchLong",
   "invalid",
   "insufficient",
 ] as const satisfies readonly Code[];

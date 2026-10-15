@@ -8,6 +8,7 @@ import { BankNav } from "@/components/bank/bank-nav";
 import { HowItWorks } from "@/components/bank/how-it-works";
 import { OverviewSection } from "@/components/bank/overview-section";
 import { RulesSection } from "@/components/bank/rules-section";
+import { TransactionsSection } from "@/components/bank/transactions-section";
 import { readBankFlash } from "@/lib/bank/flash";
 import { defaultBankSection, isBankSection, type BankSection } from "@/lib/bank/sections";
 import { getBankAccess } from "@/lib/bank/queries";
@@ -45,6 +46,7 @@ export default async function BankPage(props: PageProps<"/bank">) {
             {t("back")}
           </Link>
           {current === "overview" && <OverviewSection syncAllowed={syncAllowed} timeZone={profile.timezone} flash={flash} />}
+          {current === "transactions" && <TransactionsSection params={search} timeZone={profile.timezone} />}
           {current === "android" && <AndroidSection timeZone={profile.timezone} />}
           {current === "rules" && <RulesSection />}
         </div>

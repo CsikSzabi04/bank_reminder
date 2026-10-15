@@ -25,6 +25,8 @@ export type BillRowProps = {
   notifyOff?: boolean;
   /** jobb oldali művelet (PayButton) */
   action?: ReactNode;
+  /** külső hivatkozás („Megnyitás ↗”), a művelet előtt */
+  link?: ReactNode;
 };
 
 // Egy esedékesség/emlékeztető sora (ref-3 „Bills list"): ikon · név+alcím · összeg+esedékesség · művelet.
@@ -42,6 +44,7 @@ export function BillRow({
   demo,
   notifyOff,
   action,
+  link,
 }: BillRowProps) {
   const t = useTranslations("reminders");
   const main = (
@@ -81,7 +84,12 @@ export function BillRow({
       ) : (
         <div className="flex min-w-0 basis-full items-center gap-3 sm:flex-1 sm:basis-0">{main}</div>
       )}
-      {action && <div className="ml-auto flex items-center gap-1">{action}</div>}
+      {(link || action) && (
+        <div className="ml-auto flex items-center gap-2">
+          {link}
+          {action}
+        </div>
+      )}
     </li>
   );
 }

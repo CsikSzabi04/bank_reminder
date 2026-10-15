@@ -27,6 +27,7 @@ function item(name: string, due: string | null, over: Partial<ListReminder> = {}
       remind_enabled: true,
       is_active: true,
       is_demo: false,
+      url: null,
       ...over,
     },
     next: due ? { id: `o-${name}`, due_date: due, amount, currency: "HUF" } : null,

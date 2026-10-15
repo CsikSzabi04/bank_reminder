@@ -8,6 +8,7 @@ import type { ActionState } from "@/lib/action-state";
 import { validationFailure } from "@/lib/auth/server-utils";
 import { todayIn } from "@/lib/format";
 import { mapDbError } from "@/lib/reminders/db-error";
+import { bankMatchPatch, checkBankMatch } from "@/lib/bank/match";
 import { contributionSchema, goalSchema } from "@/lib/schemas/savings";
 import { createClient } from "@/utils/supabase/server";
 
@@ -37,9 +38,12 @@ export async function saveGoal(goalId: string | null, _prev: ActionState | null,
     targetDate: formData.get("targetDate"),
     icon: formData.get("icon"),
     colorSlot: formData.get("colorSlot"),
+    // a hiányzó mező (pl. egy telepítés előtt betöltött régi űrlap) nem hiba: üresként kezeljük
+    bankMatch: formData.get("bankMatch") ?? "",
   });
   if (!parsed.success) return validationFailure(parsed.error);
   const v = parsed.data;
+  const match = checkBankMatch(v.bankMatch); // a séma már ellenőrizte; itt a normalizált érték kell
   if (v.target <= 0) return { ok: false, code: "validation", fieldErrors: { target: ["amountInvalid"] } };
 
   const supabase = await db();
@@ -49,7 +53,7 @@ export async function saveGoal(goalId: string | null, _prev: ActionState | null,
     return { ok: false, code: "validation", fieldErrors: { targetDate: ["startInPast"] } };
   }
 
-  const row = { name: v.name, target_amount: v.target, target_date: v.targetDate ?? null, icon: v.icon, color_slot: v.colorSlot };
+  const row = { name: v.name, target_amount: v.target, target_date: v.targetDate ?? null, icon: v.icon, color_slot: v.colorSlot, ...bankMatchPatch(match.ok ? match.value : null, formData.get("bankMatchWas") === "1") };
   const query = goalId
     ? supabase.from("savings_goals").update(row).eq("id", goalId)
     : supabase.from("savings_goals").insert({ ...row, currency: profile.base_currency });

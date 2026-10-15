@@ -23,6 +23,8 @@ export type FormValues = {
   autoPaid: boolean;
   note: string;
   url: string;
+  // Bank-egyeztetés kulcsszó (A-48); a szerkesztésnél külön, tűrő lekérdezésből (az oszlop a db:push előtt még nincs)
+  bankMatch: string;
   usageTags: string[];
 };
 
@@ -58,6 +60,7 @@ export function defaultValues(today: string, profile: ProfileDefaults): FormValu
     autoPaid: false,
     note: "",
     url: "",
+    bankMatch: "",
     usageTags: [],
   };
 }
@@ -88,7 +91,7 @@ export type ReminderRecord = {
 const isUnit = (u: string | null): u is FormValues["recurUnit"] => u === "day" || u === "week" || u === "month" || u === "year";
 
 // DB-sor → űrlap. A (unit, every) pár visszaképezése módra a toRecurrence() fordítottja.
-export function valuesFromReminder(r: ReminderRecord): FormValues {
+export function valuesFromReminder(r: ReminderRecord, bankMatch = ""): FormValues {
   let recurrence: RecurrenceMode;
   if (!isUnit(r.recur_unit)) recurrence = "once";
   else if (r.recur_every === 1 && r.recur_unit !== "day") recurrence = r.recur_unit;
@@ -116,6 +119,7 @@ export function valuesFromReminder(r: ReminderRecord): FormValues {
     autoPaid: r.auto_paid,
     note: r.note ?? "",
     url: r.url ?? "",
+    bankMatch,
     usageTags: r.usage_tags,
   };
 }
