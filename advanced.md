@@ -1,7 +1,7 @@
 # Bank Reminder — advanced.md
 ### Haladó funkciók: automatikus kiadás-felismerés (Android értesítés-olvasás + Enable Banking) és azonnali keret-riasztás
 
-> **Verzió:** v0.1 · **Dátum:** 2026-10-15 · **Státusz:** terv, a gazda jóváhagyta az irányt (lásd §1) — kódot még nem írtunk.
+> **Verzió:** v0.1 · **Dátum:** 2026-10-15 · **Státusz:** terv, a gazda jóváhagyta az irányt (lásd §1); az Enable Banking **sandbox** alkalmazás létrejött (§10.7) — kódot még nem írtunk. **v0.2 (2026-10-15): a gazda telefonja iPhone → az Android-út nála nem próbálható ki, a sorrend átállt az Enable Bankingre (D8, §10.1).**
 > **Kinek:** AI-A (Platform) és AI-B (Experience) — és a gazda (kézi lépések: §10.3).
 > **Viszony az ARCHITECTURE.md-hez:** ez a fájl **bővíti** azt. Az ARCHITECTURE.md §1.3 *nem-célja* („bankkártya/bankszámla összekötés, automatikus tranzakció-import") a gazda 2026-10-15-i döntésével **érvényét veszti** erre a körre. A szabályok (§2 H1–H11), a fájl-tulajdon (§7) és a protokoll (§25) **változatlanul érvényesek**; szerződés-változás → `docs/CONTRACT_CHANGES.md` (az első bejegyzés megvan: „proposed").
 
@@ -33,6 +33,7 @@ Az Android-értesítés *ideiglenes* tételt hoz létre, amit a banki adat kés�
 | D5 | **Lekérdezés: napi 1× (max.), inkább kevesebb** — nem a legpontosabb kell, hanem a biztonságos | §5.4 |
 | D6 | **Mindkét forrás legyen meg** (Android értesítés + Enable Banking); az Android-lehetőség **szerepeljen az oldalon** (MacroDroid/Tasker **és** a natív app lehetősége) | v1: MacroDroid/Tasker; natív app = P2 (§10.4) |
 | D7 | **Egy `advanced.md`**, két AI-ra bontva; a végén push gitre | §10 |
+| D8 | **A gazda telefonja iPhone** (a MacroDroid/Tasker nem telepíthető) | a gazda saját keret-riasztásait az **Enable Banking napi szinkronja** adja → **nem azonnali** (legfeljebb ~1 napos késés); az Android-út (webhook) a többi, Androidos felhasználónak és eszköz nélkül (curl/automata teszt) fejleszthető, az útmutatója (B-43) **eszközön nem próbálható ki**, amíg nincs Android-készülék. Az azonnaliság iPhone-on csak a Parancsok-ötlettel (§2.4) lenne elérhető |
 
 ---
 
@@ -55,7 +56,8 @@ A magyar bankok többnyire **átirányításos** (redirect) folyamatot használn
 - **Webes PWA nem olvashat más appok értesítéseit.** Kell egy Android-oldali közvetítő: **MacroDroid / Tasker** (v1), vagy egy **natív app** `NotificationListenerService`-szel (P2).
 - A telefonon **külön engedély** kell („Értesítéshez hozzáférés"). Android 13+ alatt **oldalról telepített** (nem Play Store-os) appnál a rendszer „korlátozott beállítások" védelme is közbeszólhat — a natív app (P2) idején ellenőrizendő.
 - Az akkumulátor-kímélő módok **leállíthatják** a közvetítőt → a UI-ban „Utolsó esemény: …" és hibaelhárítási szöveg.
-- **iPhone-on nem lehetséges** (az iOS nem engedi más appok értesítéseinek olvasását). iPhone-nal: csak Enable Banking vagy kézi gyors kiadás.
+- **iPhone-on nem lehetséges** (az iOS nem engedi más appok értesítéseinek olvasását). iPhone-nal: Enable Banking vagy kézi gyors kiadás.
+  - *Kipróbálandó ötlet (P2, nem ígéret):* ha a bank a tranzakcióról **SMS-t vagy e-mailt** küld, az iOS **Parancsok** (Shortcuts) automatizálása reagálhat rá, és ugyanazt a webhookot hívhatja (§5.1). Push-értesítésre (bank-app) ez **nem** működik. Az A-40 spike-ban a gazda bankjánál ellenőrizendő, hogy van-e ilyen SMS/e-mail.
 
 ### 2.5 Az értesítés-szöveg érzékeny adat
 Egy bank-push tartalmazhat egyenleget, számlaszám-töredéket. Ezért (**H3/H10/§9.4**): a feldolgozott tételből csak **összeg · pénznem · dátum · kereskedő** marad meg; a **nyers szöveget** csak a *feldolgozhatatlan* eseményeknél őrizzük, **14 napig**, hogy a felhasználó kézzel besorolhassa / a parser javítható legyen; utána törlődik. Banki hitelesítő adatot, kártyaszámot, teljes IBAN-t **nem** tárolunk.
@@ -86,7 +88,7 @@ Egy bank-push tartalmazhat egyenleget, számlaszám-töredéket. Ezért (**H3/H1
                 │ redirect                                   └───────────┬────────────┘
    ┌────────────┴───────────┐                                            │ check_budget_alert()
    │ Next.js  /bank oldal   │  (nincs titok a kliensben, H3)             ▼
-   │ + /api/bank/callback   │                                  notifications (kind=budget)
+   │ + /bank/callback       │                                  notifications (kind=budget)
    └────────────────────────┘                                  notifications (kind=bank_consent, KÖTELEZŐ)
                                                                          │
                                               meglévő csővezeték: send-notifications → push / in-app
@@ -234,7 +236,7 @@ Lépések: (1) token-hash keresés (konstans idejű), `revoked_at is null` → (
 **Kapcsolat létrehozása** (`bank-connect-start` / `bank-connect-finish`, felhasználói JWT-vel, csak ha `bank_sync_allowed`):
 1. UI: bank kiválasztása (`GET /aspsps?country=HU` szűrt lista, Edge-en át) → *Összekötés*.
 2. `bank-connect-start`: `state` generálása (véletlen, 10 perc, egyszer használatos, `bank_connect_states`) → Enable `POST /auth` (kért érvényesség = a bank `maximum_consent_validity`-je) → visszaadja az átirányító URL-t.
-3. A felhasználó a banknál jóváhagy → `GET {SITE}/api/bank/callback?code=…&state=…` (B route-ja: session-ellenőrzés + `state` egyezés).
+3. A felhasználó a banknál jóváhagy → `GET {SITE}/bank/callback?code=…&state=…` (B route-ja: `app/(app)/bank/callback/route.ts` — session-ellenőrzés + `state` egyezés; az Enable-ben pontosan ez az útvonal van regisztrálva, §10.7).
 4. `bank-connect-finish`: `POST /sessions` (code → session) → `bank_connections` sor: számlák **maszkolva**, `consent_valid_until` = a *valódi* lejárat → `rebuild_bank_consent_notifications` (§6) → első szinkron.
 5. **Visszavonás:** `DELETE /sessions/{id}` + sor `revoked` + a lejárat-értesítések `cancelled`.
 
@@ -309,7 +311,7 @@ Két kártya egymás mellett (mobilon egymás alatt):
 1. **MacroDroid / Tasker (most elérhető):**
    - *Webhook-token létrehozása* → a **nyers token egyszer** látszik (másolás-gomb, figyelmeztetés „később nem látod újra"); lista: előtag · címke · utolsó használat · **Visszavonás** / **Újragenerálás**.
    - Másolható **webhook-URL** és **JSON-sablon**.
-   - **Lépésről lépésre útmutató** MacroDroidhoz és Taskerhez (a *B-43* a gazda telefonján kipróbálva írja meg — a két app változó-nevei nem találgatandók).
+   - **Lépésről lépésre útmutató** MacroDroidhoz és Taskerhez (a két app változó-nevei **nem találgatandók**: a *B-43* a hivatalos dokumentációból írja, és **„nem tesztelt eszközön"** jelzést kap, amíg egy Android-készüléken ki nem próbálták — a gazdának iPhone-ja van, D8).
    - **Engedélyezett appok**: csomagnév-lista szerkesztése (üres = semmi nem engedett); a „Legutóbb érkezett appok" listából egy koppintással hozzáadható.
    - **Teszt**: „Teszt-esemény küldése" → a felület megmutatja, megjött-e (az `ingest_events` alapján) és mit olvasott ki.
    - **Állapot:** „Utolsó esemény: 2 perce" / „Több mint 24 órája nem jött semmi — ellenőrizd a telefon akkumulátor-beállításait".
@@ -353,32 +355,39 @@ Két kártya egymás mellett (mobilon egymás alatt):
 
 ### 10.1 Sorrend és szinkron-pontok
 
+**A gazda (iPhone) útvonala az első — D8:** Enable Banking → kötelező lejárat-értesítések; az Android-út (webhook) vele **párhuzamosan**, eszköz nélkül tesztelhető backenddel halad.
+
 ```
-        S8a  Android → kiadás → riasztás      S8b  Enable-összekötés + szinkron      S8c  Kötelező lejárat-értesítések
-AI-A:   A-41 → A-42 → A-44 → A-43 → A-45      A-40 (spike, ELŐL) → A-47 → A-48 → A-46      A-49 → A-50 → A-51
-AI-B:   B-40 → B-43 → B-44 → B-45             B-41                                         B-42 → B-46 → B-47 → B-48
+ GAZDA-ÚT   S8b  Enable-összekötés + szinkron  ──►  S8c  Kötelező lejárat-értesítések
+ ANDROID    S8a  webhook → kiadás → riasztás   (párhuzamos; curl/automata teszt, eszköz nélkül)
+
+AI-A:  A-40 (spike, ELŐL) → A-41 → A-47 → A-48 → A-45 → A-46 → A-49 → A-50 → A-51 → A-52
+         └─ párhuzamosan, az A-41 után: A-42 → A-44 → A-43   (Android-backend)
+AI-B:  B-40 (váz) → B-41 → B-42 → B-45 → B-46 → B-47 → B-48
+         └─ párhuzamosan: B-43 → B-44   (Android-szakasz + szabályok)
 ```
-- **A-40 (spike) azonnal indul**, párhuzamosan az S8a-val: az Enable restricted-módjának kérdése (§2.1) minden S8b-munkát meghatároz. **Az S8b feladatai a spike döntése előtt nem kezdődnek.**
-- **S8a** (Android → riasztás) az **első értékes kiadás**: az Enable-től független, a gazda példáját teljesen lefedi.
+- **A-40 (spike) azonnal indul:** az Enable viselkedése (§2.1) minden S8b-munkát meghatároz; a sandbox-alkalmazás már kész (§10.7). **Az S8b feladatai a spike döntése előtt nem kezdődnek.**
+- A **keret-riasztás (A-45)** forrás-független (az `expenses` táblára épül), ezért az A-41 után azonnal építhető és az Enable-szinkronnal is él.
+- **S8a** (Android → riasztás) az Androidos felhasználóknak az **azonnali** út; a gazda iPhone-ján nem próbálható, ezért a B-43 útmutatója „nem tesztelt eszközön" jelzést kap, míg valaki Android-készülékkel ki nem próbálja.
 
 | Sync | Mitől zöld | A szállít | B szállít | Közös teszt |
 |---|---|---|---|---|
-| **S8a** | webhook → kiadás → keret-riasztás végig | A-41…A-45 | B-40, B-43…B-45 | §11 / T1, T2 |
-| **S8b** | Enable-kapcsolat + napi szinkron + egyeztetés | A-40, A-46…A-48 | B-41 | §11 / T3, T4 |
-| **S8c** | kötelező lejárat-értesítések + oldal-ütemterv | A-49…A-51 | B-42, B-46…B-48 | §11 / T5, T6 |
+| **S8b** *(gazda-út, először)* | Enable-kapcsolat + napi szinkron + egyeztetés + keret-riasztás | A-40, A-41, A-45…A-48 | B-40, B-41 | §11 / T3, T4 (+ T1 az `expenses`-en át) |
+| **S8c** | kötelező lejárat-értesítések + oldal-ütemterv | A-49…A-51 | B-42, B-45…B-48 | §11 / T5, T6 |
+| **S8a** *(Android, párhuzamos)* | webhook → kiadás → keret-riasztás végig | A-42…A-44 | B-43, B-44 | §11 / T1, T2 |
 
 ### 10.2 AI-A feladatok (Platform) — `supabase/**`, scriptek, generált típusok
 
 | ID | Feladat | Kimenet | Elfogadási kritérium | Méret | Függ. |
 |---|---|---|---|---|---|
-| **A-40** | **Enable Banking spike + ADR** | PoC egy saját számlán (sandbox + valódi OTP); `DECISIONS.md` bejegyzés | Megválaszolva: (1) restricted módban az app-indította `/auth`→`/sessions` megy-e a linkelt számlákra; (2) a `GET /aspsps?country=HU` lista (OTP, Erste, Revolut, K&H, Raiffeisen, MBH); (3) bankonkénti max. hozzáférés-hossz; (4) a tranzakció-mezők; (5) JWT (RS256) aláírás Edge-en (könyvtár-döntés + indoklás, §25.7); (6) localhost/HTTPS redirect-szabály. Ha (1) **nem** megy → a gazda dönt a tartalékról (nem találgatunk). A privát kulcs csak env-ben | M | gazda (kézi: §10.3) |
+| **A-40** | **Enable Banking spike + ADR** | PoC **először a kész sandbox-alkalmazással** (Mock ASPSP, §10.7), utána — a gazda *Production*-alkalmazásával — valódi saját számlán (OTP); `DECISIONS.md` bejegyzés | Megválaszolva: (1) restricted módban az app-indította `/auth`→`/sessions` megy-e a linkelt számlákra; (2) a `GET /aspsps?country=HU` lista (OTP, Erste, Revolut, K&H, Raiffeisen, MBH); (3) bankonkénti max. hozzáférés-hossz; (4) a tranzakció-mezők; (5) JWT (RS256) aláírás Edge-en (könyvtár-döntés + indoklás, §25.7); (6) localhost/HTTPS redirect-szabály. Ha (1) **nem** megy → a gazda dönt a tartalékról (nem találgatunk). A privát kulcs csak env-ben | M | gazda (kézi: §10.3) |
 | **A-41** | **Séma + RLS** (§4) | migráció(k): `ingest_tokens`, `ingest_events`, `bank_connections`, `bank_connect_states`, `bank_transactions`, `merchant_rules`, `profiles`/`expenses`/`notifications` bővítés, tombstone-trigger; `types/database.types.ts` újragenerálva | két-felhasználós RLS-teszt mind az új táblákra (mutációra bukik); `security_lint` zöld; `bank_sync_allowed` kliensről **nem** írható; törölt kiadás → `dismissed` | L | — |
 | **A-42** | **Parser + kereskedő-szabályok** | `_shared/parse-notification.ts` (+ `PARSER_VERSION`), `seed/merchant_rules.sql` (javaslat-szintű rendszer-szabályok), normalizáló (`merchant_key`) | Deno-tesztek: HUF/EUR formák, terhelés vs. jóváírás, ismeretlen formátum → `unparsed`; **a fixture-ök a gazda anonimizált mintáiból** (addig jelölt szintetikus) | L | A-41 |
 | **A-43** | **`ingest-notification` Edge Function** (§5.1) | függvény + `RUNBOOK`-bejegyzés | Deno-tesztek: érvényes token → `recorded`; ismétlés → `duplicate`; visszavont token 401; rossz app 403; > 4 KB 413; ráta 429; válaszban/logban nincs PII | L | A-41, A-42 |
 | **A-44** | **Token-RPC-k** | `create_ingest_token(label, allowed_apps)` (nyers token **egyszer**), `revoke_ingest_token`, `list_ingest_tokens`, `set_ingest_apps` | a hash nem fordítható vissza; a lista nem ad nyers tokent; másik felhasználó tokenje nem kezelhető (RLS-teszt) | M | A-41 |
-| **A-45** | **Keret-riasztás** (§7) | `check_budget_alert`, `notifications.kind='budget'`, szövegek HU/EN (`_shared/i18n.ts`), `profiles.budget_alerts` tiszteletben tartása | SQL-teszt: 15 000 Ft keret + 16 000 Ft költés → **1** értesítés; újabb költés ugyanabban a hónapban → nincs új `over`; következő hónap → újra; keret nélküli / besorolatlan → nincs; `budget_alerts=false` → nincs | M | A-41, A-43 |
+| **A-45** | **Keret-riasztás** (§7) | `check_budget_alert`, `notifications.kind='budget'`, szövegek HU/EN (`_shared/i18n.ts`), `profiles.budget_alerts` tiszteletben tartása | SQL-teszt (közvetlen `expenses`-beszúrással, webhook nélkül): 15 000 Ft keret + 16 000 Ft költés → **1** értesítés; újabb költés ugyanabban a hónapban → nincs új `over`; következő hónap → újra; keret nélküli / besorolatlan → nincs; `budget_alerts=false` → nincs | M | A-41 |
 | **A-46** | **Egyeztetés** (§5.3) | `reconcile_bank_transactions(p_user, p_now)` | vektorok: azonos összeg ±3 nap → párosít; **két azonos kávé** ugyanazon a napon → 1:1; EUR/HUF nem keveredik; késői könyvelés; nincs pár → új kiadás; **átsorolt kategória megmarad**; `dismissed` nem éled újra | L | A-41, A-48 |
-| **A-47** | **Enable-kapcsolat Edge Function-ök** (§5.4) | `bank-connect-start`, `bank-connect-finish`, `bank-disconnect`, `list-aspsps`; `_shared/enable.ts` (JWT, hívások); `ENABLE_*` secret-ek a `db:secrets`-be + `RUNBOOK-secrets.md` | mock-Enable Deno-tesztek: `state` újrahasználat/lejárat elutasítva; `bank_sync_allowed=false` → 403; számlák maszkolva (nincs teljes IBAN); a válaszban/logban nincs titok | L | **A-40**, A-41 |
+| **A-47** | **Enable-kapcsolat Edge Function-ök** (§5.4) | `bank-connect-start`, `bank-connect-finish`, `bank-disconnect`, `list-aspsps`; `_shared/enable.ts` (JWT, hívások); `ENABLE_*` secret-ek a `db:secrets`-be — **`--enable-key <fájl.pem>` kapcsoló: beolvassa a kulcsfájlt, secretként beállítja, a tartalmát soha nem írja ki** (§10.7) — + `RUNBOOK-secrets.md` | mock-Enable Deno-tesztek: `state` újrahasználat/lejárat elutasítva; `bank_sync_allowed=false` → 403; számlák maszkolva (nincs teljes IBAN); a válaszban/logban nincs titok | L | **A-40**, A-41 |
 | **A-48** | **`bank-sync` + cron** | függvény + `pg_cron` job (`40 3 * * *`), `request_bank_sync` guard (12 óra, napi max 2) | mock-Enable tesztek: lapozás, 3 napos átfedés, 401/403/422 → `expired`, 429 → nincs újrapróba, 5xx → másnap; a napi plafon **nem** léphető túl (mutációra bukó teszt) | L | A-47 |
 | **A-49** | **Kötelező lejárat-értesítések** (§6) | `rebuild_bank_consent_notifications`, `kind='bank_consent'`, **claim-kivétel** a kapcsolók alól, szövegek HU/EN, trigger a kapcsolat létrehozás/megújítás/törlés eseményre | SQL-teszt: a 7 sor a helyes napokon (30/23/16/9/2/1/0); `reminders_enabled=false` és `channel_push=false` mellett **mégis** kimegy; megújításkor a régiek `cancelled`; 90 napos hozzáférésnél a múltbéli lépések kimaradnak; a paritás-konstans egyezik a B-oldalival | M | A-41, A-47 |
 | **A-50** | **Karbantartás + export + törlés** | `cleanup_daily` bővítés (nyers szöveg 14 nap, `ingest_events` 60 nap, lejárt `state`), `export_my_data` bővítés, `delete-account` (Enable-session `DELETE` + kaszkád), `ops_health` (utolsó szinkron, hibás kapcsolatok) | fiók-törlés után nincs maradék; export a token-hash/nyers szöveg nélkül | M | A-43, A-47 |
@@ -389,9 +398,9 @@ AI-B:   B-40 → B-43 → B-44 → B-45             B-41                        
 
 | # | Lépés | Mikor kell |
 |---|---|---|
-| G-1 | **Enable Banking Control Panel:** regisztráció → *Production* alkalmazás létrehozása → a kiadott **App ID** és **privát kulcs** (a kulcs titok: **ne küldd chatbe**, csak a `db:secrets`-be) → a **saját számláid linkelése** a Control Panelben (OTP; Erste/Revolut, ha a listában megjelennek) | A-40 előtt |
-| G-2 | **Redirect URL** megadása az Enable-ben: éles Vercel-domain `/api/bank/callback` (dev: ha az Enable engedi a localhostot — A-40 kideríti). Ehhez kell a **B-27 (Vercel-deploy)** | A-47 próbája előtt |
-| G-3 | **Android:** MacroDroid *vagy* Tasker telepítése; „Értesítéshez hozzáférés" engedély; a bank-appok **csomagneveinek** kiolvasása (a UI „Legutóbb érkezett appok" listája segít) | B-43 próbája |
+| G-1 | **Enable Banking Control Panel.** ✔ **Sandbox**-alkalmazás kész és *Active*, a privát kulcs (`.pem`) letöltve (§10.7). ☐ Hátra: **Production**-alkalmazás létrehozása + a **saját számláid linkelése** a Control Panelben (OTP; Erste/Revolut, ha a listában megjelennek) — **az A-40 sandbox-szakasza után**, a spike eredményétől függően. A Production kulcsot is **csak** fájlként, `db:secrets`-szel add át; chatbe soha | A-40 (valódi bank) előtt |
+| G-2 | ✔ **Redirect URL-ek** az Enable-ben regisztrálva: `https://bankreminder.vercel.app/bank/callback` és `http://localhost:3000/bank/callback` (§10.7). Hátra: a Vercel-deploy (B-27) és a `bankreminder.vercel.app` tényleges állapotának egyeztetése; a Production-alkalmazásnál ugyanezeket az URL-eket kell megadni | A-47 próbája előtt |
+| G-3 | **Android** *(nem a gazdának — iPhone, D8)*: ha lesz Android-készülék (családtag/barát/tesztelő): MacroDroid *vagy* Tasker telepítése; „Értesítéshez hozzáférés" engedély; a bank-appok **csomagneveinek** kiolvasása (a UI „Legutóbb érkezett appok" listája segít). Addig a B-43 útmutatója „nem tesztelt eszközön" jelzésű | B-43 eszközös próbája |
 | G-4 | **2–3 valódi bank-push szövegminta, anonimizálva** (egyenleg, számlaszám-töredék, név törölve; az összeg és a kereskedő maradhat) — a parser-tesztek ebből készülnek | A-42 |
 | G-5 | **Jóváhagyások (H5):** `db:push`, Edge-deploy, `db:secrets` futtatása; `bank_sync_allowed = true` beállítása a saját fiókodra | minden telepítésnél |
 | G-6 | **Jogi:** a `/privacy` bank-adat bekezdésének jóváhagyása (§26-Q7); döntés a natív Android appról (§10.4) | B-48 / P2 |
@@ -404,9 +413,9 @@ Az `ingest-notification` szerződése miatt a szerver-oldal **már kész** (ugya
 | ID | Feladat | Kimenet | Elfogadási kritérium | Méret | Függ. |
 |---|---|---|---|---|---|
 | **B-40** | **`/bank` váz + navigáció** | route (`?section=`), oldalsáv/ikon-sín/„Még" elem (`Landmark`), i18n-névtér `bank` (HU/EN), üres/betöltés/hiba állapotok, `bank_sync_allowed`-függő megjelenítés | 360/768/1280 px helyes; `aria-current`; `i18n:check` zöld; `bank_sync_allowed=false` → csak az Android-szakasz | M | A-41 |
-| **B-41** | **Bank-összekötés szakasz** | állapot-kártya (hátralévő napok, utolsó szinkron), „Összekötés" Server Action → átirányítás, **`/api/bank/callback`** (session + `state` + `Origin`), Enable-link, Újra-hitelesítés, Frissítés most (12 órás üzenet), Kapcsolat törlése (megerősítés), hibaleképezés | a teljes oldal-folyamat mock-szerverrel végigvihető; hibás/újrahasznált `state` → barátságos hiba; **nincs titok a kliens-csomagban** (bundle-ellenőrzés) | L | A-47 |
+| **B-41** | **Bank-összekötés szakasz** | állapot-kártya (hátralévő napok, utolsó szinkron), „Összekötés" Server Action → átirányítás, **`/bank/callback`** route (session + `state`; az Enable-ben regisztrált útvonal — **nem** `/api/…`), Enable-link, Újra-hitelesítés, Frissítés most (12 órás üzenet), Kapcsolat törlése (megerősítés), hibaleképezés | a teljes oldal-folyamat mock-szerverrel végigvihető; hibás/újrahasznált `state` → barátságos hiba; **nincs titok a kliens-csomagban** (bundle-ellenőrzés) | L | A-47 |
 | **B-42** | **`ConsentTimeline` + lejárat-banner** | a 7 lépés dátummal (`<ol>`, ikon+szöveg állapot), lakat + „Kötelező — nem kapcsolható ki", Főoldal-sáv ≤ 30 napnál | a dátumok a szerver lejáratából; **paritás-teszt** a `BANK_CONSENT_NOTIFY_DAYS_BEFORE`-re (mutációra bukik); rövid (pl. 90 napos) hozzáférésnél helyes | M | A-41, A-49 |
-| **B-43** | **Android-szakasz** | token létrehozás (egyszeri megjelenítés + másolás), webhook-URL + JSON-sablon, MacroDroid/Tasker útmutató (**a gazda telefonján kipróbálva**), engedélyezett appok, „Legutóbb érkezett appok", Teszt-gomb, „Utolsó esemény", visszavonás/újragenerálás, **iPhone-jelzés**, „Natív app — hamarosan" kártya | a nyers token újratöltés után **nem** látszik; a teszt-esemény a felületen megjelenik; axe 0 serious/critical | L | A-43, A-44 |
+| **B-43** | **Android-szakasz** | token létrehozás (egyszeri megjelenítés + másolás), webhook-URL + JSON-sablon, MacroDroid/Tasker útmutató (a hivatalos dokumentációból; **„nem tesztelt eszközön" jelzéssel**, amíg Android-készüléken nincs kipróbálva — D8), engedélyezett appok, „Legutóbb érkezett appok", Teszt-gomb, „Utolsó esemény", visszavonás/újragenerálás, **iPhone-jelzés**, „Natív app — hamarosan" kártya | a nyers token újratöltés után **nem** látszik; a teszt-esemény a felületen megjelenik; axe 0 serious/critical | L | A-43, A-44 |
 | **B-44** | **Szabályok + *Besorolásra vár*** | lista + „Ezt mindig így" + „Ez nem kiadás", szabály-CRUD (`merchant_rules`), rendszer-javaslatok jelölése | átsorolás → szabály → a következő azonos kereskedő automatikusan besorolódik (e2e a DB-vel); törlés → `dismissed`, nem tér vissza | M | A-41, A-42 |
 | **B-45** | **Keretek + értesítések integráció** | „automatikus"/„ideiglenes" jelvény a tétel-listán, törlés Visszavonással, új `budget`/`bank_consent` kind a `notification-text.ts`-ben, értesítésközpontban, `sw.js` általános `kind`-kezelés | a push-kattintás a `/budgets/<kat>` / `/bank` oldalra visz; a `paid`/`snooze` akció csak `reminder`-nél; unit + e2e | M | A-45, A-49 |
 | **B-46** | **Profil → Értesítések** | „Keret-riasztások" kapcsoló (`budget_alerts`), kapcsoló nélküli „Bank-hozzáférés lejárata — kötelező" sor, az „Emlékeztetők be/ki" szöveg kiegészítése | a kötelező sor **nem** kapcsolható (nincs `<input>`); HU/EN; axe tiszta | S | A-41, A-49 |
@@ -415,8 +424,25 @@ Az `ingest-notification` szerződése miatt a szerver-oldal **már kész** (ugya
 
 ### 10.6 Fájl-tulajdon (nincs átfedés)
 - **A:** `supabase/migrations/*`, `supabase/functions/{ingest-notification,bank-connect-*,bank-disconnect,bank-sync,list-aspsps}/**`, `supabase/functions/_shared/{parse-notification,enable}.ts`, `supabase/seed/merchant_rules.sql`, `supabase/tests/*`, `scripts/*` (db:secrets), `types/database.types.ts`, `types/rpc.ts`.
-- **B:** `app/(app)/bank/**`, `app/api/bank/**`, `components/bank/**`, `lib/bank/**`, `lib/constants.ts` (a közös konstans B oldala), `locales/*.json`, `public/sw.js`, `tests/**`.
+- **B:** `app/(app)/bank/**` (benne a `callback/route.ts`), `components/bank/**`, `lib/bank/**`, `lib/constants.ts` (a közös konstans B oldala), `locales/*.json`, `public/sw.js`, `tests/**`.
 - **Közös:** `docs/CONTRACT_CHANGES.md`, `docs/STATUS.md`, `docs/DECISIONS.md`, `.env.example`, ez a fájl. A `BANK_CONSENT_NOTIFY_DAYS_BEFORE` két helyen él (SQL + TS) — a paritás-teszt (B-42) őrzi.
+
+### 10.7 Beállított környezet (2026-10-15) — a gazda lépései, amik már megvannak
+
+| Elem | Állapot |
+|---|---|
+| **Enable Banking Control Panel** | ✔ fiók; az *API applications* fülön a **„Bank Reminder (sandbox)"** alkalmazás **Active** |
+| **Alkalmazás-azonosító (App ID)** | `2b12a2bc-e5b5-49ad-9fb3-a51acd80d147` — *nem titok* (a JWT `kid` fejléce); a **sandbox**-hoz tartozik, a Production-nek külön lesz |
+| **Környezet / szolgáltatások** | `SANDBOX` · *Account Information* ✔ · *Payment Initiation* (a Control Panel bekapcsolta — **mi nem használjuk**: az app soha nem indít fizetést, H10; a hívások csak a számla-információra szólnak) |
+| **Redirect URL-ek** | `https://bankreminder.vercel.app/bank/callback` · `http://localhost:3000/bank/callback` (a dev-próbához a localhost is engedett — az A-40 spike-ban még ellenőrizendő, hogy a bank-oldali folyamat is elfogadja) |
+| **Privát kulcs** | ✔ letöltve: `2b12a2bc-e5b5-49ad-9fb3-a51acd80d147.pem` (3,2 KB) a **repo gyökerében**. **Titok (H3)**: a `.gitignore` `*.pem` sora védi (`git check-ignore` igazolta, **nincs követve**); a tartalmát **senki nem olvasta ki és nem is fogja** (chat/repo/log tilos). Sorsa: az A-47 `db:secrets --enable-key <fájl>` Edge-secretként állítja be (`ENABLE_PRIVATE_KEY`), utána a fájl **a repo-mappán kívülre** kerül (a gazda jelszókezelőjébe/biztonságos helyre) |
+| **Mock ASPSP** | a Control Panelben van egy *Mock ASPSP* fül → az A-40 és az A-47/A-48 fejlesztés **valódi bank nélkül** végigpróbálható a sandboxban |
+
+**Mit jelent ez a tervre:**
+1. Az **A-40 spike azonnal kezdhető** a sandbox-alkalmazással és a Mock ASPSP-vel — a gazdának nincs más dolga, mint jóváhagyni a futtatást (G-5).
+2. A **valódi bankhoz** (OTP stb.) külön **Production**-alkalmazás kell, a saját számlák linkelésével (G-1) — ennek az App ID-ja és `.pem`-je **más** lesz; a sandbox-kulcs a valódi bankon nem használható.
+3. A callback-útvonal **`/bank/callback`** (nem `/api/…`): a B route-ja ide épül (B-41), az `proxy.ts` védett-útvonal listájában a `/bank/**` bejelentkezést kér.
+4. **Kulcs-higiénia:** ha a `.pem` bármikor gyanúsan kikerülne (chat, commit, log) → **azonnal új kulcsot** kell generálni a Control Panelben és a régit visszavonni.
 
 ---
 
@@ -461,6 +487,8 @@ Az `ingest-notification` szerződése miatt a szerver-oldal **már kész** (ugya
 | **Q-ADV-4** | Natív Android app (P2): Kotlin vagy Capacitor; oldalról telepítés vagy Play Store? | **Később** — előbb a MacroDroid/Tasker út bizonyít |
 | **Q-ADV-5** | A rendszer-alap kereskedő-szabályok (pl. gyakori éttermek) induljanak-e javaslatként? | **Igen**, felülírható, jelölt |
 | **Q-ADV-6** | A keret-riasztás `watch` szintje (közel a kerethez) is menjen-e push-ként, vagy csak az `over`? | **Mindkettő** (a meglévő `budget_status` állapotai szerint) |
+| **Q-ADV-7** | iPhone-on a keret-riasztás a napi szinkronnal jön (≤ ~1 nap késés). Kell-e sűrűbb szinkron (pl. napi 2–3×)? | **Nem** — napi 1× (D5, biztonság); a PSD2 többet engedhet, de azt csak a spike (A-40) után, a bank 429-válaszait látva érdemes feljebb venni |
+| **Q-ADV-8** | Kipróbáljuk-e az iOS Parancsok (Shortcuts) ötletet, ha a banktól jön SMS/e-mail a tranzakcióról? (§2.4) | **Később** (P2) — az A-40-ben csak azt nézzük meg, küld-e a bank ilyet |
 
 ---
 
@@ -470,7 +498,7 @@ Az `ingest-notification` szerződése miatt a szerver-oldal **már kész** (ugya
 - **Bővített táblák (additív, nem törő):** `profiles` (+`bank_sync_allowed`, +`budget_alerts`), `expenses` (+`source`, +`is_provisional`, +`merchant`), `notifications.kind` (+`budget`, +`bank_consent`).
 - **Új RPC-k:** `create_ingest_token`, `revoke_ingest_token`, `list_ingest_tokens`, `set_ingest_apps`, `check_budget_alert`, `reconcile_bank_transactions`, `request_bank_sync`, `rebuild_bank_consent_notifications`.
 - **Új Edge Function-ök:** `ingest-notification`, `bank-connect-start`, `bank-connect-finish`, `bank-disconnect`, `list-aspsps`, `bank-sync`.
-- **Új route-ok (B):** `/bank`, `/api/bank/callback`.
+- **Új route-ok (B):** `/bank`, `/bank/callback` (az Enable-ben regisztrált redirect URL).
 - **Új cron job:** `bank_sync_daily` (`40 3 * * *` UTC).
 - **Új secret-ek (csak Edge):** `ENABLE_APP_ID`, `ENABLE_PRIVATE_KEY`.
 - **Új konstans (két helyen, paritás-teszttel):** `BANK_CONSENT_NOTIFY_DAYS_BEFORE = [30, 23, 16, 9, 2, 1, 0]`.
