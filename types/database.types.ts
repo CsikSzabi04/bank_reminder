@@ -7,6 +7,7 @@ export type Database = {
         Row: {
           created_at: string;
           expires_at: string;
+          renew_connection_id: string | null;
           state: string;
           used_at: string | null;
           user_id: string;
@@ -15,6 +16,7 @@ export type Database = {
         Insert: {
           created_at?: string;
           expires_at: string;
+          renew_connection_id?: string | null;
           state: string;
           used_at?: string | null;
           user_id: string;
@@ -22,11 +24,20 @@ export type Database = {
         Update: {
           created_at?: string;
           expires_at?: string;
+          renew_connection_id?: string | null;
           state?: string;
           used_at?: string | null;
           user_id?: string;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: "bank_connect_states_renew_connection_id_fkey";
+            columns: ["renew_connection_id"];
+            isOneToOne: false;
+            referencedRelation: "bank_connections";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       bank_connections: {
         Row: {
@@ -1460,6 +1471,10 @@ export type Database = {
         Args: { p_now?: string; p_occ: string };
         Returns: undefined;
       };
+      check_budget_alert: {
+        Args: { p_category: string; p_month?: string; p_now?: string; p_user: string };
+        Returns: number;
+      };
       claim_due_notifications: {
         Args: { p_limit?: number; p_now?: string };
         Returns: {
@@ -1488,10 +1503,19 @@ export type Database = {
           isSetofReturn: true;
         };
       };
+      classify_bank_transaction: {
+        Args: { p_category: string; p_remember?: boolean; p_transaction: string };
+        Returns: Json;
+      };
       cleanup_old_data: { Args: Record<PropertyKey, never>; Returns: Json };
       clear_demo_data: { Args: Record<PropertyKey, never>; Returns: number };
       compute_tips: { Args: { p_now?: string; p_user: string }; Returns: number };
+      consume_bank_connect_state: {
+        Args: { p_now?: string; p_state: string; p_user: string };
+        Returns: Json;
+      };
       dashboard_summary: { Args: { p_month?: string }; Returns: Json };
+      dismiss_bank_transaction: { Args: { p_transaction: string }; Returns: undefined };
       enqueue_extra_notifications: { Args: { p_now?: string }; Returns: number };
       ensure_occurrences: {
         Args: { p_horizon_days?: number; p_now?: string; p_reminder_id?: string };
@@ -1499,6 +1523,19 @@ export type Database = {
       };
       ensure_occurrences_all: { Args: { p_now?: string }; Returns: number };
       export_my_data: { Args: Record<PropertyKey, never>; Returns: Json };
+      finish_bank_connection: {
+        Args: {
+          p_accounts: Json;
+          p_aspsp_country: string;
+          p_aspsp_name: string;
+          p_authorized_at: string;
+          p_renew: string;
+          p_session_id: string;
+          p_user: string;
+          p_valid_until: string;
+        };
+        Returns: Json;
+      };
       finish_notification: {
         Args: { p_error?: string; p_id: string; p_now?: string; p_outcome: string };
         Returns: undefined;
@@ -1568,6 +1605,10 @@ export type Database = {
           isOneToOne: true;
           isSetofReturn: false;
         };
+      };
+      match_merchant_category: {
+        Args: { p_hit?: boolean; p_key: string; p_user: string };
+        Returns: string;
       };
       month_start: { Args: { d: string }; Returns: string };
       monthly_equivalent: {
@@ -1699,6 +1740,7 @@ export type Database = {
           status: string;
         }[];
       };
+      revoke_bank_connection: { Args: { p_connection: string; p_user: string }; Returns: Json };
       rotate_ics_token: { Args: Record<PropertyKey, never>; Returns: string };
       run_daily_maintenance: { Args: { p_now?: string }; Returns: Json };
       skip_occurrence: {
@@ -1746,6 +1788,10 @@ export type Database = {
           isOneToOne: true;
           isSetofReturn: false;
         };
+      };
+      start_bank_connect: {
+        Args: { p_now?: string; p_renew?: string; p_state: string; p_user: string };
+        Returns: undefined;
       };
       tip_action: {
         Args: { p_action: string; p_tip_id: string };

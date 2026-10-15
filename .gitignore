@@ -22,3 +22,6 @@ playwright/.auth/
 # privát kulcsok (pl. Enable Banking .pem) soha ne kerüljenek a repóba (H3)
 *.pem
 *.key
+
+# Deno (Edge Function tesztek) generált zárfájlja
+deno.lock
