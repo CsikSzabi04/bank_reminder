@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { hasE2eAccount } from "../support/db";
+import { hasE2eAccount, userClient } from "../support/db";
 
 test.skip(!hasE2eAccount(), "nincs .env.e2e.local (teszt-fiók)");
 
@@ -58,7 +58,9 @@ test("a szakasz az URL-ben él: frissítés után is megmarad, ismeretlen érté
   await page.reload();
   const nav = page.getByRole("navigation", { name: SECTIONS });
   await expect(nav.getByRole("link", { name: "Szabályok" })).toHaveAttribute("aria-current", "page");
-  await expect(page.getByRole("heading", { level: 2, name: "Nincs besorolásra váró tétel" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 2, name: /Besorolásra vár/ })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 2, name: "Szabályaim" })).toBeVisible();
+
 
   await page.goto("/bank?section=nincs-ilyen");
   await expect(nav.getByRole("link", { name: "Android-értesítések" })).toHaveAttribute("aria-current", "page");
@@ -112,4 +114,60 @@ test("az összekötés-gomb jogosultság nélkül nem jelenik meg, az oldal nem 
   await page.goto(`/bank/callback?state=${STATE}&error=server_error`);
   await expect(page.getByRole("button", { name: /Összekötés az Enable/ })).toHaveCount(0);
   await expect(page.getByText("Ez a funkció jelenleg csak a fejlesztő saját számláira érhető el.")).toBeVisible();
+});
+
+// B-44: kereskedő-szabályok CRUD az élő adatbázissal (a saját sorokon; az RLS a többit úgysem engedné).
+// A „Besorolásra vár" tételeket a teszt-fiók nem tudja létrehozni (a főkönyvi sorokat csak szerver írja) → azt a unit-teszt (fake-db) fedi.
+test.describe("kereskedő-szabályok (B-44)", () => {
+  test.describe.configure({ mode: "serial" });
+  let db: Awaited<ReturnType<typeof userClient>>;
+  const KEY = "e2e teszt bolt";
+  const clean = () => db.client.from("merchant_rules").delete().like("match_key", `${KEY}%`);
+
+  test.beforeAll(async () => {
+    db = await userClient();
+    await clean();
+  });
+  test.afterAll(async () => {
+    await clean();
+  });
+
+  test("új szabály → szerkesztés → duplikátum elutasítva → törlés megerősítéssel", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto("/bank?section=rules");
+    await expect(page.getByText("Nincs besorolásra váró tétel.")).toBeVisible();
+
+    // létrehozás: a kulcs ékezet- és kisbetű-független alakban mentődik
+    await page.getByLabel("Kereskedő neve").fill("E2E Teszt Bolt");
+    await page.getByLabel("Kategória", { exact: true }).selectOption({ index: 1 });
+    await page.getByRole("button", { name: "Szabály hozzáadása" }).click();
+    await expect(page.getByText("Szabály elmentve.")).toBeVisible();
+    await expect.poll(async () => (await db.client.from("merchant_rules").select("match_key, user_id").eq("match_key", KEY)).data?.length).toBe(1);
+    await expect(page.getByRole("button", { name: `A(z) ${KEY} szabály szerkesztése` })).toBeVisible();
+
+    // ugyanaz a kulcs másodszor → barátságos hiba, nincs duplikátum
+    await page.getByLabel("Kereskedő neve").fill("E2E TESZT bolt");
+    await page.getByLabel("Kategória", { exact: true }).selectOption({ index: 2 });
+    await page.getByRole("button", { name: "Szabály hozzáadása" }).click();
+    await expect(page.getByRole("alert").filter({ hasText: "Erre a kereskedőre már van szabályod." })).toBeVisible();
+    expect((await db.client.from("merchant_rules").select("id").eq("match_key", KEY)).data).toHaveLength(1);
+
+    // szerkesztés
+    await page.getByRole("button", { name: `A(z) ${KEY} szabály szerkesztése` }).click();
+    await page.getByLabel("Kereskedő neve").first().fill("E2E Teszt Bolt 2");
+    await page.getByRole("button", { name: "Mentés", exact: true }).click();
+    await expect.poll(async () => (await db.client.from("merchant_rules").select("id").eq("match_key", `${KEY} 2`)).data?.length).toBe(1);
+
+    // törlés megerősítéssel
+    await page.getByRole("button", { name: `A(z) ${KEY} 2 szabály törlése` }).click();
+    await page.getByRole("dialog").getByRole("button", { name: "Törlés" }).click();
+    await expect.poll(async () => (await db.client.from("merchant_rules").select("id").like("match_key", `${KEY}%`)).data?.length).toBe(0);
+  });
+
+  test("mobilon a szabály-szakasz nem csordul túl, és a lista elérhető", async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 740 });
+    await page.goto("/bank?section=rules");
+    await expect(page.getByRole("heading", { level: 2, name: "Szabályaim" })).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0);
+  });
 });

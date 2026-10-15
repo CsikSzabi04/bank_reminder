@@ -2,6 +2,8 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { BankFlashBanner } from "@/components/bank/bank-flash";
 import { ConnectPanel } from "@/components/bank/connect-panel";
 import { ConsentBannerView } from "@/components/bank/consent-banner";
+import { PendingList } from "@/components/bank/pending-list";
+import { RulesManager } from "@/components/bank/rules-manager";
 import { ConnectionCard } from "@/components/bank/connection-card";
 import { ConsentTimeline } from "@/components/bank/consent-timeline";
 import { NotificationSettingsForm } from "@/components/push/notification-settings-form";
@@ -143,7 +145,7 @@ export default async function DevUiPage() {
 
       <section>
         <h2 className={section}>ConsentTimeline</h2>
-        <div className="grid gap-4 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           {/* szintetikus dátumok a mai naphoz képest: 180 napos hozzáférés 20 nap múlva lejár · 14 napos rövid hozzáférés */}
           <ConsentTimeline validUntil={inDays(now, 20)} authorizedAt={inDays(now, -160)} timeZone="Europe/Budapest" now={now} />
           <ConsentTimeline validUntil={inDays(now, 13)} authorizedAt={inDays(now, -1)} timeZone="Europe/Budapest" now={now} />
@@ -152,7 +154,7 @@ export default async function DevUiPage() {
 
       <section>
         <h2 className={section}>Bank: ConnectionCard · ConnectPanel · BankFlashBanner</h2>
-        <div className="grid gap-4 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           {demoConnections(now).map((c) => (
             <ConnectionCard key={c.id} connection={c} timeZone="Europe/Budapest" now={now} />
           ))}
@@ -165,6 +167,26 @@ export default async function DevUiPage() {
             ]}
           />
           <ConnectPanel another={false} listError="upstream_failed" banks={[]} />
+          <PendingList
+            categories={[
+              { id: "00000000-0000-4000-8000-0000000000c1", name: "Étterem" },
+              { id: "00000000-0000-4000-8000-0000000000c2", name: "Élelmiszer" },
+            ]}
+            items={[
+              { id: "t1", source: "notification", provisional: true, amount: 4500, currency: "HUF", bookedOn: "2026-10-10", merchant: "Demo Pizzéria", merchantKey: "demo pizzeria" },
+              { id: "t2", source: "bank", provisional: false, amount: 12.5, currency: "EUR", bookedOn: "2026-10-11", merchant: null, merchantKey: null },
+            ]}
+          />
+          <RulesManager
+            categories={[
+              { id: "00000000-0000-4000-8000-0000000000c1", name: "Étterem" },
+              { id: "00000000-0000-4000-8000-0000000000c2", name: "Élelmiszer" },
+            ]}
+            rules={[
+              { id: "r1", matchKey: "demo pizzeria", categoryId: "00000000-0000-4000-8000-0000000000c1", hits: 3, system: false },
+              { id: "r2", matchKey: "demo bolt", categoryId: "00000000-0000-4000-8000-0000000000c2", hits: 0, system: true },
+            ]}
+          />
           <div className="flex flex-col gap-3">
             <ConsentBannerView info={{ bank: "Demo Bank", daysLeft: 12, expired: false }} />
             <ConsentBannerView info={{ bank: "Demo Bank 2", daysLeft: -10, expired: true }} />

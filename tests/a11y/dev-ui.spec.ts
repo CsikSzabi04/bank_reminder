@@ -17,3 +17,13 @@ for (const scheme of ["light", "dark"] as const) {
     await context.close();
   });
 }
+
+// Mobilon (360 px) a játszótér összes komponense — köztük a bank-kártyák, a szabály-lista, az értesítési űrlap — nem csordulhat túl
+test("/dev/ui (360 px): nincs vízszintes túlcsordulás", async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 360, height: 800 }, locale: "hu-HU" });
+  const page = await context.newPage();
+  await page.goto("/dev/ui");
+  await expect(page.getByRole("heading", { name: "/dev/ui" })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0);
+  await context.close();
+});
