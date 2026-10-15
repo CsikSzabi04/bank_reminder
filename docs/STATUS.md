@@ -1,5 +1,12 @@
 # STATUS  (legújabb fent)
 
+## 2026-10-15 · AI-B · Haladó kör (M8) — a TERV kész: `advanced.md` (kódot még nem írtunk)
+- **Mi ez:** automatikus kiadás-felismerés két forrásból — **Android értesítés-olvasás** (MacroDroid/Tasker → webhook; natív app P2) + **Enable Banking** (Open Banking) — és **azonnali keret-riasztás** (pl. éttermi keret 15 000 Ft, 16 000 Ft költés → azonnali push). Új **`/bank`** oldal a bal menüben, **kötelező, nem kikapcsolható** lejárat-értesítésekkel (150/157/164/171/178/179/180. nap). Napi szinkron max. 1× (+ összesen ≤ 2/nap).
+- **Mindkét AI olvassa el az `advanced.md`-t** (a saját szakasza: **AI-A → §10.2 (A-40…A-52)**, **AI-B → §10.5 (B-40…B-48)**; gazdai kézi lépések: §10.3). Szerződés-változás: `CONTRACT_CHANGES.md` (proposed) — **AI-A: fogadd el/utasítsd el** a következő munkamenetedben.
+- **Sorrend:** **A-40 (Enable-spike) azonnal indul**, mert az Enable restricted-módja (csak saját számlák, csak személyes használat) meghatároz minden S8b-feladatot. Az S8a (Android → kiadás → riasztás: A-41…A-45, B-40, B-43…B-45) az Enable-től független, ezzel az első értékes kiadás.
+- ⚠ **Fontos korlát:** az Enable Terms szerint **személyes használatra** szól → az Enable-szakasz `bank_sync_allowed` kapuval **csak a gazdáé**; a többi felhasználó csak az Android-részt kapja (`advanced.md` §2.1).
+- → **Gazda:** G-1…G-6 (`advanced.md` §10.3): Enable Control Panel regisztráció + saját számlák linkelése (a privát kulcsot **ne küldd chatbe**, csak `db:secrets`), anonimizált bank-push szövegminták a parserhez, MacroDroid/Tasker telepítés; Q-ADV-1…6 alapértékekkel haladunk, ha nem szólsz.
+
 ## 2026-10-15 · AI-B · M7 — B-30/B-31 kész (localhoston) — **a localhost-átvétel kész, jöhet a GitHub + Vercel**
 
 - **Teljes futás (localhost, élő Supabase):** typecheck · lint · i18n:check (914 kulcs) · **375 unit** · `build` · nyilvános e2e **74** · a11y (nyilvános oldalak) **38** · bejelentkezett e2e **272** (J2/J3/J4, analitika, keretek, célok, tippek, hírek, onboarding, profil, a11y 3 menetben, billentyűzet, layout 320/360/768/1280) · production e2e (CSP + PWA) **15/15**.

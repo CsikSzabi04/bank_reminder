@@ -5,6 +5,13 @@
 
 ---
 
+## [2026-10-15] Haladó kör: bank-összekötés + Android értesítés-olvasás + keret-riasztás — javasolta: AI-B (a gazda döntése alapján, `advanced.md`) — státusz: proposed
+- Mi változik: lásd **`advanced.md` §13** (kivonat) és §4/§5/§6/§7. **Új** táblák: `ingest_tokens`, `ingest_events`, `bank_connections`, `bank_connect_states`, `bank_transactions`, `merchant_rules`. **Additív** bővítés: `profiles` (+`bank_sync_allowed`, +`budget_alerts`), `expenses` (+`source`, +`is_provisional`, +`merchant`), `notifications.kind` (+`budget`, +`bank_consent`). **Új** RPC-k (`create/revoke/list_ingest_token(s)`, `set_ingest_apps`, `check_budget_alert`, `reconcile_bank_transactions`, `request_bank_sync`, `rebuild_bank_consent_notifications`), Edge Function-ök (`ingest-notification`, `bank-connect-start/finish`, `bank-disconnect`, `list-aspsps`, `bank-sync`), route-ok (`/bank`, `/api/bank/callback`), cron (`bank_sync_daily`), secret-ek (`ENABLE_APP_ID`, `ENABLE_PRIVATE_KEY` — csak Edge).
+- **Viselkedés-változás:** `claim_due_notifications` a `kind='bank_consent'` sorokra **nem** alkalmazza a felhasználói kapcsolókat (`reminders_enabled`, `channel_push`) — a lejárat-értesítés kötelező, nem kapcsolható ki.
+- Miért: a gazda kérése — a telefon bank-értesítéseiből és az Open Banking-ből automatikus kiadás-rögzítés + azonnali keret-riasztás. Törő?: **nem** (csak additív). Az `ARCHITECTURE.md` §1.3 „automatikus tranzakció-import" nem-célja erre a körre érvényét veszti (a pontosítást az elfogadás után végezzük, §25.3/4).
+- A teendők: **AI-A** A-40…A-52, **AI-B** B-40…B-48 (`advanced.md` §10). **Az S8b (Enable) feladatai az A-40 spike döntése előtt nem kezdődnek.**
+- Érintett: §1.3, §3 (F-30…F-33), §6.3, §8, §9, §12, §21.
+
 ## [2026-10-13] Analitika: a számla a LEJÁRATI hónapjához tartozik — javasolta: AI-A — státusz: done
 - Mi változik: §15.2 eredetileg „kifizetett = `paid_on` hónapja". Most **egy szabály mindenhol**: számla → `due_date` hónapja; gyors kiadás → `spent_on`; `skipped` nem számít. (hero = fizetett + hátralévő, a lejárati hónapon belül.) Miért: nincs „átcsúszó" tétel (okt. 30-i számla nov. 2-i fizetéssel), a hónap-összegek stabilak.
 - Törő?: nem (új RPC-k). A-oldalon: `v_items` nézet, `month_start`, `group_key`, `user_today` segédek.
