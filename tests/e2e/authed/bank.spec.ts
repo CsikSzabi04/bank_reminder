@@ -247,7 +247,9 @@ test.describe("Tranzakciók (A-48)", () => {
   test("ha a szinkron él: a szűrő-űrlap elérhető és a keresés az URL-be kerül", async ({ page }) => {
     await page.goto("/bank?section=transactions");
     const form = page.getByRole("form", { name: "Szűrők" });
-    test.skip((await form.count()) === 0, "a banki szinkron oszlopai még nincsenek az adatbázisban");
+    // megvárjuk, hogy a szakasz kirajzolódjon (szűrő-űrlap VAGY „még nem elérhető"), és csak utána döntünk
+    await form.or(unavailable(page)).first().waitFor();
+    test.skip((await form.count()) === 0, "a banki szinkron oszlopai nincsenek az adatbázisban");
     await page.getByLabel("Keresés").fill("tesco");
     await page.getByRole("button", { name: "Szűrés" }).click();
     await expect(page).toHaveURL(/section=transactions/);

@@ -23,8 +23,8 @@ export type TransactionsData =
   | { available: false }
   | { available: true; items: BankTx[]; total: number; links: TxLinks; hasAny: boolean };
 
-// A banki szinkron új oszlopai (A-48) a `db:push` után élnek; addig a lekérdezés `42703`-mal (nincs ilyen oszlop) elbukik,
-// és a szakasz „még nem elérhető" állapotot mutat, nem hibaoldalt.
+// Ha a banki szinkron oszlopai (A-48) valahol még hiányoznának (pl. egy `db:push` előtti környezet), a lekérdezés `42703`-mal
+// (nincs ilyen oszlop) elbukik, és a szakasz „még nem elérhető" állapotot mutat, nem hibaoldalt.
 const MISSING_COLUMN = new Set(["42703", "PGRST204"]);
 
 const ids = (values: (string | null)[]): string[] => [...new Set(values.filter((v): v is string => Boolean(v)))];
@@ -41,8 +41,7 @@ export const getTransactions = cache(async (filters: TxFilters): Promise<Transac
     .order("created_at", { ascending: false })
     .range(from, from + TX_PAGE_SIZE - 1);
   if (filters.account) query = query.eq("account_ref", filters.account);
-  // a `direction` oszlop a `db:types` után lesz típusos; addig a lazább `filter` hívja
-  if (filters.direction !== "all") query = query.filter("direction", "eq", filters.direction);
+  if (filters.direction !== "all") query = query.eq("direction", filters.direction);
   if (filters.month) {
     const { from: start, to } = monthBounds(filters.month);
     query = query.gte("booked_on", start).lte("booked_on", to);

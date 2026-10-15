@@ -56,12 +56,7 @@ export async function refreshBankNow(connectionId: string): Promise<ActionState<
   if (!id.success) return fail("not_found");
   const g = await guard();
   if (!g.ok) return g.state;
-  // A request_bank_sync az A-48-ban érkezik, így még nincs a generált típusban
-  const rpc = g.supabase.rpc.bind(g.supabase) as unknown as (
-    fn: string,
-    args: Record<string, unknown>,
-  ) => Promise<{ data: unknown; error: { code?: string } | null }>;
-  const { data, error } = await rpc("request_bank_sync", { p_connection_id: id.data });
+  const { data, error } = await g.supabase.rpc("request_bank_sync", { p_connection_id: id.data });
   if (error) {
     console.error("request_bank_sync failed", { code: error.code ?? "unknown" });
     // PGRST202 / 42883: a függvény még nincs telepítve (a szinkron az A-48-cal érkezik) → nem „a bank nem válaszol", hanem „még nem elérhető"
