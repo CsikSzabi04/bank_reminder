@@ -3,6 +3,7 @@ import {
   CalendarDays,
   ChartColumn,
   House,
+  Landmark,
   Lightbulb,
   Newspaper,
   PiggyBank,
@@ -16,6 +17,7 @@ export type NavKey =
   | "calendar"
   | "analytics"
   | "budgets"
+  | "bank"
   | "savings"
   | "tips"
   | "news";
@@ -28,6 +30,7 @@ export const NAV_ITEMS: Record<NavKey, NavItem> = {
   calendar: { key: "calendar", href: "/calendar", icon: CalendarDays },
   analytics: { key: "analytics", href: "/analytics", icon: ChartColumn },
   budgets: { key: "budgets", href: "/budgets", icon: Wallet },
+  bank: { key: "bank", href: "/bank", icon: Landmark },
   savings: { key: "savings", href: "/savings", icon: PiggyBank },
   tips: { key: "tips", href: "/tips", icon: Lightbulb },
   news: { key: "news", href: "/news", icon: Newspaper },
@@ -38,7 +41,7 @@ const pick = (keys: NavKey[]) => keys.map((k) => NAV_ITEMS[k]);
 // Mobil alsó fül-sáv (§14.3): 4 fő elem + "Még"
 export const BOTTOM_NAV = pick(["home", "reminders", "analytics", "budgets"]);
 // A "Még" lap tartalma (a Profil és a Letöltés külön elem)
-export const MORE_NAV = pick(["calendar", "savings", "tips", "news"]);
+export const MORE_NAV = pick(["calendar", "bank", "savings", "tips", "news"]);
 // Tablet ikon-sín és asztali oldalsáv
 export const SIDE_NAV = pick([
   "home",
@@ -46,6 +49,7 @@ export const SIDE_NAV = pick([
   "calendar",
   "analytics",
   "budgets",
+  "bank",
   "savings",
   "tips",
   "news",

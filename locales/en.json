@@ -35,6 +35,7 @@
     "calendar": "Calendar",
     "analytics": "Analytics",
     "budgets": "Budgets",
+    "bank": "Bank sync",
     "savings": "Savings",
     "tips": "Tips",
     "news": "News",
@@ -526,6 +527,39 @@
     "deleteExpense": "Delete {name}",
     "expenseDeleted": "Expense deleted.",
     "expenseDeleteFailed": "Could not delete the expense."
+  },
+  "bank": {
+    "title": "Bank sync",
+    "back": "Back to bank sync",
+    "sections": {
+      "label": "Bank sync sections",
+      "overview": "Connection",
+      "android": "Android notifications",
+      "rules": "Rules"
+    },
+    "overview": {
+      "title": "Bank sync",
+      "restricted": {
+        "body": "This feature is currently available only for the developer's own accounts.",
+        "hint": "The Android notifications section is available to everyone who uses an Android phone."
+      },
+      "empty": {
+        "title": "No bank connected yet",
+        "body": "Connecting a bank will be available here soon."
+      }
+    },
+    "android": {
+      "empty": {
+        "title": "Android notifications — coming soon",
+        "body": "Here you will be able to have the app add expenses automatically from your phone's bank notifications."
+      }
+    },
+    "rules": {
+      "empty": {
+        "title": "Nothing waiting to be sorted",
+        "body": "Merchant rules for automatically added items, and items waiting to be sorted, will show up here."
+      }
+    }
   },
   "savings": {
     "title": "Savings",

@@ -35,6 +35,7 @@
     "calendar": "Naptár",
     "analytics": "Analitika",
     "budgets": "Keretek",
+    "bank": "Bank-összekötés",
     "savings": "Megtakarítás",
     "tips": "Tippek",
     "news": "Hírek",
@@ -526,6 +527,39 @@
     "deleteExpense": "{name} törlése",
     "expenseDeleted": "A kiadás törölve.",
     "expenseDeleteFailed": "A kiadást nem sikerült törölni."
+  },
+  "bank": {
+    "title": "Bank-összekötés",
+    "back": "Vissza a bank-oldalhoz",
+    "sections": {
+      "label": "Bank-oldal szakaszai",
+      "overview": "Összekötés",
+      "android": "Android-értesítések",
+      "rules": "Szabályok"
+    },
+    "overview": {
+      "title": "Bank-összekötés",
+      "restricted": {
+        "body": "Ez a funkció jelenleg csak a fejlesztő saját számláira érhető el.",
+        "hint": "Az Android-értesítések szakasz mindenkinek elérhető, aki Android-telefont használ."
+      },
+      "empty": {
+        "title": "Még nincs összekötött bank",
+        "body": "Az összekötés hamarosan elérhető itt."
+      }
+    },
+    "android": {
+      "empty": {
+        "title": "Android-értesítések — hamarosan",
+        "body": "Itt állíthatod be, hogy a telefonod bank-értesítéseiből az app automatikusan felvegye a kiadásokat."
+      }
+    },
+    "rules": {
+      "empty": {
+        "title": "Nincs besorolásra váró tétel",
+        "body": "Az automatikusan felvett tételek kereskedő-szabályai és a besorolásra váró tételek itt jelennek meg."
+      }
+    }
   },
   "savings": {
     "title": "Megtakarítás",

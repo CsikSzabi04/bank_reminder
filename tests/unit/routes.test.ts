@@ -53,6 +53,17 @@ describe("decideAccess (§10.6)", () => {
     expect(isPublicPath("/auth", false)).toBe(false);
   });
 
+  it("a /bank és a /bank/callback védett: kijelentkezve belépés kell (B-40/B-41)", () => {
+    expect(decide("/bank", false, "?section=android")).toEqual({
+      kind: "redirect",
+      to: "/login?next=%2Fbank%3Fsection%3Dandroid",
+    });
+    expect(decide("/bank/callback", false, "?code=x&state=y").kind).toBe("redirect");
+    expect(isPublicPath("/bank", false)).toBe(false);
+    expect(isPublicPath("/bank/callback", false)).toBe(false);
+    expect(decide("/bank", true)).toEqual({ kind: "next" });
+  });
+
   it("/dev/* csak fejlesztői módban publikus", () => {
     expect(isPublicPath("/dev/ui", true)).toBe(true);
     expect(isPublicPath("/dev/ui", false)).toBe(false);

@@ -25,3 +25,8 @@ test("védett profil és avatar-API kijelentkezve nem érhető el", async ({ pag
   const res = await request.post("/api/profile/avatar", { maxRedirects: 0 });
   expect(res.status()).toBe(401);
 });
+
+test("a /bank és a szakaszai kijelentkezve a belépéshez visznek (B-40)", async ({ page }) => {
+  await page.goto("/bank?section=android");
+  await expect(page).toHaveURL(/\/login\?next=%2Fbank%3Fsection%3Dandroid$/);
+});

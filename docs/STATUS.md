@@ -1,5 +1,14 @@
 # STATUS  (legújabb fent)
 
+## 2026-10-15 · AI-B · M8 — B-40 kész (localhoston): `/bank` váz + navigáció
+
+- **Mi van:** `/bank?section=overview|android|rules` (mobilon lista → részlet, asztalon belső nav, mint a Profil) · új „Bank-összekötés" elem (`Landmark`) a *Keretek* és *Megtakarítás* között (oldalsáv + ikon-sín), mobilon a „Még" lapon · `loading.tsx` · i18n-névtér `bank` (HU/EN, 934 kulcs) · a szakaszok **üres állapotú helyőrzők**, a tartalmat a B-41 (összekötés), B-43 (Android), B-44 (szabályok) tölti fel. `/bank/**` védett (proxy: bejelentkezés kell; unit + e2e őrzi).
+- **`bank_sync_allowed`:** `lib/bank/queries.ts` **külön** olvassa (nem a `getCurrentProfile`-ban, hogy az oszlop hiánya az egész appot ne törje). Hamis/hiányzó → az „Összekötés" csak őszinte magyarázat, nyitó szakasz = Android. **Hiányzó oszlop (A-41 még nincs fent) = „nincs jogosultság", nem hiba**; más DB-hiba → error boundary. Az A-41 utáni típus-újragenerálás után a `queries.ts` cast-ja törölhető.
+- **Kapuk:** typecheck 0 hiba · lint · i18n:check · unit 385 (új: `bank-access`, `routes`; mutációval ellenőrizve) · `build` (a `/bank` az útvonal-listában) · authed e2e: `bank-spec` 6/6 + `/bank` a layout (320/360/768/1280) és a11y (világos/sötét/mobil 360, axe + 44 px) listákban 29/29 · keyboard/dashboard/shell/auth-guard regresszió zöld.
+- **Nem tesztelt:** a `bank_sync_allowed = true` ág (a kliens nem is állíthatja; az A-41 + gazdai beállítás után a B-41 e2e-je fedi).
+- → **AI-A:** (1) az A-41-ben a `profiles.bank_sync_allowed` legyen a kliens oszlop-allowlistjén **kívül**, és a generált típusban szerepeljen; (2) a **:3000 portot most az `enable-spike.mjs --auth` figyelője tartja** — ezért az e2e-t ideiglenes konfiggal a 3100-as porton futtattam (nem nyúltam a folyamathoz); ha a spike végzett, a szokásos `test:e2e:authed` megy 3000-en.
+- ⚠ **Később (B-48):** a meglévő szövegek („nem fér/férünk hozzá a bankszámládhoz": `common.disclaimer.notBank`, `legal.terms.service.body`, a `legal.privacy` bank-adat mondata) az Enable-lel pontatlanná válnak → a B-48-ban a gazda jóváhagyásával át kell írni.
+
 ## 2026-10-15 · AI-B · Haladó kör (M8) — a TERV kész: `advanced.md` (kódot még nem írtunk)
 - **Mi ez:** automatikus kiadás-felismerés két forrásból — **Android értesítés-olvasás** (MacroDroid/Tasker → webhook; natív app P2) + **Enable Banking** (Open Banking) — és **azonnali keret-riasztás** (pl. éttermi keret 15 000 Ft, 16 000 Ft költés → azonnali push). Új **`/bank`** oldal a bal menüben, **kötelező, nem kikapcsolható** lejárat-értesítésekkel (150/157/164/171/178/179/180. nap). Napi szinkron max. 1× (+ összesen ≤ 2/nap).
 - **Mindkét AI olvassa el az `advanced.md`-t** (a saját szakasza: **AI-A → §10.2 (A-40…A-52)**, **AI-B → §10.5 (B-40…B-48)**; gazdai kézi lépések: §10.3). Szerződés-változás: `CONTRACT_CHANGES.md` (proposed) — **AI-A: fogadd el/utasítsd el** a következő munkamenetedben.
