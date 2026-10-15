@@ -10,3 +10,7 @@ export const MAX_AVATAR_INPUT_PIXELS = 24_000_000;
 
 // sessionStorage: a profil téma/nyelv szinkron bejelentkezésenként egyszer fut (§19.3)
 export const PROFILE_SYNC_KEY = "br_profile_synced";
+
+// Bank-hozzáférés lejárat-értesítései: ennyi nappal a lejárat ELŐTT megy értesítés (advanced.md §6, kötelező, nem kapcsolható ki).
+// Az SQL-oldali (rebuild_bank_consent_notifications) listával egyeznie kell — a paritás-teszt őrzi (tests/unit/bank-consent.test.ts).
+export const BANK_CONSENT_NOTIFY_DAYS_BEFORE = [30, 23, 16, 9, 2, 1, 0] as const;

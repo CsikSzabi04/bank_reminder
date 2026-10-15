@@ -1,4 +1,5 @@
 import { getLocale, getTranslations } from "next-intl/server";
+import { ConsentTimeline } from "@/components/bank/consent-timeline";
 import { CategoryChip } from "@/components/categories/category-chip";
 import { CategoryIcon } from "@/components/categories/category-icon";
 import { AmountText } from "@/components/ui/amount-text";
@@ -30,10 +31,13 @@ const TEXTS = [
   ["danger-text", "text-danger-text"],
 ] as const;
 
+const inDays = (from: Date, days: number) => new Date(from.getTime() + days * 86_400_000).toISOString();
+
 export default async function DevUiPage() {
   const locale = (await getLocale()) as Locale;
   const t = await getTranslations();
   const section = "mb-3 text-lg font-semibold";
+  const now = new Date();
 
   return (
     <div className="flex flex-col gap-8">
@@ -97,6 +101,15 @@ export default async function DevUiPage() {
           <AmountText amount={2300} currency="HUF" />
           <AmountText amount={12.5} currency="EUR" />
           <AmountText amount={9.99} currency="USD" />
+        </div>
+      </section>
+
+      <section>
+        <h2 className={section}>ConsentTimeline</h2>
+        <div className="grid gap-4 lg:grid-cols-2">
+          {/* szintetikus dátumok a mai naphoz képest: 180 napos hozzáférés 20 nap múlva lejár · 14 napos rövid hozzáférés */}
+          <ConsentTimeline validUntil={inDays(now, 20)} authorizedAt={inDays(now, -160)} timeZone="Europe/Budapest" now={now} />
+          <ConsentTimeline validUntil={inDays(now, 13)} authorizedAt={inDays(now, -1)} timeZone="Europe/Budapest" now={now} />
         </div>
       </section>
 

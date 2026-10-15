@@ -559,6 +559,18 @@
         "title": "Nincs besorolásra váró tétel",
         "body": "Az automatikusan felvett tételek kereskedő-szabályai és a besorolásra váró tételek itt jelennek meg."
       }
+    },
+    "consent": {
+      "title": "Lejárat-értesítések",
+      "locked": "Kötelező — nem kapcsolható ki",
+      "intro": "A bank-hozzáférés lejárta előtt ezeken a napokon értesítünk. Lejárat után a bankot újra kell hitelesítened a bank saját appjában, különben megáll az automatikus követés.",
+      "listLabel": "Az értesítések ütemterve",
+      "step": "{count, plural, =0 {Ma lejár a hozzáférés} =1 {Holnap lejár a hozzáférés} other {# nap múlva lejár a hozzáférés}}",
+      "state": {
+        "sent": "Elküldve",
+        "next": "Következő",
+        "upcoming": "Várható"
+      }
     }
   },
   "savings": {
