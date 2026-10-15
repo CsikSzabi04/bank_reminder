@@ -7,9 +7,9 @@ A titkok (`sb_secret_…`, DB jelszó, VAPID privát kulcs, SMTP) **soha** nem k
 
 - [ ] Privát repó létrehozása, `main` ág, a helyi commitok feltöltése (`git push`). A `.githooks` secret-scan hook marad.
 - [ ] *Settings → Secrets and variables → Actions*:
-  - **Variables:** `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `NEXT_PUBLIC_VAPID_PUBLIC_KEY` (mindkettő publikus).
-  - **Secrets:** `E2E_EMAIL`, `E2E_PASSWORD` (a teszt-fiók; nélkülük az „authed" e2e kimarad, a CI zöld marad).
-- [ ] Az első `CI` futás zöld: `web` (typecheck · lint · i18n · unit · build), `e2e`, `e2e-prod`, `e2e-authed`.
+  - **Variables:** `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `NEXT_PUBLIC_VAPID_PUBLIC_KEY` (mindkettő publikus), és **utoljára** `E2E_ENABLED` = `true`.
+  - **Secrets:** `E2E_EMAIL`, `E2E_PASSWORD` (a teszt-fiók). Amíg az `E2E_ENABLED` nincs `true`-ra állítva, az „authed" job kimarad, a CI zöld marad.
+- [ ] A CI futás zöld: `web` (typecheck · lint · i18n · unit · build), `e2e`, `e2e-prod` (+ `e2e-authed`, ha engedélyezted). *A `web`, `e2e`, `e2e-prod` az első feltöltéskor már zöld volt.*
 
 ## 2. Vercel (B-27)
 

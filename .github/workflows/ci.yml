@@ -6,8 +6,9 @@ on:
   pull_request:
 
 # Kapuk (ARCHITECTURE.md §22.2): typecheck · lint · i18n · unit · build · e2e (+ a11y) · production e2e (CSP, PWA).
-# Az „authed" e2e az élő teszt-fiókot használja: csak akkor fut érdemben, ha a repo titkai közt van E2E_EMAIL / E2E_PASSWORD
-# és a repo változói közt a publikus NEXT_PUBLIC_SUPABASE_* (különben a tesztek maguktól kimaradnak). Titok nem kerül a naplóba (H3).
+# Az „authed" e2e az élő teszt-fiókot használja: csak akkor fut, ha a repo változói közt E2E_ENABLED=true, a titkok közt
+# E2E_EMAIL / E2E_PASSWORD, a változók közt pedig a publikus NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY / NEXT_PUBLIC_VAPID_PUBLIC_KEY van.
+# Titok nem kerül a naplóba (H3).
 
 env:
   NEXT_PUBLIC_SUPABASE_URL: https://ddvzslgwexvdolovqqlg.supabase.co
@@ -74,7 +75,8 @@ jobs:
   e2e-authed:
     runs-on: ubuntu-latest
     needs: web
-    if: github.event_name == 'push'
+    # csak ha a repo-változók közt E2E_ENABLED=true (a titkok és a publikus kulcsok beállítása után); addig a job kimarad
+    if: github.event_name == 'push' && vars.E2E_ENABLED == 'true'
     env:
       NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ vars.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
       NEXT_PUBLIC_VAPID_PUBLIC_KEY: ${{ vars.NEXT_PUBLIC_VAPID_PUBLIC_KEY }}
