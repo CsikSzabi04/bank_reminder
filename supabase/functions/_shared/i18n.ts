@@ -149,6 +149,24 @@ export function renderNotification(row: NotificationRow, o: RenderOptions): Rend
       base.body = L === 'hu' ? `Ez egy teszt-értesítés (${o.device ?? 'eszköz'}).` : `This is a test notification (${o.device ?? 'device'}).`;
       return base;
     }
+    case 'budget': {
+      // keret-riasztás (A-45): tény, nem tanács (H10); a kategória-név a payloadban mindkét nyelven megvan
+      const cat = L === 'hu' ? str(p.category_name_hu, '—') : str(p.category_name_en, str(p.category_name_hu, '—'));
+      const id = str(p.category_id);
+      base.url = /^[0-9a-f-]{36}$/i.test(id) ? `/budgets/${id}` : '/budgets';
+      base.tag = `bud-${shortId(id)}-${str(p.level) === 'over' ? 'over' : 'watch'}`;
+      if (o.hideDetails) {
+        base.title = L === 'hu' ? 'Keret-riasztás' : 'Budget alert';
+        base.body = L === 'hu' ? 'Nyisd meg az appot a részletekért.' : 'Open the app for details.';
+        return base;
+      }
+      const pct = Math.floor(num(p.pct));
+      base.title = str(p.level) === 'over'
+        ? (L === 'hu' ? `${cat}: elfogyott a havi keret` : `${cat}: monthly budget used up`)
+        : (L === 'hu' ? `${cat}: a keret ${pct}%-a elfogyott` : `${cat}: ${pct}% of the budget used`);
+      base.body = `${formatMoney(L, num(p.spent), cur)} / ${formatMoney(L, num(p.limit), cur)}`;
+      return base;
+    }
     default:
       base.title = 'Bank Reminder';
       base.body = '';

@@ -51,7 +51,7 @@ Deno.test('overdue, trial_end, digest, teszt', () => {
 });
 
 Deno.test('tag: ≤ 32 karakter, csak [A-Za-z0-9_-]; EUR formázás; e-mail', () => {
-  for (const k of ['reminder', 'overdue', 'trial_end', 'digest', 'system']) {
+  for (const k of ['reminder', 'overdue', 'trial_end', 'digest', 'system', 'budget']) {
     const r = renderNotification(row(k, { ...rem, count: 1, items: [] }), { locale: 'hu', today: '2026-11-09', hideDetails: false });
     assert(r.tag.length <= 32 && /^[A-Za-z0-9_-]+$/.test(r.tag), `${k}: ${r.tag}`);
   }
@@ -60,4 +60,32 @@ Deno.test('tag: ≤ 32 karakter, csak [A-Za-z0-9_-]; EUR formázás; e-mail', ()
   const mail = renderEmail(renderNotification(row('reminder', { ...rem, name: '<b>x</b>' }), { locale: 'hu', today: '2026-11-09', hideDetails: false }), 'https://app.example/');
   assert(!mail.html.includes('<b>x</b>'), 'az e-mail nem escape-el');
   assertStringIncludes(mail.html, 'https://app.example/reminders/');
+});
+
+const bud = { level: 'over', category_id: '12345678-1234-1234-1234-123456789abc', category_name_hu: 'Étterem', category_name_en: 'Dining', spent: 16000, limit: 15000, pct: 106, currency: 'HUF', month: '2026-10' };
+const budRow = (payload: Record<string, unknown>) => row('budget', payload, { reminder_id: null, occurrence_id: null });
+
+Deno.test('budget HU/EN: over és watch szöveg, összeg / keret, mély link a kategóriára', () => {
+  const o = renderNotification(budRow(bud), { locale: 'hu', today: '2026-10-15', hideDetails: false });
+  assertEquals(o.title, 'Étterem: elfogyott a havi keret');
+  assertEquals(norm(o.body), '16 000 Ft / 15 000 Ft');
+  assertEquals(o.url, '/budgets/12345678-1234-1234-1234-123456789abc');
+  assertEquals(o.actions, []);
+  const w = renderNotification(budRow({ ...bud, level: 'watch', spent: 13050, pct: 87 }), { locale: 'hu', today: '2026-10-15', hideDetails: false });
+  assertEquals(w.title, 'Étterem: a keret 87%-a elfogyott');
+  const en = renderNotification(budRow(bud), { locale: 'en', today: '2026-10-15', hideDetails: false });
+  assertEquals(en.title, 'Dining: monthly budget used up');
+  assertEquals(norm(en.body), 'HUF 16,000 / HUF 15,000');
+  assertEquals(renderNotification(budRow({ ...bud, level: 'watch', pct: 87 }), { locale: 'en', today: '2026-10-15', hideDetails: false }).title, 'Dining: 87% of the budget used');
+});
+
+Deno.test('budget: diszkrét mód nem szivárogtat kategóriát/összeget; érvénytelen id nem kerül a linkbe; a két szint tagje különbözik', () => {
+  const d = renderNotification(budRow(bud), { locale: 'hu', today: '2026-10-15', hideDetails: true });
+  const json = JSON.stringify(toPushPayload(d));
+  assert(!json.includes('Étterem') && !json.includes('16000') && !json.includes('16 000'), 'szivárog: ' + json);
+  assertEquals(d.title, 'Keret-riasztás');
+  assertEquals(renderNotification(budRow({ ...bud, category_id: '../../x' }), { locale: 'hu', today: '2026-10-15', hideDetails: false }).url, '/budgets');
+  const a = renderNotification(budRow(bud), { locale: 'hu', today: '2026-10-15', hideDetails: false });
+  const b = renderNotification(budRow({ ...bud, level: 'watch' }), { locale: 'hu', today: '2026-10-15', hideDetails: false });
+  assert(a.tag !== b.tag, 'az over és a watch azonos taggel felülírná egymást');
 });
