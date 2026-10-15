@@ -64,6 +64,8 @@ export async function refreshBankNow(connectionId: string): Promise<ActionState<
   const { data, error } = await rpc("request_bank_sync", { p_connection_id: id.data });
   if (error) {
     console.error("request_bank_sync failed", { code: error.code ?? "unknown" });
+    // PGRST202 / 42883: a függvény még nincs telepítve (a szinkron az A-48-cal érkezik) → nem „a bank nem válaszol", hanem „még nem elérhető"
+    if (error.code === "PGRST202" || error.code === "42883") return fail("unavailable");
     return fail(error.code === "P0002" ? "not_found" : "upstream_failed");
   }
   const outcome = parseRefreshOutcome(data);

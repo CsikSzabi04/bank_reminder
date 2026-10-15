@@ -40,6 +40,7 @@ export const BANK_ERROR_CODES = [
   "rate_limited",
   "upstream_failed",
   "not_found",
+  "unavailable",
   "invalid_callback",
   "bank_denied",
   "bank_error",

@@ -704,7 +704,8 @@
       "invalid_callback": "The bank's redirect was invalid, so we couldn't finish connecting. Please start again.",
       "bank_denied": "You didn't approve the access at the bank, so no connection was created.",
       "bank_error": "The bank reported an error during approval. Please try again later.",
-      "unknown": "Something went wrong. Please try again."
+      "unknown": "Something went wrong. Please try again.",
+      "unavailable": "This feature isn't available yet. Please try again later."
     },
     "banner": {
       "soon": "{bank}: {count, plural, =0 {access expires today} =1 {access expires tomorrow} other {access expires in # days}}.",

@@ -704,7 +704,8 @@
       "invalid_callback": "A bank visszairányítása hibás volt, ezért nem tudtuk befejezni az összekötést. Indítsd újra.",
       "bank_denied": "A bankban nem hagytad jóvá a hozzáférést, ezért nem jött létre az összekötés.",
       "bank_error": "A bank hibát jelzett a jóváhagyás közben. Próbáld újra később.",
-      "unknown": "Valami nem sikerült. Próbáld újra."
+      "unknown": "Valami nem sikerült. Próbáld újra.",
+      "unavailable": "Ez a funkció még nem érhető el. Próbáld meg később."
     },
     "banner": {
       "soon": "{bank}: {count, plural, =0 {ma lejár a hozzáférés} =1 {holnap lejár a hozzáférés} other {# nap múlva lejár a hozzáférés}}.",
