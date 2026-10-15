@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { AndroidSection } from "@/components/bank/android-section";
 import { BankNav } from "@/components/bank/bank-nav";
+import { HowItWorks } from "@/components/bank/how-it-works";
 import { OverviewSection } from "@/components/bank/overview-section";
 import { RulesSection } from "@/components/bank/rules-section";
 import { readBankFlash } from "@/lib/bank/flash";
@@ -34,6 +35,7 @@ export default async function BankPage(props: PageProps<"/bank">) {
   return (
     <div className="flex flex-col gap-4">
       <h1 className="text-2xl font-semibold">{t("title")}</h1>
+      <HowItWorks />
       <div className="md:grid md:grid-cols-[220px_1fr] md:items-start md:gap-8">
         {/* mobilon: szakasz nélkül lista, szakasszal a részlet; asztalon mindkettő látszik */}
         <BankNav current={current} className={hasSection ? "hidden md:block" : "block"} />

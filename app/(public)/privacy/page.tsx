@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { LegalDocument } from "@/components/legal/legal-document";
 
-const IDS = ["controller", "data", "purpose", "never", "processors", "retention", "rights", "cookies"] as const;
+const IDS = ["controller", "data", "purpose", "never", "processors", "bank", "retention", "rights", "cookies"] as const;
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("legal.privacy");

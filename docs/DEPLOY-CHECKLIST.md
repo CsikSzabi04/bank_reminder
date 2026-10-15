@@ -61,6 +61,18 @@ A titkok (`sb_secret_…`, DB jelszó, VAPID privát kulcs, SMTP) **soha** nem k
 | Offline (repülő mód) | telepített app | `offline.html`, nincs fehér képernyő | ☐ |
 | Lassú hálózat (3G) | Chrome DevTools | skeleton-ok, nincs elugrás | ☐ |
 
+## 7. Bank-összekötés (haladó kör, `advanced.md`) — opcionális, csak az üzemeltetőnek
+
+- [ ] **Enable Banking Control Panel:** Production-alkalmazás (*Account Information*; fizetésindítás nincs), a **Redirect URL** pontosan `https://<domain>/bank/callback` (a Production csak https-t fogad); adatvédelmi/ÁSZF URL: `https://<domain>/privacy`, `/terms`. A privát kulcs (`.pem`) letöltve — **repón kívülre, jelszókezelőbe**; a tartalmát soha nem küldöd chatbe.
+- [ ] **Secret-ek (Edge, nem fájlban):** `node scripts/setup-secrets.mjs --enable-key <fájl.pem>` (`ENABLE_APP_ID`, `ENABLE_PRIVATE_KEY`), `APP_BASE_URL=https://<domain>`. Előtte egyszer `npx supabase login`.
+- [ ] **Migrációk + Edge:** `npm run db:push` → `npm run db:test` → `npm run db:types`; `npm run db:deploy list-aspsps bank-connect-start bank-connect-finish bank-disconnect send-notifications`.
+- [ ] **Jogosultság:** `bank_sync_allowed = true` csak a saját fiókodra (kliensről nem állítható): `npm run db:sql -- -e "update public.profiles set bank_sync_allowed = true where id = (select id from auth.users where email = '<e-mail>')"`.
+- [ ] **Vercel:** a `/bank/callback` él (bejelentkezés nélkül a belépéshez irányít, nem 404).
+- [ ] **Füstteszt:** `/bank` → Összekötés → bank kiválasztása → jóváhagyás a **bank saját appjában** → visszatérés → a kapcsolat-kártya aktív, a lejárat-ütemterv a Főoldalon/`/bank`-on látszik. Hiba esetén a `/bank` barátságos hibaüzenetet mutat (a részletek a Supabase Edge naplóban, PII nélkül).
+- [ ] **Keret-riasztás:** egy kategória-keret (pl. 15 000 Ft) + egy 16 000 Ft-os kézi gyors kiadás → in-app értesítés azonnal, push a cron következő futásakor.
+- [ ] **Android (később):** MacroDroid/Tasker + webhook-token — a B-43 útmutatója „nem tesztelt eszközön" jelzésű, amíg Android-készüléken ki nem próbálták.
+- [ ] **Jogi:** az adatkezelési tájékoztató „Bank-összekötés" pontja és az ÁSZF „Bank-összekötés" szakasza **TERVEZET** — jóváhagyásig a jelzés marad (`legal.draft`).
+
 ## 6. Üzemeltetés
 
 - **Visszagörgetés:** frontend — Vercel azonnali rollback; DB — előre-javítás (új migráció). Mentés/helyreállítás: `docs/RESTORE.md`.

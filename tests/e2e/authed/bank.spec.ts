@@ -164,6 +164,18 @@ test.describe("kereskedő-szabályok (B-44)", () => {
     await expect.poll(async () => (await db.client.from("merchant_rules").select("id").like("match_key", `${KEY}%`)).data?.length).toBe(0);
   });
 
+  // A besorolás/elvetés atomi RPC-k (A-42) élnek az éles DB-n, az `authenticated` hívhatja, és a hibakódok a szerződés szerintiek.
+  // Valódi tételt a teszt-fiók nem tud létrehozni (a főkönyvi sorokat csak a szerver írja) → az „ismeretlen tétel" ágat igazoljuk.
+  test("az élő besorolás-RPC-k: ismeretlen tétel → BR404 (a függvények léteznek és hívhatók)", async () => {
+    const unknown = "00000000-0000-4000-8000-000000000000";
+    const category = (await db.client.from("categories").select("id").in("kind", ["expense", "both"]).limit(1).single()).data;
+    expect(category).not.toBeNull();
+    const classify = await db.client.rpc("classify_bank_transaction", { p_transaction: unknown, p_category: category!.id, p_remember: false });
+    expect(classify.error?.code).toBe("BR404");
+    const dismiss = await db.client.rpc("dismiss_bank_transaction", { p_transaction: unknown });
+    expect(dismiss.error?.code).toBe("BR404");
+  });
+
   test("mobilon a szabály-szakasz nem csordul túl, és a lista elérhető", async ({ page }) => {
     await page.setViewportSize({ width: 360, height: 740 });
     await page.goto("/bank?section=rules");

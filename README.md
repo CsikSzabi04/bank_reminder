@@ -1,7 +1,7 @@
 # Bank Reminder
 
 Számla- és előfizetés-emlékeztetők, költségkövetés, tippek. Telepíthető PWA (Next.js 16 + React 19 + Tailwind 4 + Supabase).
-A „nem bank": nem fér hozzá a bankszámládhoz, csak az általad megadott adatokkal dolgozik.
+A „nem bank": fizetést nem indít; alapból csak az általad megadott adatokkal dolgozik, bankszámlához pedig kizárólag olvasási hozzáférést kap, és csak ha te kifejezetten összekötöd (opcionális, lásd lent).
 
 Terv és szabályok: [ARCHITECTURE.md](ARCHITECTURE.md) · állapot: [docs/STATUS.md](docs/STATUS.md) · döntések: [docs/DECISIONS.md](docs/DECISIONS.md) · változások: [CHANGELOG.md](CHANGELOG.md).
 
@@ -55,6 +55,14 @@ Elavult `next dev` a 3000-es porton elavult buildet szolgálhat ki: futtatás el
 | `locales/` | `hu.json` · `en.json` (minden felhasználói szöveg kétnyelvű, H8) |
 | `supabase/` | séma, migrációk, Edge Function-ök (AI-A tulajdona) |
 | `tests/` | `unit`, `e2e` (`authed/` a belépett), `a11y` |
+
+## Haladó funkciók (1.1.0): bank-összekötés és keret-riasztás
+
+Terv: [advanced.md](advanced.md). Az app két forrásból tud automatikusan kiadást felvenni: **Enable Banking** (PSD2, olvasási hozzáférés, naponta legfeljebb egyszer; személyes használatra, ezért a `profiles.bank_sync_allowed` kapuval csak az üzemeltetőé) és **Android értesítés-olvasás** (webhook; MacroDroid/Tasker). A bank-hozzáférés lejár — a lejárat-értesítések kötelezőek, nem kapcsolhatók ki —, a keret elfogyásáról pedig azonnal értesít (Profilban kikapcsolható).
+
+- Oldal: **`/bank`** (Összekötés · Android-értesítések · Szabályok); a bank átirányít a `/bank/callback`-re (az Enable-ben pontosan ez az URL van regisztrálva).
+- A Next.js alkalmazásban **nincs titok**: az Enable privát kulcsa és App ID-ja csak Edge Function secret (`ENABLE_APP_ID`, `ENABLE_PRIVATE_KEY`, `APP_BASE_URL`); a `*.pem` fájlok `.gitignore`-osak, és a build kliens-csomagját teszt őrzi (`tests/unit/bank-secrets.test.ts`).
+- Éles beállítás lépésről lépésre: [docs/DEPLOY-CHECKLIST.md](docs/DEPLOY-CHECKLIST.md) „7. Bank-összekötés".
 
 ## Biztonsági alapelvek (kivonat)
 

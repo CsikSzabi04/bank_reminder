@@ -12,7 +12,7 @@
       "generic": "Oops, something went wrong. Please try again."
     },
     "disclaimer": {
-      "notBank": "Bank Reminder isn't a bank or financial advisor. It can't access your bank account."
+      "notBank": "Bank Reminder isn't a bank or financial advisor and never makes payments. It only gets read access to a bank account if you explicitly connect it."
     },
     "theme": {
       "label": "Theme",
@@ -710,6 +710,14 @@
       "soon": "{bank}: {count, plural, =0 {access expires today} =1 {access expires tomorrow} other {access expires in # days}}.",
       "expired": "{bank}: access has expired, automatic tracking is paused.",
       "cta": "Renew"
+    },
+    "help": {
+      "summary": "How does it work?",
+      "p1": "Expenses can be added automatically from two sources: your bank (Enable Banking, at most once a day) and, on an Android phone, your bank's notifications.",
+      "p2": "An item added from a notification is provisional; the bank data later reconciles and corrects it, so it isn't added twice.",
+      "p3": "Whatever can't be sorted automatically goes to the “Waiting to be sorted” list in the Rules section. “Always do this” creates a rule.",
+      "p4": "The bank access expires (after at most the period the bank allows). You get required notifications before it does — they can't be turned off — and you have to approve again in the bank's own app.",
+      "p5": "We notify you when a budget runs out (you can turn this off in your Profile). The app isn't a bank, never initiates payments and gives no advice."
     }
   },
   "savings": {
@@ -1313,7 +1321,7 @@
       },
       "data": {
         "title": "What data do we handle?",
-        "body": "Your email address, display name, optional profile picture, the reminders, expenses, budgets and savings goals you add, your notification settings and your devices' notification endpoints. Short-lived technical logs may also be created to diagnose errors."
+        "body": "Your email address, display name, optional profile picture, the reminders, expenses, budgets and saving goals you enter, your notification settings and your devices' notification endpoints. Short-lived technical logs may also be created to diagnose errors. Data for the optional bank connection is described separately below."
       },
       "purpose": {
         "title": "What do we use it for?",
@@ -1321,11 +1329,11 @@
       },
       "never": {
         "title": "What we don't do",
-        "body": "We don't ask for banking credentials and can't access your bank account. We don't sell your data and we don't use advertising trackers."
+        "body": "We don't ask for banking credentials. We only access a bank account, with read-only permission, if you explicitly connect it; we never initiate payments. We don't sell your data and we don't use advertising trackers."
       },
       "processors": {
         "title": "Who processes the data?",
-        "body": "Supabase provides the database, authentication and file storage; Vercel serves the website. Browser notifications are delivered through your browser vendor's push service (e.g. Google, Mozilla, Apple, Microsoft)."
+        "body": "The database, authentication and file storage are provided by Supabase, and the website is served by Vercel. Browser notifications are delivered through the browser vendor's push service (e.g. Google, Mozilla, Apple, Microsoft). If you connect your bank, the bank data is relayed by Enable Banking (a PSD2 provider)."
       },
       "retention": {
         "title": "How long do we keep it?",
@@ -1338,13 +1346,17 @@
       "cookies": {
         "title": "Cookies",
         "body": "We only use cookies that are needed to work: your sign-in session, the \"stay signed in\" flag, and your language and theme settings. There are no tracking or advertising cookies."
+      },
+      "bank": {
+        "title": "Bank connection and notification processing (optional)",
+        "body": "If you connect your bank (Enable Banking, PSD2), we get read access to the accounts you choose: the bank's name, the accounts' masked identifier (the last 4 digits of the IBAN) and currency, the access expiry, and each transaction's amount, currency, date and merchant or counterparty name. We never see your banking credentials; we don't store balances, full IBANs or card numbers. The access is valid for at most the period the bank allows, we notify you before it expires, and you can revoke it at any time on the Bank page. If you use Android notification reading, only the amount, currency, date and merchant are kept from a notification; the raw text of a notification we can't process is kept for at most 14 days so you can sort it manually."
       }
     },
     "terms": {
       "title": "Terms of Service",
       "service": {
         "title": "The service",
-        "body": "Bank Reminder provides bill and subscription reminders, expense tracking and saving tips. It isn't a bank, doesn't pay for you and can't access your bank account."
+        "body": "Bank Reminder provides bill and subscription reminders, expense tracking and saving tips. It isn't a bank and doesn't pay for you; it may only request read access to a bank account, and only if you explicitly connect it."
       },
       "account": {
         "title": "Your account",
@@ -1369,6 +1381,10 @@
       "contact": {
         "title": "Contact",
         "body": "[The operator's contact details — to be filled in by the operator.]"
+      },
+      "bank": {
+        "title": "Bank connection",
+        "body": "The bank connection is optional, relies on an external provider (Enable Banking) and is subject to its terms; it isn't available to everyone at the moment. The bank is responsible for the accuracy of bank data; automatic categorisation is a suggestion, so please check it. You can revoke the access at any time."
       }
     }
   },

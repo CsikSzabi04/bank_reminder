@@ -6,6 +6,8 @@ import {
   parseRules,
   parseUnparsedEvents,
 } from "@/lib/bank/rules";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import type { Database } from "@/types/database.types";
 import { classifyTransactionCore, deleteRuleCore, dismissTransactionCore, saveRuleCore } from "@/lib/bank/rules-service";
 import { FakeDb } from "./support/fake-db";
 
@@ -83,137 +85,58 @@ describe("olvasók (tűrő parserek)", () => {
   });
 });
 
-// ───────── szolgáltatás-mag ─────────
-function world() {
-  const db = new FakeDb();
-  db.seed("expenses", [
-    { id: "e1", category_id: null, amount: 4500 },
-    { id: "e2", category_id: null, amount: 3000 },
-    { id: "e3", category_id: null, amount: 900 },
-  ]);
-  db.seed("bank_transactions", [
-    { id: "t1", expense_id: "e1", merchant_key: "tesco", category_id: null, dismissed: false },
-    { id: "t2", expense_id: "e2", merchant_key: "tesco expressz budapest", category_id: null, dismissed: false },
-    { id: "t3", expense_id: "e3", merchant_key: "spar", category_id: null, dismissed: false },
-    { id: "t4", expense_id: null, merchant_key: "tesco", category_id: null, dismissed: false },
-    { id: "t5", expense_id: null, merchant_key: "tesco", category_id: CAT_OTHER, dismissed: false }, // már besorolt: nem nyúlunk hozzá
-    { id: "t6", expense_id: null, merchant_key: "tesco", category_id: null, dismissed: true }, // „nem kiadás": nem éled újra
-    { id: "t7", expense_id: "e9", merchant_key: null, category_id: null, dismissed: false },
-  ]);
-  return db;
+// ───────── besorolás / elvetés: atomi RPC-k (A-42) ─────────
+// A tényleges besorolási logika (sorrend, retro-besorolás, tombstone, részleges írás nélküli hiba) SQL-ben él, és ott van tesztelve
+// (supabase/tests/bank_rules.test.sql, mutációval). Itt a B-oldali szerződést védjük: az argumentumok, a hibakód-leképezés, a válasz-értelmezés.
+type RpcResult = { data: unknown; error: { code?: string; message: string } | null };
+function rpcClient(result: RpcResult | Error) {
+  const calls: { fn: string; args: Record<string, unknown> }[] = [];
+  const client = {
+    rpc: async (fn: string, args: Record<string, unknown>) => {
+      calls.push({ fn, args });
+      if (result instanceof Error) throw result;
+      return result;
+    },
+  } as unknown as SupabaseClient<Database>;
+  return { client, calls };
 }
-const tx = (db: FakeDb, id: string) => db.rows("bank_transactions").find((r) => r.id === id)!;
-const exp = (db: FakeDb, id: string) => db.rows("expenses").find((r) => r.id === id)!;
+const ok = (data: unknown): RpcResult => ({ data, error: null });
+const err = (code?: string): RpcResult => ({ data: null, error: { code, message: "x" } });
 
-describe("classifyTransactionCore", () => {
-  it("egy tétel besorolása: előbb a kiadás, utána a főkönyvi sor; szabály nem készül", async () => {
-    const db = world();
-    const res = await classifyTransactionCore(db.client(), { transactionId: "t3", categoryId: CAT_FOOD, remember: false });
-    expect(res).toEqual({ ok: true, data: { classified: 1 } });
-    expect(exp(db, "e3").category_id).toBe(CAT_FOOD);
-    expect(tx(db, "t3").category_id).toBe(CAT_FOOD);
-    expect(db.rows("merchant_rules")).toHaveLength(0);
-    const writes = db.log.filter((l) => !l.startsWith("select"));
-    expect(writes[0]).toContain("update:expenses");
-    expect(writes[1]).toContain("update:bank_transactions");
+describe("classifyTransactionCore (classify_bank_transaction RPC)", () => {
+  it("az argumentumok a szerződés szerint mennek; a darabszám visszajön", async () => {
+    const { client, calls } = rpcClient(ok({ classified: 3, rule_id: "r1" }));
+    expect(await classifyTransactionCore(client, { transactionId: "t1", categoryId: CAT_FOOD, remember: true })).toEqual({ ok: true, data: { classified: 3 } });
+    expect(calls).toEqual([{ fn: "classify_bank_transaction", args: { p_transaction: "t1", p_category: CAT_FOOD, p_remember: true } }]);
+    const single = rpcClient(ok({ classified: 1, rule_id: null }));
+    await classifyTransactionCore(single.client, { transactionId: "t1", categoryId: CAT_FOOD, remember: false });
+    expect(single.calls[0].args.p_remember).toBe(false);
   });
 
-  it("kiadás nélküli főkönyvi tétel is besorolható (csak a főkönyvi sor változik)", async () => {
-    const db = world();
-    expect(await classifyTransactionCore(db.client(), { transactionId: "t4", categoryId: CAT_FOOD, remember: false })).toMatchObject({ ok: true });
-    expect(tx(db, "t4").category_id).toBe(CAT_FOOD);
-    expect(db.log.some((l) => l.startsWith("update:expenses"))).toBe(false);
+  it("hibakód-leképezés: BR404 → not_found, BR422 → no_merchant_key, minden más → failed", async () => {
+    const run = async (r: RpcResult | Error) => classifyTransactionCore(rpcClient(r).client, { transactionId: "t1", categoryId: CAT_FOOD, remember: true });
+    expect(await run(err("BR404"))).toEqual({ ok: false, code: "not_found" });
+    expect(await run(err("BR422"))).toEqual({ ok: false, code: "no_merchant_key" });
+    for (const code of ["42501", "PGRST202", "23503", undefined]) expect(await run(err(code)), String(code)).toEqual({ ok: false, code: "failed" });
   });
 
-  it("„Ezt mindig így”: szabály készül a kereskedő-kulccsal, és a várakozó, azonos kereskedős tételek is besorolódnak", async () => {
-    const db = world();
-    const res = await classifyTransactionCore(db.client(), { transactionId: "t1", categoryId: CAT_FOOD, remember: true });
-    expect(res).toEqual({ ok: true, data: { classified: 3 } }); // t1 + t2 (a kulcsot tartalmazza) + t4
-    expect(db.rows("merchant_rules")).toMatchObject([{ match_key: "tesco", category_id: CAT_FOOD, user_id: "user-1" }]);
-    for (const id of ["t1", "t2", "t4"]) expect(tx(db, id).category_id, id).toBe(CAT_FOOD);
-    expect(exp(db, "e2").category_id).toBe(CAT_FOOD);
-    // nem érintettek: más kereskedő, már besorolt, elvetett, kulcs nélküli
-    expect(tx(db, "t3").category_id).toBeNull();
-    expect(tx(db, "t5").category_id).toBe(CAT_OTHER);
-    expect(tx(db, "t6").category_id).toBeNull();
-    expect(tx(db, "t6").dismissed).toBe(true);
-    expect(tx(db, "t7").category_id).toBeNull();
-    expect(exp(db, "e3").category_id).toBeNull();
-  });
-
-  it("ha már van saját szabály ugyanarra a kulcsra, annak kategóriája frissül (nincs duplikátum); a rendszer-szabály nem akadály", async () => {
-    const db = world();
-    db.seed("merchant_rules", [
-      { id: "own", user_id: "user-1", match_key: "tesco", category_id: CAT_OTHER },
-      { id: "sys", user_id: null, match_key: "tesco", category_id: CAT_OTHER },
-    ]);
-    await classifyTransactionCore(db.client(), { transactionId: "t1", categoryId: CAT_FOOD, remember: true });
-    expect(db.rows("merchant_rules").filter((r) => r.user_id === "user-1")).toHaveLength(1);
-    expect(db.rows("merchant_rules").find((r) => r.id === "own")?.category_id).toBe(CAT_FOOD);
-    expect(db.rows("merchant_rules").find((r) => r.id === "sys")?.category_id).toBe(CAT_OTHER);
-
-    const db2 = world();
-    db2.seed("merchant_rules", [{ id: "sys", user_id: null, match_key: "tesco", category_id: CAT_OTHER }]);
-    await classifyTransactionCore(db2.client(), { transactionId: "t1", categoryId: CAT_FOOD, remember: true });
-    expect(db2.rows("merchant_rules").filter((r) => r.user_id === "user-1")).toHaveLength(1);
-  });
-
-  it("kereskedő-kulcs nélküli tételnél a „mindig így” elutasított, és SEMMI nem íródik (nincs félig besorolt tétel)", async () => {
-    const db = world();
-    const before = JSON.stringify(db.tables);
-    expect(await classifyTransactionCore(db.client(), { transactionId: "t7", categoryId: CAT_FOOD, remember: true })).toEqual({ ok: false, code: "no_merchant_key" });
-    expect(JSON.stringify(db.tables)).toBe(before);
-  });
-
-  it("ismeretlen vagy elvetett tétel → not_found, nincs írás", async () => {
-    const db = world();
-    expect(await classifyTransactionCore(db.client(), { transactionId: "nincs", categoryId: CAT_FOOD, remember: false })).toEqual({ ok: false, code: "not_found" });
-    expect(await classifyTransactionCore(db.client(), { transactionId: "t6", categoryId: CAT_FOOD, remember: false })).toEqual({ ok: false, code: "not_found" });
-    expect(db.log.some((l) => !l.startsWith("select"))).toBe(false);
-  });
-
-  it("a kiadás frissítése elbukik → a főkönyvi sor érintetlen (a tétel a listán marad), az ismétlés helyreállít", async () => {
-    const db = world().failOn("expenses", "update");
-    expect(await classifyTransactionCore(db.client(), { transactionId: "t1", categoryId: CAT_FOOD, remember: false })).toEqual({ ok: false, code: "failed" });
-    expect(tx(db, "t1").category_id).toBeNull();
-    db.clearFaults();
-    expect(await classifyTransactionCore(db.client(), { transactionId: "t1", categoryId: CAT_FOOD, remember: false })).toMatchObject({ ok: true });
-    expect(exp(db, "e1").category_id).toBe(CAT_FOOD);
-    expect(tx(db, "t1").category_id).toBe(CAT_FOOD);
-  });
-
-  it("a főkönyvi sor frissítése bukik → a tétel a „Besorolásra vár” listán marad (category_id null), az ismétlés idempotens", async () => {
-    const db = world().failOn("bank_transactions", "update");
-    expect(await classifyTransactionCore(db.client(), { transactionId: "t1", categoryId: CAT_FOOD, remember: false })).toEqual({ ok: false, code: "failed" });
-    expect(tx(db, "t1").category_id).toBeNull(); // még a listán van
-    db.clearFaults();
-    expect(await classifyTransactionCore(db.client(), { transactionId: "t1", categoryId: CAT_FOOD, remember: false })).toMatchObject({ ok: true });
-    expect(tx(db, "t1").category_id).toBe(CAT_FOOD);
+  it("váratlan válasz-alak (nincs darabszám) nem számít sikernek", async () => {
+    for (const data of [null, {}, { classified: "3" }, { classified: Number.NaN }, "ok"]) {
+      expect(await classifyTransactionCore(rpcClient(ok(data)).client, { transactionId: "t1", categoryId: CAT_FOOD, remember: false }), JSON.stringify(data)).toEqual({ ok: false, code: "failed" });
+    }
   });
 });
 
-describe("dismissTransactionCore — „Ez nem kiadás”", () => {
-  it("a kiadás törlődik, a főkönyvi sor dismissed lesz, és a „Besorolásra vár” szűrő már nem hozza vissza", async () => {
-    const db = world();
-    expect(await dismissTransactionCore(db.client(), "t1")).toEqual({ ok: true, data: null });
-    expect(db.rows("expenses").some((r) => r.id === "e1")).toBe(false);
-    expect(tx(db, "t1")).toMatchObject({ dismissed: true, expense_id: null });
-    const pending = db.rows("bank_transactions").filter((r) => r.category_id === null && r.dismissed === false).map((r) => r.id);
-    expect(pending).not.toContain("t1");
+describe("dismissTransactionCore (dismiss_bank_transaction RPC)", () => {
+  it("siker, és a tétel azonosítója megy az RPC-nek", async () => {
+    const { client, calls } = rpcClient(ok(null));
+    expect(await dismissTransactionCore(client, "t1")).toEqual({ ok: true, data: null });
+    expect(calls).toEqual([{ fn: "dismiss_bank_transaction", args: { p_transaction: "t1" } }]);
   });
 
-  it("kiadás nélküli tételnél is dismissed lesz; ismeretlen → not_found", async () => {
-    const db = world();
-    expect(await dismissTransactionCore(db.client(), "t4")).toMatchObject({ ok: true });
-    expect(tx(db, "t4").dismissed).toBe(true);
-    expect(await dismissTransactionCore(db.client(), "nincs")).toEqual({ ok: false, code: "not_found" });
-  });
-
-  it("ha a kiadás törlése bukik, a tétel NEM lesz dismissed (nem marad kiadás nélküli árva)", async () => {
-    const db = world().failOn("expenses", "delete");
-    expect(await dismissTransactionCore(db.client(), "t1")).toEqual({ ok: false, code: "failed" });
-    expect(tx(db, "t1").dismissed).toBe(false);
-    expect(db.rows("expenses").some((r) => r.id === "e1")).toBe(true);
+  it("BR404 → not_found, más hiba → failed", async () => {
+    expect(await dismissTransactionCore(rpcClient(err("BR404")).client, "t1")).toEqual({ ok: false, code: "not_found" });
+    expect(await dismissTransactionCore(rpcClient(err("XX000")).client, "t1")).toEqual({ ok: false, code: "failed" });
   });
 });
 
