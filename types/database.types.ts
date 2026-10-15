@@ -48,7 +48,9 @@ export type Database = {
           consent_valid_until: string;
           created_at: string;
           id: string;
+          last_attempt_at: string | null;
           last_error: string | null;
+          last_success_at: string | null;
           last_sync_at: string | null;
           last_sync_ok: boolean | null;
           provider: string;
@@ -67,7 +69,9 @@ export type Database = {
           consent_valid_until: string;
           created_at?: string;
           id?: string;
+          last_attempt_at?: string | null;
           last_error?: string | null;
+          last_success_at?: string | null;
           last_sync_at?: string | null;
           last_sync_ok?: boolean | null;
           provider?: string;
@@ -85,7 +89,9 @@ export type Database = {
           consent_valid_until?: string;
           created_at?: string;
           id?: string;
+          last_attempt_at?: string | null;
           last_error?: string | null;
+          last_success_at?: string | null;
           last_sync_at?: string | null;
           last_sync_ok?: boolean | null;
           provider?: string;
@@ -104,8 +110,11 @@ export type Database = {
           booked_on: string;
           category_id: string | null;
           connection_id: string | null;
+          contribution_id: string | null;
+          counterparty: string | null;
           created_at: string;
           currency: string;
+          direction: string;
           dismissed: boolean;
           expense_id: string | null;
           external_ref: string | null;
@@ -114,6 +123,8 @@ export type Database = {
           matched_with: string | null;
           merchant: string | null;
           merchant_key: string | null;
+          occurrence_id: string | null;
+          remittance: string | null;
           source: string;
           status: string;
           user_id: string;
@@ -125,8 +136,11 @@ export type Database = {
           booked_on: string;
           category_id?: string | null;
           connection_id?: string | null;
+          contribution_id?: string | null;
+          counterparty?: string | null;
           created_at?: string;
           currency: string;
+          direction?: string;
           dismissed?: boolean;
           expense_id?: string | null;
           external_ref?: string | null;
@@ -135,6 +149,8 @@ export type Database = {
           matched_with?: string | null;
           merchant?: string | null;
           merchant_key?: string | null;
+          occurrence_id?: string | null;
+          remittance?: string | null;
           source: string;
           status: string;
           user_id: string;
@@ -145,8 +161,11 @@ export type Database = {
           booked_on?: string;
           category_id?: string | null;
           connection_id?: string | null;
+          contribution_id?: string | null;
+          counterparty?: string | null;
           created_at?: string;
           currency?: string;
+          direction?: string;
           dismissed?: boolean;
           expense_id?: string | null;
           external_ref?: string | null;
@@ -155,6 +174,8 @@ export type Database = {
           matched_with?: string | null;
           merchant?: string | null;
           merchant_key?: string | null;
+          occurrence_id?: string | null;
+          remittance?: string | null;
           source?: string;
           status?: string;
           user_id?: string;
@@ -175,6 +196,13 @@ export type Database = {
             referencedColumns: ["id"];
           },
           {
+            foreignKeyName: "bank_transactions_contribution_id_fkey";
+            columns: ["contribution_id"];
+            isOneToOne: false;
+            referencedRelation: "goal_contributions";
+            referencedColumns: ["id"];
+          },
+          {
             foreignKeyName: "bank_transactions_expense_id_fkey";
             columns: ["expense_id"];
             isOneToOne: false;
@@ -187,6 +215,27 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "bank_transactions";
             referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "bank_transactions_occurrence_id_fkey";
+            columns: ["occurrence_id"];
+            isOneToOne: false;
+            referencedRelation: "occurrences";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "bank_transactions_occurrence_id_fkey";
+            columns: ["occurrence_id"];
+            isOneToOne: false;
+            referencedRelation: "v_occurrences";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "bank_transactions_occurrence_id_fkey";
+            columns: ["occurrence_id"];
+            isOneToOne: false;
+            referencedRelation: "v_reminders";
+            referencedColumns: ["next_occurrence_id"];
           },
         ];
       };
@@ -920,6 +969,7 @@ export type Database = {
         Row: {
           amount: number;
           auto_paid: boolean;
+          bank_match: string | null;
           category_id: string | null;
           channels: string[];
           created_at: string;
@@ -949,6 +999,7 @@ export type Database = {
         Insert: {
           amount: number;
           auto_paid?: boolean;
+          bank_match?: string | null;
           category_id?: string | null;
           channels?: string[];
           created_at?: string;
@@ -977,6 +1028,7 @@ export type Database = {
         Update: {
           amount?: number;
           auto_paid?: boolean;
+          bank_match?: string | null;
           category_id?: string | null;
           channels?: string[];
           created_at?: string;
@@ -1022,6 +1074,7 @@ export type Database = {
       savings_goals: {
         Row: {
           archived_at: string | null;
+          bank_match: string | null;
           color_slot: number;
           created_at: string;
           currency: string;
@@ -1036,6 +1089,7 @@ export type Database = {
         ComputedFields: never;
         Insert: {
           archived_at?: string | null;
+          bank_match?: string | null;
           color_slot?: number;
           created_at?: string;
           currency?: string;
@@ -1049,6 +1103,7 @@ export type Database = {
         };
         Update: {
           archived_at?: string | null;
+          bank_match?: string | null;
           color_slot?: number;
           created_at?: string;
           currency?: string;
@@ -1466,7 +1521,9 @@ export type Database = {
           suggested_limit: number;
         }[];
       };
-      call_edge_function: { Args: { p_name: string }; Returns: number };
+      call_edge_function:
+        | { Args: { p_name: string }; Returns: number }
+        | { Args: { p_body: Json; p_name: string }; Returns: number };
       cancel_occurrence_notifications: {
         Args: { p_now?: string; p_occ: string };
         Returns: undefined;
@@ -1536,6 +1593,16 @@ export type Database = {
         };
         Returns: Json;
       };
+      finish_bank_sync: {
+        Args: {
+          p_connection: string;
+          p_error?: string;
+          p_expire?: boolean;
+          p_now?: string;
+          p_ok: boolean;
+        };
+        Returns: undefined;
+      };
       finish_notification: {
         Args: { p_error?: string; p_id: string; p_now?: string; p_outcome: string };
         Returns: undefined;
@@ -1556,6 +1623,10 @@ export type Database = {
           remind: boolean;
           uid: string;
         }[];
+      };
+      ingest_bank_transactions: {
+        Args: { p_account_ref: string; p_connection: string; p_now?: string; p_rows: Json };
+        Returns: Json;
       };
       is_valid_timezone: { Args: { tz: string }; Returns: boolean };
       load_demo_data: { Args: Record<PropertyKey, never>; Returns: number };
@@ -1659,6 +1730,7 @@ export type Database = {
           url: string;
         }[];
       };
+      normalize_merchant_key: { Args: { p_text: string }; Returns: string };
       occurrence_dates: {
         Args: {
           p_end?: string;
@@ -1683,6 +1755,10 @@ export type Database = {
         Returns: string[];
       };
       process_auto_paid: { Args: { p_now?: string }; Returns: number };
+      queue_bank_sync: {
+        Args: { p_connection: string; p_now?: string; p_source: string };
+        Returns: Json;
+      };
       rebuild_notification_queue: {
         Args: { p_now?: string; p_reminder_id: string };
         Returns: number;
@@ -1739,6 +1815,11 @@ export type Database = {
           prev_amount: number;
           status: string;
         }[];
+      };
+      request_bank_sync: { Args: { p_connection_id: string }; Returns: Json };
+      reserve_bank_sync: {
+        Args: { p_connection: string; p_now?: string; p_source: string };
+        Returns: Json;
       };
       revoke_bank_connection: { Args: { p_connection: string; p_user: string }; Returns: Json };
       rotate_ics_token: { Args: Record<PropertyKey, never>; Returns: string };
