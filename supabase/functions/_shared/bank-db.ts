@@ -30,6 +30,10 @@ export function supabaseBankDb(admin: SupabaseClient): BankDb {
       check(error);
       return { connectionId: String(data.connection_id), oldSessionIds: Array.isArray(data.old_session_ids) ? data.old_session_ids.map(String) : [] };
     },
+    async queueFirstSync(connectionId) {
+      const { error } = await admin.rpc('queue_bank_sync', { p_connection: connectionId, p_source: 'auto' });
+      check(error);
+    },
     async revokeConnection(userId, connectionId) {
       const { data, error } = await admin.rpc('revoke_bank_connection', { p_user: userId, p_connection: connectionId });
       check(error);

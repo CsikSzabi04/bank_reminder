@@ -100,3 +100,18 @@ Deno.test('mapAccounts: teljes IBAN soha; hash+pénznem a kulcs; az IBAN nélkü
   assert(!json.includes('HU93') && !json.includes('1234 5678') && !json.includes('34567890'), 'teljes IBAN a kimenetben: ' + json);
   assertEquals(mapAccounts(undefined), []);
 });
+
+Deno.test('listTransactions: csak a könyvelt (BOOK) tételek, a dátum és a lapozó kulcs kódolva, az uid nincs path-injektálva; a kulcs nélküli válasz = vége', async () => {
+  const { api, calls } = await client([
+    { json: { transactions: [{ entry_reference: 'A' }], continuation_key: 'k/2?x' } },
+    { json: { transactions: [] } },
+    { json: { continuation_key: 42 } },
+  ]);
+  const p1 = await api.listTransactions('uid/../1', '2026-07-17');
+  assertEquals(p1, { transactions: [{ entry_reference: 'A' }], continuationKey: 'k/2?x' });
+  assertEquals(calls[0].url, 'https://enable.test/accounts/uid%2F..%2F1/transactions?date_from=2026-07-17&transaction_status=BOOK');
+  await api.listTransactions('u', '2026-07-17', 'k/2?x');
+  assertEquals(calls[1].url, 'https://enable.test/accounts/u/transactions?date_from=2026-07-17&transaction_status=BOOK&continuation_key=k%2F2%3Fx');
+  assertEquals((await api.listTransactions('u', '2026-07-17')).continuationKey, null, 'nem szöveges kulcs nem lehet lapozó');
+  assertEquals(calls.every((c) => c.method === 'GET'), true);
+});

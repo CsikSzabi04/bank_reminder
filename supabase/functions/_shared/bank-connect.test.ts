@@ -18,13 +18,14 @@ const session = (over: Partial<EnableSession> = {}): EnableSession => ({
 
 // ── mock-Enable és mock-DB, hívás-naplóval
 function rig(o: { allowed?: boolean; banks?: typeof bank[]; session?: EnableSession; consume?: 'ok' | 'invalid' | 'expired'; renew?: string | null;
-                  startErr?: string; enableFail?: Partial<Record<'aspsps' | 'auth' | 'sessions' | 'delete', number>>; finishErr?: string; oldSessions?: string[]; revokeSession?: string | null; appBase?: string | null } = {}) {
+                  startErr?: string; enableFail?: Partial<Record<'aspsps' | 'auth' | 'sessions' | 'delete', number>>; finishErr?: string; oldSessions?: string[]; revokeSession?: string | null; appBase?: string | null; queueErr?: boolean } = {}) {
   const calls: string[] = [];
-  const sent: { auth?: Record<string, unknown>; start?: { state: string; renew: string | null }; finish?: Record<string, unknown>; deleted: string[] } = { deleted: [] };
+  const sent: { auth?: Record<string, unknown>; start?: { state: string; renew: string | null }; finish?: Record<string, unknown>; queued?: string; deleted: string[] } = { deleted: [] };
   const enable: EnableApi = {
     listAspsps: (c) => { calls.push('enable.aspsps'); if (o.enableFail?.aspsps) return Promise.reject(new EnableError(o.enableFail.aspsps, 'aspsps')); return Promise.resolve((o.banks ?? [bank]).filter((b) => b.country === c)); },
     startAuth: (a) => { calls.push('enable.auth'); sent.auth = a; if (o.enableFail?.auth) return Promise.reject(new EnableError(o.enableFail.auth, 'auth')); return Promise.resolve({ url: 'https://tilisy.test/start' }); },
     createSession: () => { calls.push('enable.sessions'); if (o.enableFail?.sessions) return Promise.reject(new EnableError(o.enableFail.sessions, 'sessions')); return Promise.resolve(o.session ?? session()); },
+    listTransactions: () => Promise.resolve({ transactions: [], continuationKey: null }),
     deleteSession: (id) => { calls.push('enable.delete'); sent.deleted.push(id); if (o.enableFail?.delete) return Promise.reject(new EnableError(o.enableFail.delete, 'delete_session')); return Promise.resolve(); },
   };
   const db: BankDb = {
@@ -32,6 +33,7 @@ function rig(o: { allowed?: boolean; banks?: typeof bank[]; session?: EnableSess
     startConnect: (_u, state, renew) => { calls.push('db.start'); if (o.startErr) return Promise.reject(new DbError(o.startErr)); sent.start = { state, renew }; return Promise.resolve(); },
     consumeState: () => { calls.push('db.consume'); return Promise.resolve({ status: o.consume ?? 'ok', renewConnectionId: o.renew ?? null }); },
     finishConnection: (a) => { calls.push('db.finish'); sent.finish = a as unknown as Record<string, unknown>; if (o.finishErr) return Promise.reject(new DbError(o.finishErr)); return Promise.resolve({ connectionId: CONN, oldSessionIds: o.oldSessions ?? [] }); },
+    queueFirstSync: (id) => { calls.push('db.queueFirstSync'); sent.queued = id; return o.queueErr ? Promise.reject(new Error('x')) : Promise.resolve(); },
     revokeConnection: () => { calls.push('db.revoke'); if (o.finishErr) return Promise.reject(new DbError(o.finishErr)); return Promise.resolve({ sessionId: o.revokeSession === undefined ? SESSION : o.revokeSession }); },
   };
   const deps: BankDeps = { enable, db, appBaseUrl: o.appBase === undefined ? 'https://bankreminder.vercel.app/' : o.appBase, now: () => NOW, randomState: () => 'random-state-0001' };
@@ -135,6 +137,7 @@ Deno.test('finish: sikeres összekötés — a számlák maszkoltak (nincs telje
   assertEquals(f.accounts, [{ uid: 'u1', identification_hash: 'h1', currency: 'HUF', cash_account_type: 'CACC', iban_last4: '0001', name: null, sync_enabled: true }]);
   assert(!JSON.stringify(f.accounts).includes('HU93'), 'teljes IBAN megy az adatbázisba');
   assertEquals(sent.deleted, ['old-session-1'], 'a lecserélt régi session nem törlődött az Enable-nél');
+  assertEquals(sent.queued, CONN, 'az első szinkron nem lett sorba állítva');
   clean(JSON.stringify(r.body)); clean(logs);
 });
 
@@ -151,6 +154,13 @@ Deno.test('finish: használhatatlan session (nincs számla / lejárt / hiányzó
   assertEquals(dbfail.sent.deleted, [SESSION], 'DB-hiba után nyilvántartás nélküli élő hozzáférés maradt');
   assertEquals((await finishConnection(rig({ finishErr: 'BR404' }).deps, USER, { code: CODE, state: STATE })).body, { ok: false, code: 'not_found' });
   assertEquals((await finishConnection(rig({ enableFail: { sessions: 400 } }).deps, USER, { code: CODE, state: STATE })).body, { ok: false, code: 'upstream_failed' });
+  // az első szinkron sorba állításának hibája nem akadályozza az összekötést (és csak sikeres mentés után fut)
+  const q = rig({ queueErr: true });
+  assertEquals((await finishConnection(q.deps, USER, { code: CODE, state: STATE })).body, { ok: true, connection_id: CONN });
+  for (const bad of [rig({ consume: 'invalid' }), rig({ enableFail: { sessions: 500 } }), rig({ finishErr: 'XX000' })]) {
+    await finishConnection(bad.deps, USER, { code: CODE, state: STATE });
+    assert(!bad.calls.includes('db.queueFirstSync'), 'sikertelen összekötés után is sorba állt a szinkron');
+  }
   // a régi session törlésének hibája nem akadályozza az összekötést
   assertEquals((await finishConnection(rig({ oldSessions: ['o1', 'o2'], enableFail: { delete: 500 } }).deps, USER, { code: CODE, state: STATE })).status, 200);
 });

@@ -39,6 +39,11 @@ export interface EnableAccount {
   uid?: string; identification_hash?: string; identification_hashes?: string[]; currency?: string;
   cash_account_type?: string; name?: string; account_id?: { iban?: string }; [k: string]: unknown;
 }
+export interface EnableTransaction {
+  entry_reference?: string | null; transaction_id?: string | null; booking_date?: string | null; value_date?: string | null; transaction_date?: string | null;
+  transaction_amount?: { amount?: string | number; currency?: string }; credit_debit_indicator?: string;
+  creditor?: { name?: string | null } | null; debtor?: { name?: string | null } | null; remittance_information?: string[] | null; [k: string]: unknown;
+}
 export interface EnableSession {
   session_id: string; aspsp?: { name?: string; country?: string }; accounts?: EnableAccount[];
   access?: { valid_until?: string };
@@ -49,6 +54,8 @@ export interface EnableApi {
   startAuth(a: { aspspName: string; aspspCountry: string; state: string; redirectUrl: string; validUntil: string }): Promise<{ url: string }>;
   createSession(code: string): Promise<EnableSession>;
   deleteSession(sessionId: string): Promise<void>;
+  /** Egy számla könyvelt (BOOK) tételei, lapozva: a `continuationKey` a következő oldalhoz (null = vége) */
+  listTransactions(accountUid: string, dateFrom: string, continuationKey?: string | null): Promise<{ transactions: EnableTransaction[]; continuationKey: string | null }>;
 }
 
 export interface EnableOptions {
@@ -110,6 +117,11 @@ export function createEnableClient(o: EnableOptions): EnableApi {
       if (typeof r.session_id !== 'string' || !r.session_id) throw new EnableError(502, 'sessions');
       return r;
     },
+    async listTransactions(accountUid, dateFrom, continuationKey) {
+      const q = `date_from=${encodeURIComponent(dateFrom)}&transaction_status=BOOK${continuationKey ? `&continuation_key=${encodeURIComponent(continuationKey)}` : ''}`;
+      const r = await call('transactions', 'GET', `/accounts/${encodeURIComponent(accountUid)}/transactions?${q}`) as { transactions?: EnableTransaction[]; continuation_key?: unknown };
+      return { transactions: Array.isArray(r.transactions) ? r.transactions : [], continuationKey: typeof r.continuation_key === 'string' && r.continuation_key ? r.continuation_key : null };
+    },
     async deleteSession(sessionId) { await call('delete_session', 'DELETE', `/sessions/${encodeURIComponent(sessionId)}`); },
   };
 }
@@ -133,6 +145,29 @@ export function mapAccounts(raw: EnableAccount[] | undefined): Array<Record<stri
       // alapból a folyószámlák szinkronizálnak, a megtakarítás/egyéb külön bekapcsolandó (A-40 ADR)
       sync_enabled: type === 'CACC',
     });
+  }
+  return out;
+}
+
+export interface IngestRow {
+  ref: string | null; booked_on: string; amount: string; currency: string; direction: 'debit' | 'credit';
+  counterparty: string | null; remittance: string | null; merchant_key: string | null;
+}
+
+/** Az Enable tételei a `ingest_bank_transactions` soraivá (A-40 leletek): az összeg pozitív string (az irányt a DBIT/CRDT adja, H9: nincs float),
+ *  a referencia az `entry_reference` (a Revolut `transaction_id`-ja null), a másik fél neve irány szerint (DBIT → creditor, CRDT → debtor). */
+export function mapTransactions(raw: EnableTransaction[] | undefined, key: (name: string | null | undefined) => string | null): IngestRow[] {
+  const out: IngestRow[] = [];
+  for (const t of raw ?? []) {
+    const amount = String(t.transaction_amount?.amount ?? '').trim().replace(/^[-+]/, '');
+    const currency = typeof t.transaction_amount?.currency === 'string' ? t.transaction_amount.currency.trim().toUpperCase() : '';
+    const date = [t.booking_date, t.value_date, t.transaction_date].find((d) => typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d)) as string | undefined;
+    const dir = t.credit_debit_indicator === 'DBIT' ? 'debit' : t.credit_debit_indicator === 'CRDT' ? 'credit' : null;
+    if (!/^\d{1,12}(\.\d{1,4})?$/.test(amount) || !/^[A-Z]{3}$/.test(currency) || !date || !dir) continue;
+    const party = (dir === 'debit' ? t.creditor?.name : t.debtor?.name)?.toString().trim() || null;
+    const remittance = Array.isArray(t.remittance_information) ? t.remittance_information.filter((x) => typeof x === 'string').join(' ').trim().slice(0, 300) || null : null;
+    const ref = (typeof t.entry_reference === 'string' && t.entry_reference.trim()) || (typeof t.transaction_id === 'string' && t.transaction_id.trim()) || null;
+    out.push({ ref, booked_on: date, amount, currency, direction: dir, counterparty: party ? party.slice(0, 120) : null, remittance, merchant_key: key(party ?? remittance) });
   }
   return out;
 }

@@ -9,13 +9,13 @@ import { adminClient } from './supabase.ts';
 const MAX_BODY = 4096;
 
 let keyPromise: Promise<CryptoKey> | null = null;
-function enableClient(): EnableApi {
+export function enableClient(): EnableApi {
   const appId = Deno.env.get('ENABLE_APP_ID');
   const secret = Deno.env.get('ENABLE_PRIVATE_KEY');
   if (!appId || !secret) {
     console.error('enable_not_configured');
     const down = (op: string) => () => Promise.reject(new EnableError(0, op));
-    return { listAspsps: down('aspsps'), startAuth: down('auth'), createSession: down('sessions'), deleteSession: down('delete_session') };
+    return { listAspsps: down('aspsps'), startAuth: down('auth'), createSession: down('sessions'), deleteSession: down('delete_session'), listTransactions: down('transactions') };
   }
   keyPromise ??= importPrivateKey(secret);
   // a kulcs-import hibája is csak „upstream_failed" lesz (a kulcs tartalma/formátuma nem kerül a válaszba); hiba után újrapróbálható
@@ -33,6 +33,7 @@ function lazyClient(appId: string, key: Promise<CryptoKey>): EnableApi {
     startAuth: async (a) => (await get()).startAuth(a),
     createSession: async (c) => (await get()).createSession(c),
     deleteSession: async (s) => (await get()).deleteSession(s),
+    listTransactions: async (u, f, k) => (await get()).listTransactions(u, f, k),
   };
 }
 

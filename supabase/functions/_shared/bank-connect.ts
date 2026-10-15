@@ -24,6 +24,8 @@ export interface BankDb {
     accounts: Array<Record<string, unknown>>; authorizedAt: string; validUntil: string;
   }): Promise<{ connectionId: string; oldSessionIds: string[] }>;
   revokeConnection(userId: string, connectionId: string): Promise<{ sessionId: string | null }>;
+  /** Az első szinkron sorba állítása az összekötés után (foglalás + bank-sync hívás); hibája nem akadályozza az összekötést */
+  queueFirstSync(connectionId: string): Promise<void>;
 }
 
 export interface BankDeps {
@@ -147,6 +149,8 @@ export async function finishConnection(deps: BankDeps, userId: string, body: Rec
   for (const id of saved.oldSessionIds) {
     try { await deps.enable.deleteSession(id); } catch (e) { log('old_session_cleanup_failed', { status: e instanceof EnableError ? e.status : 0 }); }
   }
+  // az első szinkron: a tételek az összekötés után azonnal megjelennek (a hiba csak naplóba kerül, az összekötés ettől még kész)
+  try { await deps.db.queueFirstSync(saved.connectionId); } catch { log('first_sync_not_queued'); }
   return ok({ connection_id: saved.connectionId });
 }
 
