@@ -8,7 +8,7 @@ import { NewsToggle } from "@/components/news/news-toggle";
 import { EmptyState } from "@/components/ui/empty-state";
 import type { Locale } from "@/lib/i18n/config";
 import { buildNewsCards } from "@/lib/news/cards";
-import { NEWS_PAGE_SIZE, NEWS_TOPICS, getNewsEnabled, getNewsFeed, resolveTopic } from "@/lib/news/queries";
+import { NEWS_PAGE_SIZE, NEWS_TOPICS, getNewsFeed, resolveTopic } from "@/lib/news/queries";
 import { getCurrentProfile } from "@/lib/profile/queries";
 import { first } from "@/lib/search-params";
 import { cn } from "@/lib/utils";
@@ -29,7 +29,7 @@ export default async function NewsPage(props: PageProps<"/news">) {
   if (!profile) redirect("/login?next=%2Fnews");
 
   const topic = resolveTopic(first((await props.searchParams).topic));
-  const enabled = await getNewsEnabled(profile.id);
+  const enabled = profile.news_enabled;
 
   const header = (
     <div className="flex flex-wrap items-center justify-between gap-3">

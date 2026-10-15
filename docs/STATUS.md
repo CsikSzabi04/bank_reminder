@@ -1,5 +1,13 @@
 # STATUS  (legújabb fent)
 
+## 2026-10-15 · AI-B · M7 — B-30/B-31 kész (localhoston) — **a localhost-átvétel kész, jöhet a GitHub + Vercel**
+
+- **Teljes futás (localhost, élő Supabase):** typecheck · lint · i18n:check (914 kulcs) · **375 unit** · `build` · nyilvános e2e **74** · a11y (nyilvános oldalak) **38** · bejelentkezett e2e **272** (J2/J3/J4, analitika, keretek, célok, tippek, hírek, onboarding, profil, a11y 3 menetben, billentyűzet, layout 320/360/768/1280) · production e2e (CSP + PWA) **15/15**.
+- **B-30:** J4-folyamat végig (értesítés → megnyitás → kifizetés), értesítés-gomb végpontok (+ védelmek), J2 vége; CI-munkafolyamat (4 job); `npm run test:all`.
+- **B-31:** szöveg-higiénia őr, bundle-jelentés (`scripts/bundle-report.mjs`: Főoldal 200 kB gzip), README + `CHANGELOG.md` (1.0.0), `docs/DEPLOY-CHECKLIST.md` (GitHub → Vercel → Supabase → füstteszt → eszköz-mátrix), verzió 1.0.0.
+- **Tudnivaló:** a CI-munkafolyamat a GitHubra feltöltés után fut először (helyben a lépéseit szimuláltam: placeholder kulcs + hideg dev-szerver → a melegítő megoldotta).
+- → **Gazda:** `docs/DEPLOY-CHECKLIST.md` szerint (a push és a fiók-törlés kézi próbái is ott). A B-27 (Vercel-deploy) a jóváhagyásodra vár; semmit nem publikáltam.
+
 ## 2026-10-15 · AI-B · M7 — B-29 kész (localhoston): a11y-átfutás
 
 - Automata: minden belépett oldal axe-ja asztali világos/sötét + **mobil 360 px** (cél-méret ≥ 44 px, nincs túlcsordulás); a kijelentkezve elérhető oldalak 4 menetben; billentyűzet-teszt (Tab-sorrend, ugrás a tartalomra, látható fókusz, dialógus-csapda + fókusz-visszaadás, aria-live toast); 320 px-es reflow. Javítások: calendar-rács rés, ViewToggle 44 px, aláírás/regisztráció jelölőnégyzet, nyilvános fejléc-link, előfizetés-lista link.

@@ -72,11 +72,6 @@ export async function getNewsItem(id: string): Promise<NewsItem | null> {
   return data?.[0] ? toItem(data[0]) : null;
 }
 
-export async function getNewsEnabled(userId: string): Promise<boolean> {
-  const { data } = await (await createClient(await cookies())).from("profiles").select("news_enabled").eq("id", userId).single();
-  return data?.news_enabled ?? true;
-}
-
 // A kiadó linkje csak https lehet (a betöltő is így szűri) — a megjelenítésnél is ellenőrizzük
 export function safeExternalUrl(url: string): string | null {
   try {

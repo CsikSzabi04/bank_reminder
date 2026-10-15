@@ -20,6 +20,7 @@ const prod = Boolean(process.env.E2E_PROD);
 const PUBLIC_IGNORE = ["**/security.spec.ts", "**/pwa.spec.ts", "**/authed/**", "**/auth.setup.ts"];
 
 export default defineConfig({
+  globalSetup: "./tests/e2e/support/global-warmup.ts",
   testDir: "./tests",
   testMatch: ["e2e/**/*.spec.ts", "a11y/**/*.spec.ts"],
   fullyParallel: true,
@@ -49,7 +50,8 @@ export default defineConfig({
       name: "setup",
       testDir: "./tests/e2e",
       testMatch: "**/auth.setup.ts",
-      use: { ...devices["Desktop Chrome"] },
+      // production módban a belépés is a production szerveren fut (nincs hideg `next dev`, ami a `.next` mappát a buildtől elvenné)
+      use: { ...devices["Desktop Chrome"], ...(prod ? { baseURL: `http://localhost:${PROD_PORT}` } : {}) },
     },
     {
       name: "authed",
@@ -81,23 +83,23 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"] },
     },
   ],
-  webServer: [
-    {
-      command: "npm run dev",
-      url: "http://localhost:3000/api/health",
-      reuseExistingServer: !process.env.CI,
-      timeout: 120_000,
-    },
-    // a production szerver a `next build` után indul (E2E_PROD=1)
-    ...(prod
-      ? [
-          {
-            command: `npm run start -- -p ${PROD_PORT}`,
-            url: `http://localhost:${PROD_PORT}/api/health`,
-            reuseExistingServer: !process.env.CI,
-            timeout: 120_000,
-          },
-        ]
-      : []),
-  ],
+  // fejlesztői szerver: a nyilvános / belépett / a11y futásokhoz; production módban (E2E_PROD=1) csak a production szerver
+  // indul a `next build` után — a két szerver ugyanazt a `.next` mappát használná, és egymást rontanák
+  webServer: prod
+    ? [
+        {
+          command: `npm run start -- -p ${PROD_PORT}`,
+          url: `http://localhost:${PROD_PORT}/api/health`,
+          reuseExistingServer: !process.env.CI,
+          timeout: 120_000,
+        },
+      ]
+    : [
+        {
+          command: "npm run dev",
+          url: "http://localhost:3000/api/health",
+          reuseExistingServer: !process.env.CI,
+          timeout: 120_000,
+        },
+      ],
 });

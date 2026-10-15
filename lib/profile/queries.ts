@@ -13,6 +13,8 @@ export type CurrentProfile = {
   timezone: string;
   base_currency: string;
   created_at: string;
+  tips_enabled: boolean;
+  news_enabled: boolean;
 };
 
 // Kérésenként egyszer fut (React cache), és csak a ténylegesen olvasott oszlopokat kéri (H11).
@@ -25,7 +27,7 @@ export const getCurrentProfile = cache(async (): Promise<CurrentProfile | null> 
 
   const { data } = await supabase
     .from("profiles")
-    .select("id, display_name, avatar_path, theme, locale, timezone, base_currency, created_at")
+    .select("id, display_name, avatar_path, theme, locale, timezone, base_currency, created_at, tips_enabled, news_enabled")
     .eq("id", claims.sub)
     .single();
   if (!data) return null;

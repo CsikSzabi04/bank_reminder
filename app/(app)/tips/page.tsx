@@ -10,7 +10,7 @@ import type { Locale } from "@/lib/i18n/config";
 import { sumMoney } from "@/lib/money";
 import { getCurrentProfile } from "@/lib/profile/queries";
 import { buildTipCards } from "@/lib/tips/cards";
-import { getActiveTips, getDoneSaving, getTipsEnabled } from "@/lib/tips/queries";
+import { getActiveTips, getDoneSaving } from "@/lib/tips/queries";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("tips");
@@ -25,7 +25,7 @@ export default async function TipsPage() {
   const profile = await getCurrentProfile();
   if (!profile) redirect("/login?next=%2Ftips");
 
-  const enabled = await getTipsEnabled(profile.id);
+  const enabled = profile.tips_enabled;
   const header = (
     <div className="flex flex-wrap items-center justify-between gap-3">
       <h1 className="text-2xl font-semibold">{t("title")}</h1>

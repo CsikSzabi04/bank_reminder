@@ -19,9 +19,8 @@ import { todayIn } from "@/lib/format";
 import type { Locale } from "@/lib/i18n/config";
 import { getCurrentProfile } from "@/lib/profile/queries";
 import { getCategories } from "@/lib/reminders/queries";
-import { getNewsEnabled } from "@/lib/news/queries";
 import { first } from "@/lib/search-params";
-import { getTipsEnabled, getTopTip } from "@/lib/tips/queries";
+import { getTopTip } from "@/lib/tips/queries";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("nav");
@@ -43,13 +42,12 @@ export default async function DashboardPage(props: PageProps<"/dashboard">) {
   const currentMonth = `${today.slice(0, 7)}-01`;
   const month = resolveMonth(first((await props.searchParams).month), today);
 
-  const [summary, categories, tipsEnabled, newsEnabled] = await Promise.all([
+  // a tipp/hír kapcsolója a profil-sorban jön (nincs külön lekérdezés); a tipp a többivel párhuzamosan
+  const [summary, categories, topTip] = await Promise.all([
     getDashboardSummary(month),
     getCategories(locale),
-    getTipsEnabled(profile.id),
-    getNewsEnabled(profile.id),
+    profile.tips_enabled ? getTopTip(today) : Promise.resolve(null),
   ]);
-  const topTip = tipsEnabled ? await getTopTip(today) : null;
   const name = profile.display_name || profile.email.split("@")[0];
 
   return (
@@ -141,7 +139,7 @@ export default async function DashboardPage(props: PageProps<"/dashboard">) {
           </div>
         </div>
       )}
-      {newsEnabled && summary && <NewsStrip />}
+      {profile.news_enabled && summary && <NewsStrip />}
       <InstallCard />
     </div>
   );

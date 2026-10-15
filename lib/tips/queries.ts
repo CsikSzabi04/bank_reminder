@@ -59,11 +59,6 @@ export async function getDoneSaving(): Promise<number> {
   return sumMoney((data ?? []).map((t) => t.est_monthly_saving ?? 0));
 }
 
-export async function getTipsEnabled(userId: string): Promise<boolean> {
-  const { data } = await (await client()).from("profiles").select("tips_enabled").eq("id", userId).single();
-  return data?.tips_enabled ?? true;
-}
-
 // A „Mit nézel itt?" chipekhez: az emlékeztető mostani használati címkéi
 export async function getUsageTags(reminderIds: string[]): Promise<Map<string, string[]>> {
   if (reminderIds.length === 0) return new Map();
