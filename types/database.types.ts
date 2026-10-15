@@ -3,6 +3,182 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 export type Database = {
   public: {
     Tables: {
+      bank_connect_states: {
+        Row: {
+          created_at: string;
+          expires_at: string;
+          state: string;
+          used_at: string | null;
+          user_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          created_at?: string;
+          expires_at: string;
+          state: string;
+          used_at?: string | null;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          expires_at?: string;
+          state?: string;
+          used_at?: string | null;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
+      bank_connections: {
+        Row: {
+          accounts: NonNullable<Json>;
+          aspsp_country: string;
+          aspsp_name: string;
+          authorized_at: string;
+          consent_valid_until: string;
+          created_at: string;
+          id: string;
+          last_error: string | null;
+          last_sync_at: string | null;
+          last_sync_ok: boolean | null;
+          provider: string;
+          session_id: string;
+          status: string;
+          sync_count_day: string | null;
+          sync_count_today: number;
+          user_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          accounts?: NonNullable<Json>;
+          aspsp_country: string;
+          aspsp_name: string;
+          authorized_at: string;
+          consent_valid_until: string;
+          created_at?: string;
+          id?: string;
+          last_error?: string | null;
+          last_sync_at?: string | null;
+          last_sync_ok?: boolean | null;
+          provider?: string;
+          session_id: string;
+          status?: string;
+          sync_count_day?: string | null;
+          sync_count_today?: number;
+          user_id?: string;
+        };
+        Update: {
+          accounts?: NonNullable<Json>;
+          aspsp_country?: string;
+          aspsp_name?: string;
+          authorized_at?: string;
+          consent_valid_until?: string;
+          created_at?: string;
+          id?: string;
+          last_error?: string | null;
+          last_sync_at?: string | null;
+          last_sync_ok?: boolean | null;
+          provider?: string;
+          session_id?: string;
+          status?: string;
+          sync_count_day?: string | null;
+          sync_count_today?: number;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
+      bank_transactions: {
+        Row: {
+          account_ref: string | null;
+          amount: number;
+          booked_on: string;
+          category_id: string | null;
+          connection_id: string | null;
+          created_at: string;
+          currency: string;
+          dismissed: boolean;
+          expense_id: string | null;
+          external_ref: string | null;
+          fingerprint: string;
+          id: string;
+          matched_with: string | null;
+          merchant: string | null;
+          merchant_key: string | null;
+          source: string;
+          status: string;
+          user_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          account_ref?: string | null;
+          amount: number;
+          booked_on: string;
+          category_id?: string | null;
+          connection_id?: string | null;
+          created_at?: string;
+          currency: string;
+          dismissed?: boolean;
+          expense_id?: string | null;
+          external_ref?: string | null;
+          fingerprint: string;
+          id?: string;
+          matched_with?: string | null;
+          merchant?: string | null;
+          merchant_key?: string | null;
+          source: string;
+          status: string;
+          user_id: string;
+        };
+        Update: {
+          account_ref?: string | null;
+          amount?: number;
+          booked_on?: string;
+          category_id?: string | null;
+          connection_id?: string | null;
+          created_at?: string;
+          currency?: string;
+          dismissed?: boolean;
+          expense_id?: string | null;
+          external_ref?: string | null;
+          fingerprint?: string;
+          id?: string;
+          matched_with?: string | null;
+          merchant?: string | null;
+          merchant_key?: string | null;
+          source?: string;
+          status?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "bank_transactions_category_id_fkey";
+            columns: ["category_id"];
+            isOneToOne: false;
+            referencedRelation: "categories";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "bank_transactions_connection_id_fkey";
+            columns: ["connection_id"];
+            isOneToOne: false;
+            referencedRelation: "bank_connections";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "bank_transactions_expense_id_fkey";
+            columns: ["expense_id"];
+            isOneToOne: false;
+            referencedRelation: "expenses";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "bank_transactions_matched_with_fkey";
+            columns: ["matched_with"];
+            isOneToOne: false;
+            referencedRelation: "bank_transactions";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       budgets: {
         Row: {
           category_id: string;
@@ -89,7 +265,10 @@ export type Database = {
           created_at: string;
           currency: string;
           id: string;
+          is_provisional: boolean;
+          merchant: string | null;
           note: string | null;
+          source: string;
           spent_on: string;
           user_id: string;
         };
@@ -100,7 +279,10 @@ export type Database = {
           created_at?: string;
           currency?: string;
           id?: string;
+          is_provisional?: boolean;
+          merchant?: string | null;
           note?: string | null;
+          source?: string;
           spent_on?: string;
           user_id?: string;
         };
@@ -110,7 +292,10 @@ export type Database = {
           created_at?: string;
           currency?: string;
           id?: string;
+          is_provisional?: boolean;
+          merchant?: string | null;
           note?: string | null;
+          source?: string;
           spent_on?: string;
           user_id?: string;
         };
@@ -185,6 +370,118 @@ export type Database = {
             columns: ["goal_id"];
             isOneToOne: false;
             referencedRelation: "savings_goals_progress";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      ingest_events: {
+        Row: {
+          app: string | null;
+          at: string;
+          id: number;
+          outcome: string;
+          raw_text: string | null;
+          token_id: string | null;
+          user_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          app?: string | null;
+          at?: string;
+          id?: never;
+          outcome: string;
+          raw_text?: string | null;
+          token_id?: string | null;
+          user_id: string;
+        };
+        Update: {
+          app?: string | null;
+          at?: string;
+          id?: never;
+          outcome?: string;
+          raw_text?: string | null;
+          token_id?: string | null;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "ingest_events_token_id_fkey";
+            columns: ["token_id"];
+            isOneToOne: false;
+            referencedRelation: "ingest_tokens";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      ingest_tokens: {
+        Row: {
+          allowed_apps: string[];
+          created_at: string;
+          id: string;
+          label: string | null;
+          last_used_at: string | null;
+          prefix: string;
+          revoked_at: string | null;
+          token_hash: string;
+          user_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          allowed_apps?: string[];
+          created_at?: string;
+          id?: string;
+          label?: string | null;
+          last_used_at?: string | null;
+          prefix: string;
+          revoked_at?: string | null;
+          token_hash: string;
+          user_id?: string;
+        };
+        Update: {
+          allowed_apps?: string[];
+          created_at?: string;
+          id?: string;
+          label?: string | null;
+          last_used_at?: string | null;
+          prefix?: string;
+          revoked_at?: string | null;
+          token_hash?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
+      merchant_rules: {
+        Row: {
+          category_id: string;
+          created_at: string;
+          hits: number;
+          id: string;
+          match_key: string;
+          user_id: string | null;
+        };
+        ComputedFields: never;
+        Insert: {
+          category_id: string;
+          created_at?: string;
+          hits?: number;
+          id?: string;
+          match_key: string;
+          user_id?: string | null;
+        };
+        Update: {
+          category_id?: string;
+          created_at?: string;
+          hits?: number;
+          id?: string;
+          match_key?: string;
+          user_id?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "merchant_rules_category_id_fkey";
+            columns: ["category_id"];
+            isOneToOne: false;
+            referencedRelation: "categories";
             referencedColumns: ["id"];
           },
         ];
@@ -483,7 +780,9 @@ export type Database = {
       profiles: {
         Row: {
           avatar_path: string | null;
+          bank_sync_allowed: boolean;
           base_currency: string;
+          budget_alerts: boolean;
           channel_email: boolean;
           channel_push: boolean;
           created_at: string;
@@ -507,7 +806,9 @@ export type Database = {
         ComputedFields: never;
         Insert: {
           avatar_path?: string | null;
+          bank_sync_allowed?: boolean;
           base_currency?: string;
+          budget_alerts?: boolean;
           channel_email?: boolean;
           channel_push?: boolean;
           created_at?: string;
@@ -530,7 +831,9 @@ export type Database = {
         };
         Update: {
           avatar_path?: string | null;
+          bank_sync_allowed?: boolean;
           base_currency?: string;
+          budget_alerts?: boolean;
           channel_email?: boolean;
           channel_push?: boolean;
           created_at?: string;
