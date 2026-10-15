@@ -7,6 +7,7 @@ import { AndroidSection } from "@/components/bank/android-section";
 import { BankNav } from "@/components/bank/bank-nav";
 import { OverviewSection } from "@/components/bank/overview-section";
 import { RulesSection } from "@/components/bank/rules-section";
+import { readBankFlash } from "@/lib/bank/flash";
 import { defaultBankSection, isBankSection, type BankSection } from "@/lib/bank/sections";
 import { getBankAccess } from "@/lib/bank/queries";
 import { getCurrentProfile } from "@/lib/profile/queries";
@@ -23,7 +24,10 @@ export default async function BankPage(props: PageProps<"/bank">) {
   if (!profile) redirect("/login?next=%2Fbank");
 
   const { syncAllowed } = await getBankAccess();
-  const requested = first((await props.searchParams).section);
+  const search = await props.searchParams;
+  const requested = first(search.section);
+  // az összekötés eredménye (a /bank/callback ide irányít); csak ismert érték jelenik meg
+  const flash = readBankFlash({ result: first(search.result), reason: first(search.reason) });
   const hasSection = isBankSection(requested);
   const current: BankSection = hasSection ? requested : defaultBankSection(syncAllowed);
 
@@ -38,7 +42,7 @@ export default async function BankPage(props: PageProps<"/bank">) {
             <ChevronLeft className="size-4" aria-hidden />
             {t("back")}
           </Link>
-          {current === "overview" && <OverviewSection syncAllowed={syncAllowed} />}
+          {current === "overview" && <OverviewSection syncAllowed={syncAllowed} timeZone={profile.timezone} flash={flash} />}
           {current === "android" && <AndroidSection />}
           {current === "rules" && <RulesSection />}
         </div>

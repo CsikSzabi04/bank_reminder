@@ -30,3 +30,8 @@ test("a /bank és a szakaszai kijelentkezve a belépéshez visznek (B-40)", asyn
   await page.goto("/bank?section=android");
   await expect(page).toHaveURL(/\/login\?next=%2Fbank%3Fsection%3Dandroid$/);
 });
+
+test("a /bank/callback kijelentkezve a belépéshez visz, a code és a state a next-ben megőrződik (B-41)", async ({ page }) => {
+  await page.goto("/bank/callback?code=abcdefgh12&state=abcdefgh34");
+  await expect(page).toHaveURL(/\/login\?next=%2Fbank%2Fcallback%3Fcode%3Dabcdefgh12%26state%3Dabcdefgh34$/);
+});

@@ -542,10 +542,6 @@
       "restricted": {
         "body": "Ez a funkció jelenleg csak a fejlesztő saját számláira érhető el.",
         "hint": "Az Android-értesítések szakasz mindenkinek elérhető, aki Android-telefont használ."
-      },
-      "empty": {
-        "title": "Még nincs összekötött bank",
-        "body": "Az összekötés hamarosan elérhető itt."
       }
     },
     "android": {
@@ -571,6 +567,92 @@
         "next": "Következő",
         "upcoming": "Várható"
       }
+    },
+    "flash": {
+      "connected": "Az összekötés sikerült. Az első szinkron hamarosan lefut."
+    },
+    "connect": {
+      "title": "Bank összekötése",
+      "titleAnother": "Újabb bank összekötése",
+      "lead": "Csak olvasási hozzáférést kérünk a számláidhoz — az app soha nem indít fizetést.",
+      "bankLabel": "Melyik bank?",
+      "bankPlaceholder": "Válassz bankot",
+      "maxDays": "A hozzáférés legfeljebb {days} napig érvényes, utána újra kell hitelesíteni.",
+      "cta": "Összekötés az Enable Bankinggel",
+      "pending": "Átirányítás a bankhoz…",
+      "stepsLabel": "Az összekötés lépései",
+      "step1": "Kiválasztod a bankot.",
+      "step2": "A bank saját appjában vagy oldalán jóváhagyod a hozzáférést.",
+      "step3": "Visszatérsz ide, és kész.",
+      "warning": "A bank appját neked kell megnyitnod a jóváhagyáshoz.",
+      "enableLink": "Enable Banking (új lapon nyílik)",
+      "listError": "A bankok listája most nem tölthető be.",
+      "listEmpty": "Most nincs választható bank."
+    },
+    "connection": {
+      "status": {
+        "active": "Aktív",
+        "soon": "Hamarosan lejár",
+        "expired": "Lejárt — frissítsd",
+        "error": "Hiba",
+        "revoked": "Visszavonva"
+      },
+      "daysLeft": "{count, plural, =0 {Ma lejár a hozzáférés} =1 {1 nap van hátra} other {# nap van hátra}}",
+      "expiredAgo": "{count, plural, one {A hozzáférés # napja lejárt} other {A hozzáférés # napja lejárt}}",
+      "elapsedLabel": "A hozzáférés eltelt része",
+      "expiredHint": "Az automatikus követés áll. Hitelesítsd újra a bank saját appjában.",
+      "errorHint": "A legutóbbi szinkron nem sikerült. Később újra próbáljuk; ha nem múlik el, hitelesítsd újra.",
+      "revokedHint": "Ez a kapcsolat vissza lett vonva, az automatikus követés leállt.",
+      "lastSync": {
+        "never": "Még nem volt szinkron",
+        "ok": "Utolsó szinkron: {when} — sikeres",
+        "failed": "Utolsó szinkron: {when} — nem sikerült"
+      },
+      "reauth": "Újra-hitelesítés",
+      "refresh": "Frissítés most",
+      "refreshing": "Frissítés…",
+      "refreshHint": "Két frissítés között legalább {hours} órának el kell telnie.",
+      "refreshResult": {
+        "queued": "A frissítés elindult. Az eredmény hamarosan megjelenik.",
+        "too_soon": "Nemrég volt szinkron — új frissítést ekkor kérhetsz: {time}.",
+        "too_soon_unknown": "Nemrég volt szinkron — két frissítés között legalább {hours} órának el kell telnie.",
+        "daily_limit": "Mára elfogyott a frissítések száma. Holnap újra próbálhatod.",
+        "not_active": "A kapcsolat nem aktív — hitelesítsd újra."
+      },
+      "delete": "Kapcsolat törlése",
+      "deleteTitle": "Törlöd a kapcsolatot?",
+      "deleteBody": "A bank-hozzáférés visszavonódik, és az automatikus követés leáll. Később újra összekötheted.",
+      "deleteConfirm": "Törlés",
+      "deleted": "A kapcsolat törölve.",
+      "accounts": "Számlák",
+      "noAccounts": "Nincs megjeleníthető számla."
+    },
+    "accounts": {
+      "kind": {
+        "current": "Folyószámla",
+        "savings": "Megtakarítási számla",
+        "other": "Számla"
+      },
+      "ibanEnding": "IBAN vége: {last4}",
+      "sync": {
+        "on": "Követett",
+        "off": "Nem követett"
+      }
+    },
+    "error": {
+      "title": "Nem sikerült",
+      "unauthenticated": "A munkameneted lejárt. Jelentkezz be újra.",
+      "not_allowed": "Ez a funkció ezen a fiókon nem érhető el.",
+      "unknown_bank": "Ezt a bankot nem tudtuk kiválasztani. Válassz másikat a listából.",
+      "state_invalid": "Ez az összekötési kísérlet már fel lett használva, vagy nem érvényes. Ha a bank lent megjelenik, az összekötés sikerült; különben indítsd újra.",
+      "state_expired": "Az összekötési kísérlet lejárt (10 percig érvényes). Indítsd újra.",
+      "rate_limited": "Túl sok kérés. Próbáld újra kicsit később.",
+      "upstream_failed": "A bank vagy az összekötő szolgáltatás most nem válaszol. Próbáld újra később.",
+      "not_found": "Ezt a kapcsolatot nem találjuk — lehet, hogy már törölve lett.",
+      "invalid_callback": "A bank visszairányítása hibás volt, ezért nem tudtuk befejezni az összekötést. Indítsd újra.",
+      "bank_denied": "A bankban nem hagytad jóvá a hozzáférést, ezért nem jött létre az összekötés.",
+      "bank_error": "A bank hibát jelzett a jóváhagyás közben. Próbáld újra később.",
+      "unknown": "Valami nem sikerült. Próbáld újra."
     }
   },
   "savings": {

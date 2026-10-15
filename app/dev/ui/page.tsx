@@ -1,10 +1,14 @@
 import { getLocale, getTranslations } from "next-intl/server";
+import { BankFlashBanner } from "@/components/bank/bank-flash";
+import { ConnectPanel } from "@/components/bank/connect-panel";
+import { ConnectionCard } from "@/components/bank/connection-card";
 import { ConsentTimeline } from "@/components/bank/consent-timeline";
 import { CategoryChip } from "@/components/categories/category-chip";
 import { CategoryIcon } from "@/components/categories/category-icon";
 import { AmountText } from "@/components/ui/amount-text";
 import { LanguageSwitch } from "@/components/shell/language-switch";
 import { ThemeSwitch } from "@/components/shell/theme-switch";
+import { parseConnections } from "@/lib/bank/connections";
 import { formatMoney } from "@/lib/format";
 import { FIXTURE_CATEGORIES } from "@/lib/fixtures/reminders";
 import type { Locale } from "@/lib/i18n/config";
@@ -32,6 +36,37 @@ const TEXTS = [
 ] as const;
 
 const inDays = (from: Date, days: number) => new Date(from.getTime() + days * 86_400_000).toISOString();
+
+// Szintetikus bank-kapcsolatok a bemutatóhoz (nem valódi adat): 3 számla-típus (folyószámla IBAN-nal, azonos IBAN-ú más pénznem, IBAN nélküli megtakarítás)
+const demoConnections = (now: Date) =>
+  parseConnections([
+    {
+      id: "00000000-0000-4000-8000-000000000001",
+      aspsp_name: "Demo Bank",
+      aspsp_country: "HU",
+      status: "active",
+      authorized_at: inDays(now, -160),
+      consent_valid_until: inDays(now, 20),
+      last_sync_at: inDays(now, -0.1),
+      last_sync_ok: true,
+      accounts: [
+        { identification_hash: "d1", cash_account_type: "CACC", currency: "HUF", iban_last4: "0000", name: "Fő számla", sync_enabled: true },
+        { identification_hash: "d2", cash_account_type: "CACC", currency: "USD", iban_last4: "0000", sync_enabled: false },
+        { identification_hash: "d3", cash_account_type: "SVGS", currency: "HUF", name: "Megtakarítás", sync_enabled: false },
+      ],
+    },
+    {
+      id: "00000000-0000-4000-8000-000000000002",
+      aspsp_name: "Demo Bank 2",
+      aspsp_country: "HU",
+      status: "expired",
+      authorized_at: inDays(now, -190),
+      consent_valid_until: inDays(now, -10),
+      last_sync_at: inDays(now, -11),
+      last_sync_ok: false,
+      accounts: [{ identification_hash: "e1", cash_account_type: "CACC", currency: "EUR" }],
+    },
+  ]);
 
 export default async function DevUiPage() {
   const locale = (await getLocale()) as Locale;
@@ -110,6 +145,28 @@ export default async function DevUiPage() {
           {/* szintetikus dátumok a mai naphoz képest: 180 napos hozzáférés 20 nap múlva lejár · 14 napos rövid hozzáférés */}
           <ConsentTimeline validUntil={inDays(now, 20)} authorizedAt={inDays(now, -160)} timeZone="Europe/Budapest" now={now} />
           <ConsentTimeline validUntil={inDays(now, 13)} authorizedAt={inDays(now, -1)} timeZone="Europe/Budapest" now={now} />
+        </div>
+      </section>
+
+      <section>
+        <h2 className={section}>Bank: ConnectionCard · ConnectPanel · BankFlashBanner</h2>
+        <div className="grid gap-4 lg:grid-cols-2">
+          {demoConnections(now).map((c) => (
+            <ConnectionCard key={c.id} connection={c} timeZone="Europe/Budapest" now={now} />
+          ))}
+          <ConnectPanel
+            another
+            listError={null}
+            banks={[
+              { name: "Demo Bank", country: "HU", maxConsentDays: 180 },
+              { name: "Demo Bank 2", country: "HU", maxConsentDays: 90 },
+            ]}
+          />
+          <ConnectPanel another={false} listError="upstream_failed" banks={[]} />
+          <div className="flex flex-col gap-3">
+            <BankFlashBanner flash={{ kind: "connected" }} />
+            <BankFlashBanner flash={{ kind: "error", reason: "state_invalid" }} />
+          </div>
         </div>
       </section>
 

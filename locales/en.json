@@ -542,10 +542,6 @@
       "restricted": {
         "body": "This feature is currently available only for the developer's own accounts.",
         "hint": "The Android notifications section is available to everyone who uses an Android phone."
-      },
-      "empty": {
-        "title": "No bank connected yet",
-        "body": "Connecting a bank will be available here soon."
       }
     },
     "android": {
@@ -571,6 +567,92 @@
         "next": "Next",
         "upcoming": "Scheduled"
       }
+    },
+    "flash": {
+      "connected": "Connected. The first sync will run shortly."
+    },
+    "connect": {
+      "title": "Connect a bank",
+      "titleAnother": "Connect another bank",
+      "lead": "We only ask for read access to your accounts — the app never initiates payments.",
+      "bankLabel": "Which bank?",
+      "bankPlaceholder": "Choose a bank",
+      "maxDays": "Access is valid for up to {days} days, then you need to re-authorise.",
+      "cta": "Connect with Enable Banking",
+      "pending": "Redirecting to your bank…",
+      "stepsLabel": "Steps to connect",
+      "step1": "You choose your bank.",
+      "step2": "You approve the access in the bank's own app or website.",
+      "step3": "You come back here, and you're done.",
+      "warning": "You have to open the bank's app yourself to approve.",
+      "enableLink": "Enable Banking (opens in a new tab)",
+      "listError": "The list of banks can't be loaded right now.",
+      "listEmpty": "There is no bank to choose right now."
+    },
+    "connection": {
+      "status": {
+        "active": "Active",
+        "soon": "Expires soon",
+        "expired": "Expired — renew",
+        "error": "Error",
+        "revoked": "Revoked"
+      },
+      "daysLeft": "{count, plural, =0 {Access expires today} =1 {1 day left} other {# days left}}",
+      "expiredAgo": "{count, plural, one {Access expired # day ago} other {Access expired # days ago}}",
+      "elapsedLabel": "Elapsed part of the access period",
+      "expiredHint": "Automatic tracking is paused. Re-authorise in the bank's own app.",
+      "errorHint": "The last sync failed. We'll try again later; if it persists, re-authorise.",
+      "revokedHint": "This connection was revoked and automatic tracking has stopped.",
+      "lastSync": {
+        "never": "No sync yet",
+        "ok": "Last sync: {when} — succeeded",
+        "failed": "Last sync: {when} — failed"
+      },
+      "reauth": "Re-authorise",
+      "refresh": "Refresh now",
+      "refreshing": "Refreshing…",
+      "refreshHint": "At least {hours} hours must pass between two refreshes.",
+      "refreshResult": {
+        "queued": "The refresh has started. The result will show up shortly.",
+        "too_soon": "A sync ran recently — you can request another at {time}.",
+        "too_soon_unknown": "A sync ran recently — at least {hours} hours must pass between two refreshes.",
+        "daily_limit": "Today's refreshes are used up. You can try again tomorrow.",
+        "not_active": "The connection isn't active — please re-authorise."
+      },
+      "delete": "Delete connection",
+      "deleteTitle": "Delete this connection?",
+      "deleteBody": "The bank access is revoked and automatic tracking stops. You can connect again later.",
+      "deleteConfirm": "Delete",
+      "deleted": "Connection deleted.",
+      "accounts": "Accounts",
+      "noAccounts": "No accounts to show."
+    },
+    "accounts": {
+      "kind": {
+        "current": "Current account",
+        "savings": "Savings account",
+        "other": "Account"
+      },
+      "ibanEnding": "IBAN ending {last4}",
+      "sync": {
+        "on": "Tracked",
+        "off": "Not tracked"
+      }
+    },
+    "error": {
+      "title": "Something went wrong",
+      "unauthenticated": "Your session has expired. Please sign in again.",
+      "not_allowed": "This feature is not available for this account.",
+      "unknown_bank": "We couldn't select that bank. Please choose another one from the list.",
+      "state_invalid": "This connection attempt was already used or isn't valid. If the bank shows up below, the connection worked; otherwise start again.",
+      "state_expired": "The connection attempt expired (it is valid for 10 minutes). Please start again.",
+      "rate_limited": "Too many requests. Please try again a little later.",
+      "upstream_failed": "The bank or the connection service isn't responding right now. Please try again later.",
+      "not_found": "We can't find this connection — it may have been deleted already.",
+      "invalid_callback": "The bank's redirect was invalid, so we couldn't finish connecting. Please start again.",
+      "bank_denied": "You didn't approve the access at the bank, so no connection was created.",
+      "bank_error": "The bank reported an error during approval. Please try again later.",
+      "unknown": "Something went wrong. Please try again."
     }
   },
   "savings": {

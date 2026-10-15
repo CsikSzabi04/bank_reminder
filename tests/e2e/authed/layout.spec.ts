@@ -52,6 +52,7 @@ const PAGES: [string, () => string][] = [
   ["Bank · Összekötés", () => "/bank?section=overview"],
   ["Bank · Android", () => "/bank?section=android"],
   ["Bank · Szabályok", () => "/bank?section=rules"],
+  ["Bank · Összekötés hibaüzenettel", () => "/bank?section=overview&result=error&reason=state_invalid"],
   ["Megtakarítás", () => "/savings"],
   ["Új cél", () => "/savings/new?preset=vacation"],
   ["Cél részletei", () => `/savings/${goalId}`],
