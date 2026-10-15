@@ -10,7 +10,7 @@ import { formatDate } from "@/lib/format";
 import type { Locale } from "@/lib/i18n/config";
 import { removeDevice, sendTestPush } from "@/lib/push/actions";
 import { disablePush, enablePush } from "@/lib/push-enable";
-import { pushSupport, sha256Hex, type PushReason } from "@/lib/push-client";
+import { pushSupport, sha256Hex, testErrorHints, type PushReason } from "@/lib/push-client";
 import { PushDiagnostics, type DiagRow } from "./push-diagnostics";
 
 export type DeviceView = {
@@ -67,6 +67,7 @@ export function PushPanel({ vapidKey, devices, globalEnabled }: { vapidKey: stri
   const router = useRouter();
   const [status, setStatus] = useState<Status | null>(null);
   const [problem, setProblem] = useState<PushReason | null>(null);
+  const [testNote, setTestNote] = useState<{ ok: boolean; text: string } | null>(null);
   const [busy, startTransition] = useTransition();
 
   const refresh = useCallback(() => {
@@ -98,11 +99,18 @@ export function PushPanel({ vapidKey, devices, globalEnabled }: { vapidKey: stri
 
   const test = () =>
     startTransition(async () => {
+      setTestNote(null);
       const res = await sendTestPush();
       if (res.ok) {
-        toast.show(res.data!.devices === 0 ? { tone: "error", message: tp("testNone") } : { message: tp("testSent", { sent: res.data!.sent, devices: res.data!.devices }) });
+        const note = res.data!.devices === 0 ? { ok: false, text: tp("testNone") } : { ok: true, text: tp("testSent", { sent: res.data!.sent, devices: res.data!.devices }) };
+        setTestNote(note);
+      } else if (res.code === "rate_limited") {
+        setTestNote({ ok: false, text: tp("testRateLimited") });
       } else {
-        toast.show({ tone: "error", message: res.code === "rate_limited" ? tp("testRateLimited") : tp("testFailed") });
+        // a push-szolgáltató státuszával (pl. „ios:403") és érthető magyarázattal
+        const detail = res.message ? ` (${res.message})` : "";
+        const hints = testErrorHints(res.message).map((h) => tp(`testHint.${h}`));
+        setTestNote({ ok: false, text: [`${tp("testFailed")}${detail}`, ...hints].join(" ") });
       }
     });
 
@@ -163,6 +171,11 @@ export function PushPanel({ vapidKey, devices, globalEnabled }: { vapidKey: stri
             {tp("test")}
           </button>
         </div>
+        {testNote && (
+          <div role="status">
+            <Notice variant={testNote.ok ? "success" : "error"}>{testNote.text}</Notice>
+          </div>
+        )}
       </div>
 
       {status && <PushDiagnostics rows={rows} />}

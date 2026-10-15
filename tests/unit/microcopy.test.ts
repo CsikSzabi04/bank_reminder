@@ -67,7 +67,7 @@ describe("microcopy (HU + EN)", () => {
     for (const [lang, map] of [["hu", HU], ["en", EN]] as const) {
       for (const [k, v] of map) {
         const words = v.replace(/\{[^}]*\}/g, "").match(/\p{Lu}{5,}/gu) ?? [];
-        if (words.some((w) => !["TÖRLÖM", "DELETE", "TERVEZET", "DRAFT", "HTTPS"].includes(w))) bad.push(`${lang}:${k} csupa nagybetű: ${v.slice(0, 50)}`);
+        if (words.some((w) => !["TÖRLÖM", "DELETE", "TERVEZET", "DRAFT", "HTTPS", "VAPID"].includes(w))) bad.push(`${lang}:${k} csupa nagybetű: ${v.slice(0, 50)}`);
         if (/!{2,}/.test(v)) bad.push(`${lang}:${k} felkiáltójel-halmozás`);
       }
     }

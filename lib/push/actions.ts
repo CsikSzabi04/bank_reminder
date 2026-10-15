@@ -63,8 +63,14 @@ export async function sendTestPush(): Promise<ActionState<TestResult>> {
     if (status === 401) return { ok: false, code: "unauthenticated" };
     return { ok: false, code: "upstream_failed" };
   }
-  const r = (data ?? {}) as { ok?: boolean; sent?: number; devices?: number };
-  if (!r.ok) return { ok: false, code: "upstream_failed" };
+  const r = (data ?? {}) as { ok?: boolean; sent?: number; devices?: number; errors?: unknown };
+  // nincs aktív eszköz: nem hiba, a UI külön szöveggel jelzi (a függvény ilyenkor ok:false-t ad)
+  if ((r.devices ?? 0) === 0) return { ok: true, data: { sent: 0, devices: 0 } };
+  if (!r.ok) {
+    // a push-szolgáltató HTTP-státuszai („ios:403"): diagnosztika, nem tartalmaz személyes adatot
+    const detail = Array.isArray(r.errors) ? r.errors.filter((e): e is string => typeof e === "string").slice(0, 5).join(", ") : "";
+    return { ok: false, code: "upstream_failed", ...(detail ? { message: detail } : {}) };
+  }
   return { ok: true, data: { sent: r.sent ?? 0, devices: r.devices ?? 0 } };
 }
 

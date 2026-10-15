@@ -799,6 +799,12 @@
         "denied": "letiltva",
         "prompt": "még nem kértük",
         "na": "nem elérhető"
+      },
+      "testHint": {
+        "vapid": "A push-szolgáltató elutasította a szerver azonosítóját (VAPID) — ezt a szerver beállításán kell javítani, nem rajtad múlik.",
+        "gone": "Az eszköz feliratkozása lejárt — kapcsold ki, majd be újra az értesítéseket ezen az eszközön.",
+        "rejected": "A szolgáltató elutasította az üzenetet.",
+        "transient": "A push-szolgáltató átmenetileg nem érhető el — próbáld meg később."
       }
     },
     "title": "Értesítések",

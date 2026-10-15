@@ -34,6 +34,7 @@ A titkok (`sb_secret_…`, DB jelszó, VAPID privát kulcs, SMTP) **soha** nem k
 - [ ] *Providers → Email:* **Confirm email** BE; jelszó min. 8.
 - [ ] A 8 e-mail sablon beillesztve (`supabase/email-templates/README.md`); **SMTP**: az alap Supabase SMTP csak a csapattagoknak küld (óránként 2 levél) → éles felhasználókhoz saját SMTP kell.
 - [ ] Az Edge Function-ök titkai (VAPID privát, `VAPID_SUBJECT`, `CRON_SECRET`) a `supabase secrets set`-tel — nem fájlban.
+- [ ] **Push-azonosító valós domainre** (iPhone/Apple szigorú a VAPID `sub` mezőre): *Dashboard → Edge Functions → Secrets* (vagy `supabase secrets set`): `VAPID_SUBJECT=https://bankreminder.vercel.app` és `APP_BASE_URL=https://bankreminder.vercel.app`. Utána Profil → Értesítések → „Teszt-értesítés küldése": az eredmény az oldalon marad, hiba esetén a push-szolgáltató státuszával (pl. `ios:403`) és magyarázattal.
 
 ## 4. Élesítés utáni füstteszt (≈ 10 perc, valódi e-mail-címmel)
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { deviceLabel, detectPlatform, urlBase64ToUint8Array } from "@/lib/push-client";
+import { deviceLabel, detectPlatform, testErrorHints, urlBase64ToUint8Array } from "@/lib/push-client";
 
 const UA = {
   win: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36",
@@ -43,5 +43,22 @@ describe("detectPlatform / deviceLabel", () => {
     expect(deviceLabel(env(UA.iphone, "iPhone", 5))).toBe("Safari · iOS");
     expect(deviceLabel(env(UA.firefox, "Linux x86_64"))).toBe("Firefox · Linux");
     expect(deviceLabel(env("valami", ""))).toBe("Browser");
+  });
+});
+
+describe("testErrorHints", () => {
+  it("a push-szolgáltató státuszaiból érthető magyarázatok, egyedi, sorrendtartó", () => {
+    expect(testErrorHints("ios:403")).toEqual(["vapid"]);
+    expect(testErrorHints("ios:401, windows:403")).toEqual(["vapid"]);
+    expect(testErrorHints("android:410, ios:404")).toEqual(["gone"]);
+    expect(testErrorHints("ios:403, android:410, windows:503")).toEqual(["vapid", "gone", "transient"]);
+    expect(testErrorHints("ios:400, ios:413")).toEqual(["rejected"]);
+    expect(testErrorHints("ios:0, ios:429")).toEqual(["transient"]);
+  });
+  it("ismeretlen vagy hiányzó üzenetre nincs magyarázat", () => {
+    expect(testErrorHints(undefined)).toEqual([]);
+    expect(testErrorHints("")).toEqual([]);
+    expect(testErrorHints("ios:418")).toEqual([]);
+    expect(testErrorHints("valami hiba")).toEqual([]);
   });
 });

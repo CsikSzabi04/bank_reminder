@@ -85,8 +85,14 @@ describe("sendTestPush", () => {
     expect(await sendTestPush()).toEqual({ ok: false, code: "unauthenticated" });
     state.invoke.mockResolvedValueOnce({ data: null, error: { context: { status: 500 } } });
     expect(await sendTestPush()).toEqual({ ok: false, code: "upstream_failed" });
-    state.invoke.mockResolvedValueOnce({ data: { ok: false }, error: null });
+    state.invoke.mockResolvedValueOnce({ data: { ok: false, devices: 1 }, error: null });
     expect(await sendTestPush()).toEqual({ ok: false, code: "upstream_failed" });
+  });
+  it("a push-szolgáltató státuszai átjutnak a hibában (diagnosztika); nincs aktív eszköz nem hiba", async () => {
+    state.invoke.mockResolvedValueOnce({ data: { ok: false, sent: 0, devices: 2, errors: ["ios:403", "windows:410", 7] }, error: null });
+    expect(await sendTestPush()).toEqual({ ok: false, code: "upstream_failed", message: "ios:403, windows:410" });
+    state.invoke.mockResolvedValueOnce({ data: { ok: false, sent: 0, devices: 0, errors: ["no_active_subscription"] }, error: null });
+    expect(await sendTestPush()).toEqual({ ok: true, data: { sent: 0, devices: 0 } });
   });
 });
 

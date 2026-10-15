@@ -799,6 +799,12 @@
         "denied": "blocked",
         "prompt": "not asked yet",
         "na": "not available"
+      },
+      "testHint": {
+        "vapid": "The push service rejected the server identity (VAPID) — this must be fixed in the server settings, it is not up to you.",
+        "gone": "This device subscription has expired — turn notifications off and on again on this device.",
+        "rejected": "The push service rejected the message.",
+        "transient": "The push service is temporarily unavailable — try again later."
       }
     },
     "title": "Notifications",

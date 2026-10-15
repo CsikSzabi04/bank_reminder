@@ -88,3 +88,17 @@ export async function serviceWorkerReady(): Promise<ServiceWorkerRegistration | 
     new Promise<null>((resolve) => setTimeout(() => resolve(null), READY_TIMEOUT_MS)),
   ]);
 }
+
+export type TestHint = "vapid" | "gone" | "rejected" | "transient";
+
+// A teszt-értesítés hibaüzenetéből („ios:403, windows:410") a push-szolgáltató státuszai → érthető magyarázatok (egyedi, sorrendtartó)
+export function testErrorHints(message: string | undefined): TestHint[] {
+  const hints: TestHint[] = [];
+  for (const m of (message ?? "").matchAll(/:(\d{1,3})(?!\d)/g)) {
+    const status = Number(m[1]);
+    const hint: TestHint | null =
+      status === 401 || status === 403 ? "vapid" : status === 404 || status === 410 ? "gone" : status === 400 || status === 413 ? "rejected" : status === 0 || status === 429 || status >= 500 ? "transient" : null;
+    if (hint && !hints.includes(hint)) hints.push(hint);
+  }
+  return hints;
+}
