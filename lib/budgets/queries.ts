@@ -68,7 +68,22 @@ export async function getFrequentExpenseCategories(locale: Locale, today: string
 
 export type CategoryItem =
   | { kind: "bill"; id: string; reminderId: string; name: string; date: string; amount: number; currency: string; status: string }
-  | { kind: "expense"; id: string; name: string; date: string; amount: number; currency: string };
+  | {
+      kind: "expense";
+      id: string;
+      name: string;
+      date: string;
+      amount: number;
+      currency: string;
+      // a tétel forrása: kézi · értesítésből · banki szinkronból; az ideiglenes (értesítés-eredetű) tételt a bank még nem erősítette meg
+      source: "manual" | "notification" | "bank";
+      provisional: boolean;
+      // a visszavonáshoz (törlés után újra felvehető ugyanazokkal az adatokkal)
+      note: string | null;
+      merchant: string | null;
+    };
+
+const expenseSource = (value: string): "manual" | "notification" | "bank" => (value === "notification" || value === "bank" ? value : "manual");
 
 // A kategória hónapjának tételei: számlák (esedékesség szerint) + gyors kiadások, időrendben
 export async function getCategoryItems(categoryId: string, month: string): Promise<CategoryItem[]> {
@@ -82,7 +97,7 @@ export async function getCategoryItems(categoryId: string, month: string): Promi
       .neq("status", "skipped")
       .gte("due_date", month)
       .lte("due_date", to),
-    supabase.from("expenses").select("id, note, spent_on, amount, currency").eq("category_id", categoryId).gte("spent_on", month).lte("spent_on", to),
+    supabase.from("expenses").select("id, note, spent_on, amount, currency, source, is_provisional, merchant").eq("category_id", categoryId).gte("spent_on", month).lte("spent_on", to),
   ]);
   const items: CategoryItem[] = [
     ...(bills.data ?? []).flatMap((b) =>
@@ -90,7 +105,19 @@ export async function getCategoryItems(categoryId: string, month: string): Promi
         ? [{ kind: "bill" as const, id: b.id, reminderId: b.reminder_id, name: b.reminder_name ?? "", date: b.due_date, amount: (b.status === "paid" ? b.paid_amount : null) ?? b.amount ?? 0, currency: b.currency ?? "HUF", status: b.status ?? "upcoming" }]
         : [],
     ),
-    ...(expenses.data ?? []).map((e) => ({ kind: "expense" as const, id: e.id, name: e.note ?? "", date: e.spent_on, amount: e.amount, currency: e.currency })),
+    ...(expenses.data ?? []).map((e) => ({
+      kind: "expense" as const,
+      id: e.id,
+      // az automatikus tételnél a kereskedő a név; kézinél a megjegyzés
+      name: e.merchant ?? e.note ?? "",
+      date: e.spent_on,
+      amount: e.amount,
+      currency: e.currency,
+      source: expenseSource(e.source),
+      provisional: e.is_provisional,
+      note: e.note,
+      merchant: e.merchant,
+    })),
   ];
   return items.sort((a, b) => a.date.localeCompare(b.date));
 }

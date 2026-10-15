@@ -92,6 +92,17 @@ test("kategória-részlet: a kiadás listázva, törölhető; a keret szerkeszth
   await expect(page.getByText("A kiadás törölve.")).toBeVisible();
   await expect(page.getByText(hu(60000))).toHaveCount(0);
 
+  // B-45: a törlés a toastról visszavonható — a tétel ugyanazokkal az adatokkal visszakerül
+  await page.getByRole("button", { name: "Visszavonás" }).click();
+  await expect(page.getByText("A kiadás visszaállítva.")).toBeVisible();
+  const restored = page.getByRole("listitem").filter({ hasText: hu(60000) });
+  await expect(restored).toBeVisible();
+  await expect(restored.getByText("Automatikus")).toHaveCount(0); // kézi tétel: nincs jelvény
+  const row = (await db.client.from("expenses").select("amount, note, category_id, source, is_provisional").eq("note", MARK).eq("amount", 60000)).data ?? [];
+  expect(row).toEqual([{ amount: 60000, note: MARK, category_id: category.id, source: "manual", is_provisional: false }]);
+  await restored.getByRole("button", { name: /törlése/ }).click();
+  await expect(page.getByText(hu(60000))).toHaveCount(0);
+
   await page.getByLabel("Havi keret").fill("70000");
   await page.getByRole("button", { name: "Mentés" }).click();
   await expect(page).toHaveURL(/\/budgets$/);

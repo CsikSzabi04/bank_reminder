@@ -526,7 +526,11 @@
     "itemExpense": "Expense",
     "deleteExpense": "Delete {name}",
     "expenseDeleted": "Expense deleted.",
-    "expenseDeleteFailed": "Could not delete the expense."
+    "expenseDeleteFailed": "Could not delete the expense.",
+    "badgeAuto": "Automatic",
+    "badgeProvisional": "Provisional",
+    "expenseRestored": "Expense restored.",
+    "expenseRestoreFailed": "Couldn't restore the expense."
   },
   "bank": {
     "title": "Bank sync",
@@ -983,6 +987,18 @@
       "test": {
         "title": "It works! 🎉",
         "body": "This is a test notification."
+      },
+      "budgetOver": {
+        "title": "{name}: monthly budget used up — {amount} / {total}",
+        "body": "Open for details."
+      },
+      "budgetWatch": {
+        "title": "{name}: {pct}% of the budget used",
+        "body": "{amount} / {total}"
+      },
+      "bankConsent": {
+        "title": "{name}: {n, plural, =0 {bank access expires today} =1 {bank access expires tomorrow} other {bank access expires in # days}}",
+        "body": "Renew it, otherwise automatic tracking stops."
       },
       "generic": {
         "title": "Notification",

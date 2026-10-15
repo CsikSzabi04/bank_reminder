@@ -526,7 +526,11 @@
     "itemExpense": "Kiadás",
     "deleteExpense": "{name} törlése",
     "expenseDeleted": "A kiadás törölve.",
-    "expenseDeleteFailed": "A kiadást nem sikerült törölni."
+    "expenseDeleteFailed": "A kiadást nem sikerült törölni.",
+    "badgeAuto": "Automatikus",
+    "badgeProvisional": "Ideiglenes",
+    "expenseRestored": "A kiadás visszaállítva.",
+    "expenseRestoreFailed": "A kiadást nem sikerült visszaállítani."
   },
   "bank": {
     "title": "Bank-összekötés",
@@ -983,6 +987,18 @@
       "test": {
         "title": "Működik! 🎉",
         "body": "Ez egy teszt-értesítés."
+      },
+      "budgetOver": {
+        "title": "{name}: elfogyott a havi keret — {amount} / {total}",
+        "body": "Nyisd meg a részletekért."
+      },
+      "budgetWatch": {
+        "title": "{name}: a keret {pct}%-a elfogyott",
+        "body": "{amount} / {total}"
+      },
+      "bankConsent": {
+        "title": "{name}: {n, plural, =0 {ma lejár a bank-hozzáférés} =1 {holnap lejár a bank-hozzáférés} other {# nap múlva lejár a bank-hozzáférés}}",
+        "body": "Frissítsd, különben megáll az automatikus követés."
       },
       "generic": {
         "title": "Értesítés",

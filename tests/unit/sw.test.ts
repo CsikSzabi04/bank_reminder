@@ -158,6 +158,22 @@ describe("service worker — push és értesítés-kattintás", () => {
     }
   });
 
+  it("a „Kifizettem/Halaszt” gomb csak számla-értesítésnél él: keret-riasztás / bank-lejárat / tipp mellett nincs API-hívás, az app megnyílik", async () => {
+    for (const kind of ["budget", "bank_consent", "tip", "news", "digest", "system"]) {
+      const sw = loadSw();
+      sw.handlers.notificationclick({ ...sw.base, action: "paid", notification: { close: vi.fn(), data: { kind, occId: UUID, url: "/bank" } } });
+      await Promise.all(sw.waited);
+      expect(sw.fetchMock, kind).not.toHaveBeenCalled();
+      expect(sw.self.clients.openWindow, kind).toHaveBeenCalledWith("/bank");
+    }
+    for (const kind of ["reminder", "overdue"]) {
+      const sw = loadSw(async () => ({ ok: true }));
+      sw.handlers.notificationclick({ ...sw.base, action: "snooze", notification: { close: vi.fn(), data: { kind, occId: UUID, url: "/x" } } });
+      await Promise.all(sw.waited);
+      expect(sw.fetchMock, kind).toHaveBeenCalledWith(`/api/occurrences/${UUID}/snooze`, expect.anything());
+    }
+  });
+
   it("hibás API-válasz esetén megnyitja az appot (a felhasználó befejezheti)", async () => {
     const sw = loadSw(async () => ({ ok: false }));
     sw.handlers.notificationclick({ ...sw.base, action: "paid", notification: { close: vi.fn(), data: { occId: UUID, url: "/dashboard" } } });

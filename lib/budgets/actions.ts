@@ -87,6 +87,36 @@ export async function addExpense(_prev: ActionState<{ id: string }> | null, form
   return { ok: true, data: { id: data.id } };
 }
 
+// A törölt kiadás visszavonása: a tétel újra felvételre kerül ugyanazokkal az adatokkal. Az automatikusan felvett (értesítés/bank)
+// tétel törlésekor a főkönyvi sor `dismissed` lett (ne éledjen újra) — a visszaállított tétel ezért kézi forrású marad,
+// a `source`/`is_provisional` jelzőt a DB-őr kliensről nem engedi hamisítani.
+const restoreSchema = z.object({
+  amount: z.number().positive().max(999_999_999_999),
+  currency: z.string().regex(/^[A-Z]{3}$/),
+  spentOn: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  categoryId: z.uuid().nullable(),
+  note: z.string().max(200).nullable(),
+  merchant: z.string().max(80).nullable(),
+});
+export type RestoreExpenseInput = z.infer<typeof restoreSchema>;
+
+export async function restoreExpense(input: RestoreExpenseInput): Promise<ActionState<{ id: string }>> {
+  const parsed = restoreSchema.safeParse(input);
+  if (!parsed.success) return { ok: false, code: "validation" };
+  const v = parsed.data;
+  const supabase = await db();
+  const { data: auth } = await supabase.auth.getClaims();
+  if (!auth?.claims?.sub) return { ok: false, code: "unauthenticated" };
+  const { data, error } = await supabase
+    .from("expenses")
+    .insert({ amount: v.amount, currency: v.currency, spent_on: v.spentOn, category_id: v.categoryId, note: v.note, merchant: v.merchant })
+    .select("id")
+    .single();
+  if (error) return mapDbError(error);
+  refresh();
+  return { ok: true, data: { id: data.id } };
+}
+
 export async function deleteExpense(expenseId: string): Promise<ActionState> {
   if (!id.safeParse(expenseId).success) return bad;
   const { error } = await (await db()).from("expenses").delete().eq("id", expenseId);

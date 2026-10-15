@@ -10,15 +10,29 @@ export type NotificationRowLite = {
 
 export type NotificationView = {
   /** `notifications.text.<key>.title|body` */
-  key: "reminderDays" | "reminderTomorrow" | "reminderToday" | "reminderSnoozed" | "overdue" | "trialEnd" | "digest" | "test" | "generic";
-  values: { name?: string; amount?: number; currency?: string; date?: string; n?: number; count?: number; total?: number; names?: string };
+  key:
+    | "reminderDays"
+    | "reminderTomorrow"
+    | "reminderToday"
+    | "reminderSnoozed"
+    | "overdue"
+    | "trialEnd"
+    | "digest"
+    | "test"
+    | "budgetOver"
+    | "budgetWatch"
+    | "bankConsent"
+    | "generic";
+  values: { name?: string; amount?: number; currency?: string; date?: string; n?: number; count?: number; total?: number; names?: string; pct?: number };
   url: string;
 };
 
 const str = (v: unknown): string | undefined => (typeof v === "string" ? v : undefined);
 const num = (v: unknown): number | undefined => (typeof v === "number" && Number.isFinite(v) ? v : undefined);
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-export function describeNotification(row: NotificationRowLite): NotificationView {
+// A `locale` csak a payloadban kétnyelvű mezőkhöz (keret-riasztás: kategórianév) kell; alapértelmezés: magyar
+export function describeNotification(row: NotificationRowLite, locale: "hu" | "en" = "hu"): NotificationView {
   const p = (row.payload && typeof row.payload === "object" ? row.payload : {}) as Record<string, unknown>;
   const base = { name: str(p.name), amount: num(p.amount), currency: str(p.currency), date: str(p.due_date) };
   // mély link: a részletoldal, relatív (soha nem a payloadból átvett idegen URL)
@@ -48,6 +62,20 @@ export function describeNotification(row: NotificationRowLite): NotificationView
     }
     case "test":
       return { key: "test", values: {}, url: "/profile?section=notifications" };
+    // Keret-riasztás (A-45): {level, category_id, category_name_hu/en, month, spent, limit, pct, currency}; a mély link a kategória-részlet
+    case "budget": {
+      const categoryId = str(p.category_id);
+      const name = (locale === "en" ? str(p.category_name_en) ?? str(p.category_name_hu) : str(p.category_name_hu) ?? str(p.category_name_en)) ?? "";
+      const pct = num(p.pct);
+      return {
+        key: p.level === "over" ? "budgetOver" : "budgetWatch",
+        values: { name, amount: num(p.spent), total: num(p.limit), currency: str(p.currency), pct: pct === undefined ? undefined : Math.round(pct) },
+        url: categoryId && UUID.test(categoryId) ? `/budgets/${categoryId}` : "/budgets",
+      };
+    }
+    // Kötelező bank-hozzáférés lejárat-értesítés (advanced.md §6): {bank, days_left, connection}; csak a bank neve és a hátralévő nap
+    case "bank_consent":
+      return { key: "bankConsent", values: { name: str(p.bank) ?? "", n: num(p.days_left) ?? 0 }, url: "/bank" };
     default:
       return { key: "generic", values: {}, url: "/dashboard" };
   }

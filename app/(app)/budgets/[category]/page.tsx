@@ -97,7 +97,7 @@ export default async function BudgetCategoryPage(props: PageProps<"/budgets/[cat
         <h2 id="items-title" className="text-lg font-semibold">
           {t("items")}
         </h2>
-        {items.length === 0 ? <p className="text-text-2">{t("noItems")}</p> : <CategoryItems items={items} />}
+        {items.length === 0 ? <p className="text-text-2">{t("noItems")}</p> : <CategoryItems items={items} categoryId={categoryId} />}
       </section>
     </div>
   );

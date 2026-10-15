@@ -64,10 +64,11 @@ export default async function NotificationsPage() {
               <h2 className="text-sm font-semibold text-text-2">{heading}</h2>
               <ul className="divide-y divide-border overflow-hidden rounded-card border border-border bg-surface shadow-card">
                 {items.map((r) => {
-                  const v = describeNotification(r);
+                  const v = describeNotification(r, locale);
                   const values = {
                     name: v.values.name ?? "",
                     n: v.values.n ?? 0,
+                    pct: v.values.pct ?? 0,
                     count: v.values.count ?? 0,
                     names: v.values.names ?? "",
                     amount: money(v.values.amount, v.values.currency),

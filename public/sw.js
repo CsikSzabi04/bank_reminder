@@ -6,6 +6,9 @@ const OFFLINE_URL = "/offline.html";
 const PRECACHE = [OFFLINE_URL, "/icons/icon-192.png", "/icons/icon-512.png"];
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const ACTIONS = new Set(["paid", "snooze"]);
+// A „kifizettem/halaszt" gomb csak számla-értesítésnél él; a többi fajta (keret-riasztás, bank-lejárat, tipp, hír …) csak megnyílik.
+// Kind nélküli (régi) push megengedett, hogy a már kiküldött értesítések gombjai ne törjenek el.
+const ACTION_KINDS = new Set(["reminder", "overdue"]);
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(STATIC_CACHE).then((cache) => cache.addAll(PRECACHE)));
@@ -99,10 +102,10 @@ function safeTarget(raw) {
 
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
-  const { url, occId } = event.notification.data || {};
+  const { url, occId, kind } = event.notification.data || {};
   event.waitUntil(
     (async () => {
-      if (occId && UUID.test(occId) && ACTIONS.has(event.action)) {
+      if (occId && UUID.test(occId) && ACTIONS.has(event.action) && (!kind || ACTION_KINDS.has(kind))) {
         try {
           const res = await fetch(`/api/occurrences/${occId}/${event.action}`, {
             method: "POST",
