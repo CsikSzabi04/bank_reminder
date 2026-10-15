@@ -113,8 +113,18 @@ describe("updateNotificationSettings", () => {
       channel_email: false,
       notify_hide_details: true,
       weekly_digest: false,
+      budget_alerts: false,
     });
     expect(state.eq).toHaveBeenCalledWith("id", "user-1");
+  });
+  it("a keret-riasztás kapcsoló a budget_alerts oszlopra képeződik, a főkapcsolótól függetlenül", async () => {
+    const fd = form({ budgetAlerts: "on" });
+    fd.delete("remindersEnabled");
+    await updateNotificationSettings(null, fd);
+    expect(state.update.mock.calls[0][0]).toMatchObject({ reminders_enabled: false, budget_alerts: true });
+    state.update.mockClear();
+    await updateNotificationSettings(null, form());
+    expect(state.update.mock.calls[0][0].budget_alerts).toBe(false);
   });
   it("kikapcsolt főkapcsoló mentődik (hiányzó jelölőnégyzet = hamis)", async () => {
     const fd = form();

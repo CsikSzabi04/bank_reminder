@@ -7,10 +7,8 @@ import { BANK_CONNECTION_COLUMNS, parseConnections } from "./connections";
 import { listAspspsCore } from "./service";
 import type { Aspsp, BankConnection, BankErrorCode } from "./types";
 
-// Az A-41 utáni típus-újragenerálásig a bank-oszlopok/táblák nincsenek a database.types.ts-ben → szűk, kézi alakok
-
-// Kérésenként egyszer fut. Külön a getCurrentProfile-tól: ha az oszlop még nincs a DB-ben (A-41 előtt),
-// a közös profil-lekérdezés nem borulhat el miatta — az egész alkalmazás azt használja.
+// Kérésenként egyszer fut. Külön a getCurrentProfile-tól: a bank-kapu hibája (pl. oszlop-jog változás) ne vigye el
+// az egész alkalmazást — a közös profil-lekérdezést minden oldal használja.
 export const getBankAccess = cache(async (): Promise<BankAccess> => {
   const supabase = createClient(await cookies());
   const { data: auth } = await supabase.auth.getClaims();
@@ -21,17 +19,10 @@ export const getBankAccess = cache(async (): Promise<BankAccess> => {
   return interpretBankAccess({ data, error });
 });
 
-type ConnectionsQuery = {
-  from: (table: string) => {
-    select: (columns: string) => {
-      order: (column: string, options: { ascending: boolean }) => Promise<{ data: unknown; error: { code?: string } | null }>;
-    };
-  };
-};
-
 // A felhasználó kapcsolatai (az RLS a sajátokra szűr); csak az Enable-jogosultsággal rendelkező hívja
 export const getBankConnections = cache(async (): Promise<BankConnection[]> => {
-  const supabase = createClient(await cookies()) as unknown as ConnectionsQuery;
+  const supabase = createClient(await cookies());
+  // az oszlopokat fel kell sorolni: a `session_id` és társai oszlop-szintű jog miatt a kliensnek nem láthatók (select * hibára futna)
   const { data, error } = await supabase.from("bank_connections").select(BANK_CONNECTION_COLUMNS).order("created_at", { ascending: false });
   if (error) throw new Error(`bank_connections_query_failed:${error.code ?? "unknown"}`);
   return parseConnections(data);

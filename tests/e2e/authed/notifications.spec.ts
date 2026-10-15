@@ -65,3 +65,29 @@ test("profil → Értesítések: beállítások, ezen az eszközön, naptár-tar
   // fejlesztői módban (nem éles build) az SW nincs regisztrálva → a panel ezt magyarázza, nem csendben hibázik
   await expect(page.getByRole("button", { name: "Értesítések bekapcsolása ezen az eszközön" })).toBeVisible();
 });
+
+// B-46: „Keret-riasztások” kapcsoló (profiles.budget_alerts). A kötelező bank-lejárat sor csak a bank-összekötésre jogosultnak
+// látszik (a teszt-fiók nem az) → ott a unit-teszt (bank-notification-settings) fedi; itt a mentés és a jogosulatlan nézet.
+test("profil → Értesítések: a Keret-riasztások kapcsoló menthető és az adatbázisban megjelenik; bank-lejárat sor jogosulatlannak nem látszik", async ({ page }) => {
+  const before = (await db.client.from("profiles").select("budget_alerts").eq("id", db.userId).single()).data?.budget_alerts;
+  expect(typeof before).toBe("boolean");
+  try {
+    await page.goto("/profile?section=notifications");
+    const box = page.getByRole("checkbox", { name: /Keret-riasztások/ });
+    await expect(box).toBeVisible();
+    await expect(page.getByText("Bank-hozzáférés lejárata — kötelező")).toHaveCount(0);
+
+    if (await box.isChecked()) await box.uncheck();
+    else await box.check();
+    await page.getByRole("button", { name: "Mentés", exact: true }).click();
+    await expect(page.getByText("Elmentve.")).toBeVisible();
+    await expect.poll(async () => (await db.client.from("profiles").select("budget_alerts").eq("id", db.userId).single()).data?.budget_alerts).toBe(!before);
+
+    // újratöltés után is a mentett érték látszik
+    await page.reload();
+    if (before) await expect(page.getByRole("checkbox", { name: /Keret-riasztások/ })).not.toBeChecked();
+    else await expect(page.getByRole("checkbox", { name: /Keret-riasztások/ })).toBeChecked();
+  } finally {
+    await db.client.from("profiles").update({ budget_alerts: before as boolean }).eq("id", db.userId);
+  }
+});

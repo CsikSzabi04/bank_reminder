@@ -1,8 +1,10 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { BankFlashBanner } from "@/components/bank/bank-flash";
 import { ConnectPanel } from "@/components/bank/connect-panel";
+import { ConsentBannerView } from "@/components/bank/consent-banner";
 import { ConnectionCard } from "@/components/bank/connection-card";
 import { ConsentTimeline } from "@/components/bank/consent-timeline";
+import { NotificationSettingsForm } from "@/components/push/notification-settings-form";
 import { CategoryChip } from "@/components/categories/category-chip";
 import { CategoryIcon } from "@/components/categories/category-icon";
 import { AmountText } from "@/components/ui/amount-text";
@@ -163,6 +165,16 @@ export default async function DevUiPage() {
             ]}
           />
           <ConnectPanel another={false} listError="upstream_failed" banks={[]} />
+          <div className="flex flex-col gap-3">
+            <ConsentBannerView info={{ bank: "Demo Bank", daysLeft: 12, expired: false }} />
+            <ConsentBannerView info={{ bank: "Demo Bank 2", daysLeft: -10, expired: true }} />
+          </div>
+          <div className="rounded-card border border-border bg-surface p-5 shadow-card">
+            <NotificationSettingsForm
+              showBankConsent
+              initial={{ remindersEnabled: true, offsets: [1, 3], notifyTime: "09:00", channelPush: true, channelEmail: false, hideDetails: false, weeklyDigest: false, budgetAlerts: true }}
+            />
+          </div>
           <div className="flex flex-col gap-3">
             <BankFlashBanner flash={{ kind: "connected" }} />
             <BankFlashBanner flash={{ kind: "error", reason: "state_invalid" }} />

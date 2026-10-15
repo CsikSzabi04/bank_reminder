@@ -60,3 +60,17 @@ export function connectionHealth(connection: BankConnection, timeZone: string, n
   else state = daysLeft <= BANK_CONSENT_NOTIFY_DAYS_BEFORE[0] ? "soon" : "active";
   return { state, daysLeft, elapsed };
 }
+
+// A Főoldal figyelmeztető sávja (advanced.md §8.5): ha van kapcsolat, és ≤ 30 nap van hátra (vagy már lejárt), a legsürgősebbről szól.
+export type ConsentBannerInfo = { bank: string; daysLeft: number; expired: boolean };
+
+export function consentBannerInfo(connections: BankConnection[], timeZone: string, now: Date = new Date()): ConsentBannerInfo | null {
+  let best: ConsentBannerInfo | null = null;
+  for (const connection of connections) {
+    // a visszavont kapcsolat állapota „revoked”, ezért kimarad (nincs mit frissíteni)
+    const { state, daysLeft } = connectionHealth(connection, timeZone, now);
+    if (state !== "soon" && state !== "expired") continue;
+    if (!best || daysLeft < best.daysLeft) best = { bank: connection.aspspName, daysLeft, expired: state === "expired" };
+  }
+  return best;
+}

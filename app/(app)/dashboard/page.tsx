@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { Bell, ChevronRight, Plus } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
+import { ConsentBanner } from "@/components/bank/consent-banner";
 import { BudgetBar } from "@/components/budgets/budget-bar";
 import { HeroCard } from "@/components/dashboard/hero-card";
 import { MonthSwitcher } from "@/components/dashboard/month-switcher";
@@ -62,6 +64,11 @@ export default async function DashboardPage(props: PageProps<"/dashboard">) {
           </Link>
         </div>
       </div>
+
+      {/* a bank-hozzáférés lejárata (≤ 30 nap): nem várakoztatja a Főoldalt */}
+      <Suspense fallback={null}>
+        <ConsentBanner timeZone={profile.timezone} />
+      </Suspense>
 
       {!summary ? (
         <p role="alert" className="text-danger-text">

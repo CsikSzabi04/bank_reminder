@@ -653,6 +653,11 @@
       "bank_denied": "A bankban nem hagytad jóvá a hozzáférést, ezért nem jött létre az összekötés.",
       "bank_error": "A bank hibát jelzett a jóváhagyás közben. Próbáld újra később.",
       "unknown": "Valami nem sikerült. Próbáld újra."
+    },
+    "banner": {
+      "soon": "{bank}: {count, plural, =0 {ma lejár a hozzáférés} =1 {holnap lejár a hozzáférés} other {# nap múlva lejár a hozzáférés}}.",
+      "expired": "{bank}: a hozzáférés lejárt, az automatikus követés áll.",
+      "cta": "Frissítés"
     }
   },
   "savings": {
@@ -1013,7 +1018,12 @@
       "saveFailed": "Nem sikerült menteni. Próbáld újra.",
       "thisDevice": "Ezen az eszközön",
       "calendar": "Naptár-link (biztos tartalék)",
-      "calendarHint": "Ha az értesítés valamiért nem megy, a naptáralkalmazásod is emlékeztet."
+      "calendarHint": "Ha az értesítés valamiért nem megy, a naptáralkalmazásod is emlékeztet.",
+      "masterBankNote": "A bank-hozzáférés lejárat-értesítései ettől függetlenül jönnek.",
+      "budgetAlerts": "Keret-riasztások",
+      "budgetAlertsHint": "Értesítés, ha egy kategória havi kerete közel van a kimerüléshez vagy elfogyott. Az emlékeztetők kapcsolójától független.",
+      "bankConsent": "Bank-hozzáférés lejárata — kötelező",
+      "bankConsentHint": "Ezek az értesítések mindig megjönnek, nem kapcsolhatók ki: a bank-hozzáférés lejárta után a bankot újra kell hitelesíteni, különben megáll az automatikus követés."
     }
   },
   "profile": {

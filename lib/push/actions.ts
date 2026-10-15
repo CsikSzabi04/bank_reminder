@@ -83,6 +83,7 @@ const settingsSchema = z.object({
   channelEmail: checkbox,
   hideDetails: checkbox,
   weeklyDigest: checkbox,
+  budgetAlerts: checkbox,
 });
 
 // Profil → Értesítések: globális kapcsoló, alapértelmezések, csatornák, diszkrét mód, heti összefoglaló
@@ -106,6 +107,7 @@ export async function updateNotificationSettings(_prev: ActionState | null, form
       channel_email: v.channelEmail,
       notify_hide_details: v.hideDetails,
       weekly_digest: v.weeklyDigest,
+      budget_alerts: v.budgetAlerts,
     })
     .eq("id", uid);
   if (error) return mapDbError(error);

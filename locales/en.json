@@ -653,6 +653,11 @@
       "bank_denied": "You didn't approve the access at the bank, so no connection was created.",
       "bank_error": "The bank reported an error during approval. Please try again later.",
       "unknown": "Something went wrong. Please try again."
+    },
+    "banner": {
+      "soon": "{bank}: {count, plural, =0 {access expires today} =1 {access expires tomorrow} other {access expires in # days}}.",
+      "expired": "{bank}: access has expired, automatic tracking is paused.",
+      "cta": "Renew"
     }
   },
   "savings": {
@@ -1013,7 +1018,12 @@
       "saveFailed": "Couldn't save. Please try again.",
       "thisDevice": "On this device",
       "calendar": "Calendar link (reliable fallback)",
-      "calendarHint": "If a notification doesn't arrive for some reason, your calendar app will still remind you."
+      "calendarHint": "If a notification doesn't arrive for some reason, your calendar app will still remind you.",
+      "masterBankNote": "Bank access expiry notifications arrive regardless of this.",
+      "budgetAlerts": "Budget alerts",
+      "budgetAlertsHint": "A notification when a category's monthly budget is close to used up or exceeded. Independent of the reminders switch.",
+      "bankConsent": "Bank access expiry — required",
+      "bankConsentHint": "These notifications always arrive and can't be turned off: once the bank access expires you need to re-authorise the bank, otherwise automatic tracking stops."
     }
   },
   "profile": {

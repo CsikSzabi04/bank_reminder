@@ -5,6 +5,7 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { NotificationSettingsForm } from "@/components/push/notification-settings-form";
 import { PushPanel, type DeviceView } from "@/components/push/push-panel";
+import { getBankAccess } from "@/lib/bank/queries";
 import { createClient } from "@/utils/supabase/server";
 
 const CARD = "flex flex-col gap-4 rounded-card border border-border bg-surface p-5 shadow-card";
@@ -13,13 +14,14 @@ const CARD = "flex flex-col gap-4 rounded-card border border-border bg-surface p
 export async function NotificationsSection({ userId }: { userId: string }) {
   const t = await getTranslations("notifications");
   const supabase = createClient(await cookies());
-  const [profile, subs] = await Promise.all([
+  const [profile, subs, bank] = await Promise.all([
     supabase
       .from("profiles")
-      .select("reminders_enabled, default_offsets, default_notify_time, channel_push, channel_email, notify_hide_details, weekly_digest")
+      .select("reminders_enabled, default_offsets, default_notify_time, channel_push, channel_email, notify_hide_details, weekly_digest, budget_alerts")
       .eq("id", userId)
       .single(),
     supabase.from("push_subscriptions").select("id, endpoint, platform, label, last_success_at, disabled_at").order("created_at", { ascending: false }),
+    getBankAccess(),
   ]);
   if (!profile.data) return null;
   const p = profile.data;
@@ -49,7 +51,9 @@ export async function NotificationsSection({ userId }: { userId: string }) {
             channelEmail: p.channel_email,
             hideDetails: p.notify_hide_details,
             weeklyDigest: p.weekly_digest,
+            budgetAlerts: p.budget_alerts,
           }}
+          showBankConsent={bank.syncAllowed}
         />
       </section>
 

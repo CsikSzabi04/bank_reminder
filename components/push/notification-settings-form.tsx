@@ -5,6 +5,7 @@ import { useActionState, useState } from "react";
 import { FormAlert } from "@/components/auth/form-alert";
 import { Notice } from "@/components/auth/notice";
 import { SubmitButton } from "@/components/auth/submit-button";
+import { MandatoryConsentRow } from "@/components/bank/mandatory-consent-row";
 import { TextField } from "@/components/auth/text-field";
 import { OffsetChips } from "@/components/reminders/form/offset-chips";
 import { useReminderErrorText } from "@/components/reminders/form/use-reminder-error";
@@ -18,12 +19,14 @@ export type NotificationSettings = {
   channelEmail: boolean;
   hideDetails: boolean;
   weeklyDigest: boolean;
+  budgetAlerts: boolean;
 };
 
 const CHECK = "flex min-h-11 items-start gap-3 text-sm";
 
 // Profil → Értesítések: fő kapcsoló, alapértelmezések új emlékeztetőkhöz, csatornák, diszkrét mód, heti összefoglaló (§19.1)
-export function NotificationSettingsForm({ initial }: { initial: NotificationSettings }) {
+// `showBankConsent`: csak annak, aki bank-összekötést használhat (advanced.md §2.1) — másnak a kötelező lejárat-sor zaj lenne
+export function NotificationSettingsForm({ initial, showBankConsent = false }: { initial: NotificationSettings; showBankConsent?: boolean }) {
   const t = useTranslations("notifications.settings");
   const tf = useTranslations("reminders.form");
   const errorText = useReminderErrorText();
@@ -46,6 +49,7 @@ export function NotificationSettingsForm({ initial }: { initial: NotificationSet
           <span className="block text-lg font-semibold">{t("master")}</span>
           <span className="block text-sm text-text-2" aria-live="polite">
             {v.remindersEnabled ? t("masterOn") : t("masterOff")}
+            {showBankConsent && ` ${t("masterBankNote")}`}
           </span>
         </span>
       </label>
@@ -91,6 +95,14 @@ export function NotificationSettingsForm({ initial }: { initial: NotificationSet
             <span className="block text-text-2">{t("digestHint")}</span>
           </span>
         </label>
+        <label className={CHECK}>
+          <input type="checkbox" name="budgetAlerts" checked={v.budgetAlerts} onChange={(e) => patch({ budgetAlerts: e.target.checked })} className="mt-0.5 size-5 accent-primary" />
+          <span>
+            <span className="block font-medium">{t("budgetAlerts")}</span>
+            <span className="block text-text-2">{t("budgetAlertsHint")}</span>
+          </span>
+        </label>
+        {showBankConsent && <MandatoryConsentRow />}
       </div>
 
       {state && !state.ok && state.code !== "validation" && <Notice variant="error">{t("saveFailed")}</Notice>}
