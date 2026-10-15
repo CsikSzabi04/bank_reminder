@@ -55,6 +55,10 @@ const PAGES: [string, () => string][] = [
   ["Profil · Értesítések", () => "/profile?section=notifications"],
   ["Profil", () => "/profile"],
   ["Profil · Biztonság", () => "/profile?section=security"],
+  ["Profil · Pénzügyek", () => "/profile?section=finance"],
+  ["Profil · Adataim", () => "/profile?section=data"],
+  ["Profil · Névjegy", () => "/profile?section=about"],
+  ["Profil · Megjelenés", () => "/profile?section=appearance"],
 ];
 
 for (const { width, height } of SIZES) {

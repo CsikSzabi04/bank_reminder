@@ -8,6 +8,7 @@ export type AuthErrorReason =
   | "tooManyRequests"
   | "linkExpired"
   | "samePassword"
+  | "reauthNeeded"
   | "generic";
 
 type Failure = Extract<ActionState, { ok: false }>;
@@ -37,6 +38,10 @@ export function mapAuthError(error: { code?: string; status?: number } | null | 
       return fail("validation", "linkExpired");
     case "same_password":
       return fail("validation", "samePassword");
+    // a jelszó/e-mail módosításához friss bejelentkezés kell (§19.1)
+    case "reauthentication_needed":
+    case "reauthentication_not_valid":
+      return fail("forbidden", "reauthNeeded");
   }
   // Ismeretlen: csak a kódot naplózzuk, e-mailt/nevet soha (PII-mentes)
   console.error("auth error", { code: code ?? "none", status: error?.status ?? 0 });

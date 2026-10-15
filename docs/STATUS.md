@@ -1,5 +1,12 @@
 # STATUS  (legújabb fent)
 
+## 2026-10-15 · AI-B · M4 — B-28 kész (localhoston): Profil II.
+
+- **Pénzügyek:** alap-pénznem, időzóna (automatikus felismerés + kézi), opcionális havi jövedelem; saját kategóriák (név HU/EN, ikon, színcsoport, típus) létrehozás/szerkesztés/törlés. **Biztonság:** jelszó- és e-mail-módosítás (+ kijelentkezés mindenhonnan). **Adataim:** JSON/CSV export (CSV-injekció-védelemmel), fiók törlése (szöveges megerősítés, Edge Function, `/goodbye`). **Névjegy:** verzió, jogi linkek, „nem bank" szöveg, visszajelzés. **Megjelenés:** kontrasztosabb diagramok (textúra) + kevesebb mozgás (eszköz-szintű).
+- Kapuk: typecheck · lint · i18n:check (914 kulcs) · unit · authed e2e (profile2-spec; layout/a11y az új szakaszokkal, 138/138).
+- ⚠ **Gazdának (kézi):** (1) a valódi fiók-törlést (`delete-account` Edge Function) egy eldobható fiókkal próbáld ki; (2) a Névjegy „Visszajelzés" soráért add meg a címet: `NEXT_PUBLIC_FEEDBACK_EMAIL` (Vercel env + `.env.local`); (3) e-mail-módosítás megerősítő levelét valódi címmel.
+- Talált + javított: a `useSyncExternalStore` instabil snapshotja (időzóna-lista) végtelen ciklus volt → gyorsítótárazva.
+
 ## 2026-10-14 · AI-B · M4 — B-26 kész (localhoston): onboarding + manifest-képernyőképek
 
 - `/onboarding` 3 lépés (nyelv/téma + pénznem + automatikus időzóna → első emlékeztető chipekkel/„Később" → értesítés + telepítés), kihagyható, a végén `onboarding_done = true`; a regisztráció-megerősítés ide visz.

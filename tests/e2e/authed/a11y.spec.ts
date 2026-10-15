@@ -64,6 +64,9 @@ const PAGES: [string, () => string][] = [
   ["Profil · Megjelenés", () => "/profile?section=appearance"],
   ["Profil · Értesítések", () => "/profile?section=notifications"],
   ["Profil · Biztonság", () => "/profile?section=security"],
+  ["Profil · Pénzügyek", () => "/profile?section=finance"],
+  ["Profil · Adataim", () => "/profile?section=data"],
+  ["Profil · Névjegy", () => "/profile?section=about"],
   ["404", () => "/reminders/00000000-0000-4000-8000-000000000000"],
 ];
 

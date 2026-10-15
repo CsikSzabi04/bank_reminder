@@ -1,12 +1,20 @@
-import { Bell, ChevronRight, Palette, ShieldCheck, UserRound, type LucideIcon } from "lucide-react";
+import { Bell, ChevronRight, Database, Info, Palette, ShieldCheck, UserRound, Wallet, type LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { cn } from "@/lib/utils";
 
-export const PROFILE_SECTIONS = ["overview", "appearance", "notifications", "security"] as const;
+export const PROFILE_SECTIONS = ["overview", "appearance", "notifications", "finance", "security", "data", "about"] as const;
 export type ProfileSection = (typeof PROFILE_SECTIONS)[number];
 
-const ICONS: Record<ProfileSection, LucideIcon> = { overview: UserRound, appearance: Palette, notifications: Bell, security: ShieldCheck };
+const ICONS: Record<ProfileSection, LucideIcon> = {
+  overview: UserRound,
+  appearance: Palette,
+  notifications: Bell,
+  finance: Wallet,
+  security: ShieldCheck,
+  data: Database,
+  about: Info,
+};
 
 export const isProfileSection = (value: string | undefined): value is ProfileSection =>
   (PROFILE_SECTIONS as readonly string[]).includes(value ?? "");

@@ -13,6 +13,7 @@ const REASONS: readonly AuthErrorReason[] = [
   "tooManyRequests",
   "linkExpired",
   "samePassword",
+  "reauthNeeded",
   "generic",
 ];
 

@@ -34,3 +34,14 @@ export function addDays(isoDate: string, days: number): string {
   d.setUTCDate(d.getUTCDate() + days);
   return d.toISOString().slice(0, 10);
 }
+
+// Érvényes IANA időzóna? (az Intl dob, ha ismeretlen; a minta kizárja a furcsa karaktereket)
+export function isValidTimeZone(tz: string): boolean {
+  if (!/^[A-Za-z_]+(?:\/[A-Za-z0-9_+-]+)*$/.test(tz)) return false;
+  try {
+    new Intl.DateTimeFormat("en-US", { timeZone: tz });
+    return true;
+  } catch {
+    return false;
+  }
+}

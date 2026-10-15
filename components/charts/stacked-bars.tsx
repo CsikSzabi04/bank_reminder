@@ -2,6 +2,7 @@ import { useId } from "react";
 import { topRoundedRect } from "@/lib/charts/axes";
 import { layoutStacked } from "@/lib/charts/stacked";
 import { ChartLegend, type LegendItem } from "./chart-legend";
+import { TextureDefs, textureFill } from "./texture-defs";
 
 export type StackSeries = {
   key: string;
@@ -41,12 +42,16 @@ export function StackedBars({
 }) {
   const uid = useId().replace(/[^a-zA-Z0-9_-]/g, "");
   const layout = layoutStacked({ values: series.map((s) => s.values), width: W, height: H, margin: MARGIN });
+  const solid = series.map((s, i) => ({ s, i })).filter(({ s }) => !s.hatched);
+  const multiSolid = solid.length > 1;
+  const solidIndex = new Map(solid.map(({ i }, n) => [i, n]));
   const step = categories.length > 8 ? 2 : 1;
   const showLabel = (i: number) => (categories.length - 1 - i) % step === 0;
 
   return (
     <figure className="flex flex-col gap-3">
       <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={ariaLabel} className="mx-auto h-auto w-full max-w-[560px]">
+        <TextureDefs prefix={uid} />
         <defs>
           {series
             .filter((s) => s.hatched)
@@ -82,14 +87,28 @@ export function StackedBars({
           const s = series[r.series];
           const fill = s.hatched ? `url(#${uid}-${s.key})` : undefined;
           const title = `${categories[r.cat]} · ${s.label}: ${formatValue(r.value)}`;
-          return r.top && r.h > 4 ? (
-            <path key={`${r.cat}-${r.series}`} d={topRoundedRect(r.x, r.y, r.w, r.h, 4)} fill={fill} style={s.hatched ? { stroke: s.color, strokeWidth: 1.5 } : { fill: s.color }}>
-              <title>{title}</title>
-            </path>
-          ) : (
-            <rect key={`${r.cat}-${r.series}`} x={r.x} y={r.y} width={r.w} height={r.h} fill={fill} style={s.hatched ? { stroke: s.color, strokeWidth: 1.5 } : { fill: s.color }}>
-              <title>{title}</title>
-            </rect>
+          const rounded = r.top && r.h > 4;
+          const style = s.hatched ? { stroke: s.color, strokeWidth: 1.5 } : { fill: s.color };
+          // kontrasztos módban (Profil → Megjelenés) a több tömör sorozat mintát is kap
+          const overlay = multiSolid && !s.hatched ? textureFill(uid, solidIndex.get(r.series) ?? 0) : null;
+          return (
+            <g key={`${r.cat}-${r.series}`}>
+              {rounded ? (
+                <path d={topRoundedRect(r.x, r.y, r.w, r.h, 4)} fill={fill} style={style}>
+                  <title>{title}</title>
+                </path>
+              ) : (
+                <rect x={r.x} y={r.y} width={r.w} height={r.h} fill={fill} style={style}>
+                  <title>{title}</title>
+                </rect>
+              )}
+              {overlay &&
+                (rounded ? (
+                  <path d={topRoundedRect(r.x, r.y, r.w, r.h, 4)} fill={overlay} className="chart-texture" pointerEvents="none" />
+                ) : (
+                  <rect x={r.x} y={r.y} width={r.w} height={r.h} fill={overlay} className="chart-texture" pointerEvents="none" />
+                ))}
+            </g>
           );
         })}
 
@@ -116,7 +135,7 @@ export function StackedBars({
       </svg>
       <ChartLegend
         items={[
-          ...series.map((s) => ({ key: s.key, label: s.label, color: s.color, hatched: s.hatched })),
+          ...series.map((s, i) => ({ key: s.key, label: s.label, color: s.color, hatched: s.hatched, texture: multiSolid && !s.hatched ? solidIndex.get(i) : undefined })),
           ...(average && average.value > 0 ? [{ key: "avg", label: average.label, color: "var(--text-2)", dashed: true }] : []),
           ...legendExtra,
         ]}

@@ -158,3 +158,39 @@
     }
   }
 }
+
+/* Megjelenés-beállítások (Profil → Megjelenés): a html[data-…] attribútumot a PrefsInit állítja a localStorage-ból */
+html[data-reduce-motion="1"] *,
+html[data-reduce-motion="1"] *::before,
+html[data-reduce-motion="1"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Kontrasztosabb diagramok: minta + körvonal a szín mellett (§15.5); alapból rejtve */
+.chart-texture {
+  display: none;
+}
+html[data-contrast-charts="1"] .chart-texture {
+  display: inline;
+}
+html[data-contrast-charts="1"] .chart-slice {
+  stroke: var(--text);
+  stroke-width: 1.25;
+}
+html[data-contrast-charts="1"] [data-texture="0"] {
+  background-image: repeating-linear-gradient(45deg, var(--surface) 0 1.5px, transparent 1.5px 4px) !important;
+}
+html[data-contrast-charts="1"] [data-texture="1"] {
+  background-image: repeating-linear-gradient(-45deg, var(--surface) 0 1.5px, transparent 1.5px 4px) !important;
+}
+html[data-contrast-charts="1"] [data-texture="2"] {
+  background-image: radial-gradient(var(--surface) 1.2px, transparent 1.4px) !important;
+  background-size: 5px 5px;
+}
+html[data-contrast-charts="1"] [data-texture="3"] {
+  background-image: linear-gradient(var(--surface) 1.2px, transparent 1.2px), linear-gradient(90deg, var(--surface) 1.2px, transparent 1.2px) !important;
+  background-size: 5px 5px;
+}

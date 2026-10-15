@@ -78,7 +78,8 @@
       "tooManyRequests": "Too many attempts. Wait a bit and try again.",
       "linkExpired": "The link has expired or was already used. Request a new one.",
       "samePassword": "The new password can't be the same as the old one.",
-      "generic": "Oops, something went wrong. Please try again."
+      "generic": "Oops, something went wrong. Please try again.",
+      "reauthNeeded": "For security, sign in again and then try once more."
     },
     "reset": {
       "sent": "If an account exists, we've emailed you a reset link.",
@@ -889,7 +890,10 @@
       "overview": "Overview",
       "appearance": "Appearance",
       "security": "Security",
-      "notifications": "Notifications"
+      "notifications": "Notifications",
+      "finance": "Finance",
+      "data": "My data",
+      "about": "About"
     },
     "overview": {
       "avatar": {
@@ -918,7 +922,12 @@
     },
     "appearance": {
       "title": "Appearance",
-      "hint": "We remember your settings on all your devices."
+      "hint": "We remember your settings on all your devices.",
+      "contrastCharts": "Higher-contrast charts",
+      "contrastChartsHint": "Patterns and outlines mark chart elements in addition to colour.",
+      "reduceMotion": "Reduce motion",
+      "reduceMotionHint": "Turns off animations and transitions.",
+      "devicePrefsHint": "These two settings apply to this device only."
     },
     "crop": {
       "title": "Crop photo",
@@ -932,7 +941,93 @@
       "signOut": "Log out on this device",
       "signOutHint": "Your notifications will still arrive on this device.",
       "signOutAll": "Log out of all devices",
-      "signOutAllHint": "You'll need to log in again on every device where you're currently signed in."
+      "signOutAllHint": "You'll need to log in again on every device where you're currently signed in.",
+      "saving": "Saving…",
+      "password": {
+        "title": "Change password",
+        "submit": "Save password",
+        "saved": "Your password has been changed."
+      },
+      "email": {
+        "title": "Change email address",
+        "current": "Current address: {email}",
+        "new": "New email address",
+        "hint": "We send a confirmation email to the new address; until you confirm it, the old address stays valid.",
+        "submit": "Send confirmation email",
+        "sent": "We sent a confirmation email to the new address. Click the link in it to finish the change.",
+        "same": "That is your current address."
+      }
+    },
+    "finance": {
+      "title": "Finance settings",
+      "currency": "Base currency",
+      "currencyHint": "Reports and totals are shown in this currency; items in other currencies are converted.",
+      "timezone": "Time zone",
+      "detect": "Detected time zone: {zone}",
+      "income": "Monthly income",
+      "optional": "optional",
+      "incomeHint": "Used only for tips, never shared with anyone.",
+      "save": "Save",
+      "saving": "Saving…",
+      "saved": "Saved.",
+      "categories": {
+        "title": "My categories",
+        "hint": "Add your own categories for reminders, budgets and expenses. System categories cannot be changed.",
+        "empty": "You have no custom categories yet.",
+        "add": "New category",
+        "addTitle": "New category",
+        "editTitle": "Edit category",
+        "edit": "Edit {name}",
+        "remove": "Delete {name}",
+        "removeTitle": "Delete the {name} category?",
+        "removeBody": "Its budget is deleted too; reminders and expenses stay without a category.",
+        "removeConfirm": "Delete",
+        "removed": "Category deleted.",
+        "nameHu": "Name (Hungarian)",
+        "nameEn": "Name (English)",
+        "nameHint": "Enter the name in at least one language.",
+        "kind": "Type",
+        "kinds": {
+          "bill": "Bill",
+          "expense": "Expense",
+          "both": "Both"
+        },
+        "icon": "Icon",
+        "color": "Colour group",
+        "colorN": "Colour {n}",
+        "save": "Save",
+        "saving": "Saving…",
+        "saved": "Category saved."
+      }
+    },
+    "data": {
+      "export": {
+        "title": "Download my data",
+        "hint": "You can download all your data: JSON has everything, CSV opens in a spreadsheet.",
+        "json": "All data (JSON)",
+        "csv": {
+          "reminders": "Reminders (CSV)",
+          "occurrences": "Due items (CSV)",
+          "expenses": "Expenses (CSV)"
+        }
+      },
+      "delete": {
+        "title": "Delete account",
+        "warning": "Your account and all your data (reminders, budgets, goals, profile picture) are deleted permanently. This cannot be undone.",
+        "confirmLabel": "To confirm, type: {word}",
+        "mismatch": "Type exactly: {word}",
+        "submit": "Delete account permanently",
+        "deleting": "Deleting…",
+        "failed": "We could not delete the account right now. Please try again later."
+      }
+    },
+    "about": {
+      "version": "Version",
+      "privacy": "Privacy notice",
+      "terms": "Terms of use",
+      "install": "Install guide",
+      "feedback": "Send feedback",
+      "feedbackSubject": "Feedback"
     }
   },
   "install": {
@@ -1127,5 +1222,10 @@
     "installGuide": "Install guide",
     "done": "Done, go to Home",
     "skip": "Skip"
+  },
+  "goodbye": {
+    "title": "Your account has been deleted",
+    "body": "All your data was permanently deleted. Thanks for using Bank Reminder — you can sign up again any time.",
+    "again": "Create a new account"
   }
 }

@@ -1,5 +1,6 @@
-import type { ReactNode } from "react";
+import { useId, type ReactNode } from "react";
 import { donutArcs } from "@/lib/charts/donut";
+import { TextureDefs, textureFill } from "./texture-defs";
 
 export type DonutSlice = {
   key: string;
@@ -32,12 +33,14 @@ export function DonutChart({
     { size, thickness },
   );
   const byKey = new Map(slices.map((s) => [s.key, s]));
+  const uid = useId().replace(/[^a-zA-Z0-9_-]/g, "");
 
   return (
     <div className="@container">
       <div className="flex flex-col gap-5 @md:flex-row @md:items-center">
         <div className="relative mx-auto shrink-0" style={{ width: size, height: size }}>
           <svg viewBox={`0 0 ${size} ${size}`} width={size} height={size} role="img" aria-label={ariaLabel}>
+            <TextureDefs prefix={uid} />
             {arcs.length === 0 ? (
               // nincs adat: halvány üres gyűrű
               <circle
@@ -49,13 +52,16 @@ export function DonutChart({
                 strokeWidth={thickness}
               />
             ) : (
-              arcs.map((arc) => {
+              arcs.map((arc, i) => {
                 const slice = byKey.get(arc.key)!;
                 return (
-                  <path key={arc.key} d={arc.path} style={{ fill: slice.color }} fillRule="evenodd">
-                    {/* natív tooltip hover/hosszú érintésre; a tartalom a jelmagyarázatban is szövegként megvan */}
-                    <title>{`${slice.label}: ${slice.valueText} (${slice.shareText})`}</title>
-                  </path>
+                  <g key={arc.key}>
+                    <path d={arc.path} style={{ fill: slice.color }} fillRule="evenodd" className="chart-slice">
+                      {/* natív tooltip hover/hosszú érintésre; a tartalom a jelmagyarázatban is szövegként megvan */}
+                      <title>{`${slice.label}: ${slice.valueText} (${slice.shareText})`}</title>
+                    </path>
+                    <path d={arc.path} fill={textureFill(uid, i)} fillRule="evenodd" className="chart-texture" pointerEvents="none" />
+                  </g>
                 );
               })
             )}
@@ -66,11 +72,11 @@ export function DonutChart({
         </div>
 
         <ul className="grid flex-1 gap-2 text-sm">
-          {arcs.map((arc) => {
+          {arcs.map((arc, i) => {
             const slice = byKey.get(arc.key)!;
             return (
               <li key={arc.key} className="flex items-center gap-2">
-                <span aria-hidden className="size-3 shrink-0 rounded-full" style={{ background: slice.color }} />
+                <span aria-hidden data-texture={i % 4} className="size-3 shrink-0 rounded-full" style={{ background: slice.color }} />
                 <span className="min-w-0 flex-1 truncate">{slice.label}</span>
                 <span className="font-medium tabular-nums">{slice.valueText}</span>
                 <span className="w-10 text-right text-text-2 tabular-nums">{slice.shareText}</span>

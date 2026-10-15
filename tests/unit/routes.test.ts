@@ -21,7 +21,7 @@ describe("decideAccess (§10.6)", () => {
   it("publikus útvonalak kijelentkezve átmennek", () => {
     for (const p of [
       "/login", "/signup", "/check-email", "/forgot-password", "/reset-password",
-      "/auth/confirm", "/auth/callback", "/install", "/privacy", "/terms", "/offline",
+      "/auth/confirm", "/auth/callback", "/install", "/privacy", "/terms", "/goodbye", "/offline",
       "/offline.html", "/api/health", "/api/ics/abc123.ics",
     ]) {
       expect(decide(p, false)).toEqual({ kind: "next" });

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { addDays, zonedTimeToUtc } from "@/lib/tz";
+import { addDays, isValidTimeZone, zonedTimeToUtc } from "@/lib/tz";
 
 const BUD = "Europe/Budapest";
 
@@ -38,5 +38,14 @@ describe("addDays", () => {
     expect(addDays("2026-12-31", 1)).toBe("2027-01-01");
     expect(addDays("2026-10-13", 7)).toBe("2026-10-20");
     expect(addDays("2026-03-01", -1)).toBe("2026-02-28");
+  });
+});
+
+describe("isValidTimeZone", () => {
+  it("érvényes IANA-nevek", () => {
+    for (const tz of ["Europe/Budapest", "UTC", "America/Argentina/Buenos_Aires", "Etc/GMT+1"]) expect(isValidTimeZone(tz)).toBe(true);
+  });
+  it("ismeretlen, üres és gyanús értékek", () => {
+    for (const tz of ["", "Nem/Letezik", "Europe/Budapest; drop", "../etc/passwd", " Europe/Budapest", "x".repeat(200)]) expect(isValidTimeZone(tz)).toBe(false);
   });
 });

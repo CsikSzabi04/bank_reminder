@@ -9,6 +9,7 @@ const PUBLIC_PATHS = new Set([
   "/install",
   "/privacy",
   "/terms",
+  "/goodbye",
   "/offline",
   "/offline.html",
   "/api/health",

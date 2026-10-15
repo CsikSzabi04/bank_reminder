@@ -4,6 +4,8 @@ export type LegendItem = {
   color: string;
   /** csíkozott kitöltés (a „hátralévő"): a textúra a színtől független jelzés (§15.5) */
   hatched?: boolean;
+  /** a „Kontrasztosabb diagramok" mintájának sorszáma (csak több tömör sorozatnál) */
+  texture?: number;
   /** szaggatott vonal (átlag / előző hónap) */
   dashed?: boolean;
 };
@@ -21,6 +23,7 @@ export function ChartLegend({ items }: { items: LegendItem[] }) {
           ) : (
             <span
               aria-hidden
+              data-texture={i.texture === undefined ? undefined : i.texture % 4}
               className="size-3 shrink-0 rounded-[3px]"
               style={
                 i.hatched

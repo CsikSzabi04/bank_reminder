@@ -14,6 +14,8 @@ describe("mapAuthError (§10.8)", () => {
     ["bad_otp", "validation", "linkExpired"],
     ["flow_state_expired", "validation", "linkExpired"],
     ["same_password", "validation", "samePassword"],
+    ["reauthentication_needed", "forbidden", "reauthNeeded"],
+    ["reauthentication_not_valid", "forbidden", "reauthNeeded"],
   ] as const;
 
   it.each(table)("%s → %s / %s", (supabaseCode, code, reason) => {

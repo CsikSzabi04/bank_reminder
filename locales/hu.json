@@ -78,7 +78,8 @@
       "tooManyRequests": "Túl sok próbálkozás. Várj egy kicsit, és próbáld újra.",
       "linkExpired": "A link lejárt vagy már felhasználták. Kérj újat.",
       "samePassword": "Az új jelszó nem egyezhet a régivel.",
-      "generic": "Hopp, valami elromlott. Próbáld újra."
+      "generic": "Hopp, valami elromlott. Próbáld újra.",
+      "reauthNeeded": "Biztonsági okból lépj be újra, majd próbáld meg még egyszer."
     },
     "reset": {
       "sent": "Ha létezik ilyen fiók, küldtünk egy levelet a visszaállításhoz.",
@@ -889,7 +890,10 @@
       "overview": "Áttekintés",
       "appearance": "Megjelenés",
       "security": "Biztonság",
-      "notifications": "Értesítések"
+      "notifications": "Értesítések",
+      "finance": "Pénzügyek",
+      "data": "Adataim",
+      "about": "Névjegy"
     },
     "overview": {
       "avatar": {
@@ -918,7 +922,12 @@
     },
     "appearance": {
       "title": "Megjelenés",
-      "hint": "A beállításaidat minden eszközödön megjegyezzük."
+      "hint": "A beállításaidat minden eszközödön megjegyezzük.",
+      "contrastCharts": "Kontrasztosabb diagramok",
+      "contrastChartsHint": "A szín mellett minta és körvonal is jelzi a diagram elemeit.",
+      "reduceMotion": "Kevesebb mozgás",
+      "reduceMotionHint": "Kikapcsolja az animációkat és az átmeneteket.",
+      "devicePrefsHint": "Ez a két beállítás csak ezen az eszközön érvényes."
     },
     "crop": {
       "title": "Kép kivágása",
@@ -932,7 +941,93 @@
       "signOut": "Kijelentkezés ezen az eszközön",
       "signOutHint": "Az értesítéseid ettől még megérkeznek erre az eszközre.",
       "signOutAll": "Kijelentkezés minden eszközről",
-      "signOutAllHint": "Minden eszközön újra be kell majd lépned, ahol most be vagy jelentkezve."
+      "signOutAllHint": "Minden eszközön újra be kell majd lépned, ahol most be vagy jelentkezve.",
+      "saving": "Mentés…",
+      "password": {
+        "title": "Jelszó módosítása",
+        "submit": "Jelszó mentése",
+        "saved": "A jelszavad megváltozott."
+      },
+      "email": {
+        "title": "E-mail-cím módosítása",
+        "current": "Jelenlegi cím: {email}",
+        "new": "Új e-mail-cím",
+        "hint": "Megerősítő levelet küldünk az új címre; amíg nem erősíted meg, a régi cím marad érvényben.",
+        "submit": "Megerősítő levél küldése",
+        "sent": "Elküldtük a megerősítő levelet az új címre. Kattints a benne lévő linkre a módosításhoz.",
+        "same": "Ez a jelenlegi címed."
+      }
+    },
+    "finance": {
+      "title": "Pénzügyi beállítások",
+      "currency": "Alap-pénznem",
+      "currencyHint": "A kimutatások és az összesítők ebben a pénznemben jelennek meg; a más pénznemű tételeket átváltjuk.",
+      "timezone": "Időzóna",
+      "detect": "Felismert időzóna: {zone}",
+      "income": "Havi jövedelem",
+      "optional": "opcionális",
+      "incomeHint": "Csak a tippekhez használjuk, nem osztjuk meg senkivel.",
+      "save": "Mentés",
+      "saving": "Mentés…",
+      "saved": "Elmentve.",
+      "categories": {
+        "title": "Kategóriáim",
+        "hint": "Saját kategóriát vehetsz fel az emlékeztetőkhöz, keretekhez és kiadásokhoz. A rendszer-kategóriák nem módosíthatók.",
+        "empty": "Még nincs saját kategóriád.",
+        "add": "Új kategória",
+        "addTitle": "Új kategória",
+        "editTitle": "Kategória szerkesztése",
+        "edit": "{name} szerkesztése",
+        "remove": "{name} törlése",
+        "removeTitle": "Törlöd a(z) {name} kategóriát?",
+        "removeBody": "A hozzá tartozó keret is törlődik; az emlékeztetők és a kiadások kategória nélkül maradnak.",
+        "removeConfirm": "Törlés",
+        "removed": "A kategória törölve.",
+        "nameHu": "Név (magyar)",
+        "nameEn": "Név (angol)",
+        "nameHint": "Legalább az egyik nyelven add meg a nevet.",
+        "kind": "Típus",
+        "kinds": {
+          "bill": "Számla",
+          "expense": "Kiadás",
+          "both": "Mindkettő"
+        },
+        "icon": "Ikon",
+        "color": "Színcsoport",
+        "colorN": "{n}. szín",
+        "save": "Mentés",
+        "saving": "Mentés…",
+        "saved": "A kategória elmentve."
+      }
+    },
+    "data": {
+      "export": {
+        "title": "Adataim letöltése",
+        "hint": "Minden adatodat letöltheted: a JSON mindent tartalmaz, a CSV táblázatkezelőben nyitható.",
+        "json": "Minden adat (JSON)",
+        "csv": {
+          "reminders": "Emlékeztetők (CSV)",
+          "occurrences": "Esedékességek (CSV)",
+          "expenses": "Kiadások (CSV)"
+        }
+      },
+      "delete": {
+        "title": "Fiók törlése",
+        "warning": "A fiókod és minden adatod (emlékeztetők, keretek, célok, profilkép) véglegesen törlődik. Ez nem vonható vissza.",
+        "confirmLabel": "A megerősítéshez írd be: {word}",
+        "mismatch": "Írd be pontosan: {word}",
+        "submit": "Fiók végleges törlése",
+        "deleting": "Törlés…",
+        "failed": "A fiókot most nem sikerült törölni. Próbáld újra később."
+      }
+    },
+    "about": {
+      "version": "Verzió",
+      "privacy": "Adatkezelési tájékoztató",
+      "terms": "Felhasználási feltételek",
+      "install": "Telepítési útmutató",
+      "feedback": "Visszajelzés küldése",
+      "feedbackSubject": "Visszajelzés"
     }
   },
   "install": {
@@ -1127,5 +1222,10 @@
     "installGuide": "Telepítési útmutató",
     "done": "Kész, irány a Főoldal",
     "skip": "Kihagyom"
+  },
+  "goodbye": {
+    "title": "A fiókodat töröltük",
+    "body": "Minden adatod véglegesen törlődött. Köszönjük, hogy használtad a Bank Remindert — bármikor újra regisztrálhatsz.",
+    "again": "Új fiók létrehozása"
   }
 }

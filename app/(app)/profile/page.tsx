@@ -5,7 +5,11 @@ import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
 import { AvatarUploader } from "@/components/profile/avatar-uploader";
+import { DisplayPrefs } from "@/components/profile/display-prefs";
 import { NameForm } from "@/components/profile/name-form";
+import { AboutSection } from "@/components/profile/about-section";
+import { DataSection } from "@/components/profile/data-section";
+import { FinanceSection } from "@/components/profile/finance-section";
 import { NotificationsSection } from "@/components/profile/notifications-section";
 import { SecuritySection } from "@/components/profile/security-section";
 import { isProfileSection, ProfileNav, type ProfileSection } from "@/components/profile/profile-nav";
@@ -90,6 +94,7 @@ async function Appearance() {
         <LanguageSwitch />
       </div>
       <p className="text-sm text-text-2">{t("hint")}</p>
+      <DisplayPrefs />
     </section>
   );
 }
@@ -118,7 +123,10 @@ export default async function ProfilePage(props: PageProps<"/profile">) {
           {current === "overview" && <Overview profile={profile} locale={locale} />}
           {current === "appearance" && <Appearance />}
           {current === "notifications" && <NotificationsSection userId={profile.id} />}
-          {current === "security" && <SecuritySection />}
+          {current === "finance" && <FinanceSection userId={profile.id} />}
+          {current === "security" && <SecuritySection email={profile.email} />}
+          {current === "data" && <DataSection />}
+          {current === "about" && <AboutSection />}
         </div>
       </div>
     </div>

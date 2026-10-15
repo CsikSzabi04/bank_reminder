@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
 import { PwaInit } from "@/components/pwa/pwa-init";
+import { PrefsInit } from "@/components/shell/prefs-init";
 import { ThemeProvider } from "@/components/shell/theme-provider";
 import { ToastProvider } from "@/components/ui/toast";
 import { BRAND } from "@/lib/brand";
@@ -52,6 +53,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
           <ThemeProvider nonce={nonce}>
             <ToastProvider>
               <PwaInit />
+              <PrefsInit />
               {children}
             </ToastProvider>
           </ThemeProvider>

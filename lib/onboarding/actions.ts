@@ -8,21 +8,12 @@ import type { ActionState } from "@/lib/action-state";
 import { validationFailure } from "@/lib/auth/server-utils";
 import { mapDbError } from "@/lib/reminders/db-error";
 import { CURRENCIES } from "@/lib/schemas/reminder";
+import { isValidTimeZone } from "@/lib/tz";
 import { createClient } from "@/utils/supabase/server";
-
-// Érvényes IANA időzóna? (az Intl dob, ha ismeretlen)
-function isTimeZone(tz: string): boolean {
-  try {
-    new Intl.DateTimeFormat("en-US", { timeZone: tz });
-    return /^[A-Za-z_]+(?:\/[A-Za-z0-9_+-]+)*$/.test(tz);
-  } catch {
-    return false;
-  }
-}
 
 const basicsSchema = z.object({
   currency: z.enum(CURRENCIES, "invalidCurrency"),
-  timezone: z.string().trim().max(64).refine(isTimeZone, "invalid"),
+  timezone: z.string().trim().max(64).refine(isValidTimeZone, "invalid"),
 });
 
 // 1. lépés: alap-pénznem + az automatikusan felismert időzóna (a nyelv/téma a saját kapcsolójukkal már mentődött)
