@@ -42,7 +42,10 @@ test("tétel megnyitása: olvasottá válik, és a részletoldalra visz", async 
   await page.goto("/notifications");
   await page.getByRole("link", { name: /Értesítés-teszt/ }).first().click();
   await expect(page).toHaveURL(new RegExp(`/reminders/${reminderId}`));
-  await expect.poll(async () => (await db.client.rpc("unread_notifications")).data).toBe(0);
+  // a SAJÁT értesítése lett olvasott (a globális darabszám más tesztek/riasztások — pl. keret-riasztás — olvasatlan sorait is tartalmazhatja)
+  await expect
+    .poll(async () => (await db.client.from("notifications").select("id").eq("reminder_id", reminderId).eq("channel", "in_app").is("read_at", null)).data?.length)
+    .toBe(0);
 });
 
 test("Mind olvasottnak: a gomb csak olvasatlannál látszik, kattintásra mindent olvasottá tesz", async ({ page }) => {

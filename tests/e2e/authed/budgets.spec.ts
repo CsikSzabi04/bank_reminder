@@ -16,6 +16,9 @@ const hu = (n: number) => formatMoney(n, "HUF", "hu");
 async function clean() {
   await db.client.from("expenses").delete().eq("note", MARK);
   await db.client.from("budgets").delete().eq("category_id", category.id);
+  // A túllépés-teszt keret-riasztást (kind='budget') vált ki az élő DB-ben (A-45); a sor nem törölhető, ezért olvasottnak jelöljük,
+  // hogy ne szennyezze a harang olvasatlan-számlálóját a többi tesztnek
+  await db.client.from("notifications").update({ read_at: new Date().toISOString() }).eq("kind", "budget").is("read_at", null);
 }
 
 test.beforeAll(async () => {

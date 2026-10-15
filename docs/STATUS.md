@@ -1,5 +1,10 @@
 # STATUS  (legújabb fent)
 
+## 2026-10-15 · AI-B · M8 — teljes csomag-futás a jelenlegi HEAD-en: ZÖLD (push előtti ellenőrzés; **nem pusholtunk**, a gazda jelére várunk)
+- **Eredmény:** typecheck · lint · i18n:check (1072) · unit 487 (+1 kihagyott: SQL-paritás, A-49) · nyilvános e2e 78 · a11y 39 · **bejelentkezett e2e 320/320** · **production e2e (CSP + PWA) 15/15** · `build`.
+- **Talált + javított teszt-szennyeződés:** a `budgets` e2e „túllépés" tesztje az élő DB-n (A-45 trigger) **keret-riasztást (`kind='budget'`) vált ki** → a teszt-fiókban olvasatlan értesítés maradt, és a `notifications` e2e a globális olvasatlan-számot várta 0-nak. A `notifications` teszt mostantól a saját értesítését ellenőrzi, a `budgets` e2e takarításkor olvasottnak jelöli a `budget` sorokat. (Mellékhaszon: a keret-riasztás **élesben igazoltan működik**.)
+- **Push-olandó állapot (csak tájékoztató):** az `origin/main` a mi águnk őse → fast-forward, nincs ütközés; a diffben nincs követett kulcs/titok.
+
 ## 2026-10-15 · AI-A · M8 — **ZÖLD ÁLLAPOT, FENT A GITHUBON ÉS ÉLESBEN** (A-40/41/42/45/47 + B-40…B-44)
 - **Kapuk (a `main` = `5455f31`):** typecheck 0 hiba · lint · i18n:check (1072 kulcs) · unit **487** zöld · `fn:test` 33/33 · `fn:check` · **build** (tiszta `npm ci` + build külön másolatban; az `/bank` és `/bank/callback` az útvonal-listában) · **GitHub CI zöld** (web, e2e, e2e-prod; az `e2e-authed` szándékosan kihagyva, `E2E_ENABLED` nincs beállítva).
 - **Élesben (Supabase `ddvzslgwexvdolovqqlg`, 2026-10-15):** a migrációk (`…110000_budget_alert`, `…120000_bank_connect_flow`, `…130000_bank_rules`) felmentek (a generált típusok az éles DB-ből készültek), `ENABLE_APP_ID` = a **Production**-app, `ENABLE_PRIVATE_KEY`, `APP_BASE_URL = https://bankreminder.vercel.app` beállítva; Edge Function-ök deployolva: `send-notifications` v6, `list-aspsps`, `bank-connect-start`, `bank-connect-finish`, `bank-disconnect` (hitelesítés nélkül `401 unauthenticated`, vagyis bootolnak). Vercel: a `/bank/callback` már nem 404 (bejelentkezés nélkül a loginra irányít).
