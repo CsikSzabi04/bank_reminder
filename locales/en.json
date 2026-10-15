@@ -552,6 +552,112 @@
       "empty": {
         "title": "Android notifications — coming soon",
         "body": "Here you will be able to have the app add expenses automatically from your phone's bank notifications."
+      },
+      "intro": "On an Android phone, expenses can be added straight from your bank's notifications — even before the bank sync. An item added from a notification is provisional; the bank data later reconciles and corrects it.",
+      "status": {
+        "never": "No event has arrived yet.",
+        "recent": "Last event: {when}",
+        "stale": "Last event: {when} — nothing has come in for over 24 hours. Check your phone's battery settings: power saving can stop the relay app."
+      },
+      "token": {
+        "title": "Webhook token",
+        "lead": "The app on your phone calls the webhook with this token. You can have several tokens (e.g. for several phones).",
+        "labelLabel": "Label (optional)",
+        "labelHint": "For example the phone's name.",
+        "create": "Create a new token",
+        "creating": "Creating…",
+        "revealTitle": "Your token — this is the last time you see it",
+        "revealWarning": "Copy it now. It can't be shown again; the server only keeps its fingerprint. If you lose it, revoke it and create a new one.",
+        "revealNext": "Next step: set the allowed apps below — while the list is empty, no notification is accepted.",
+        "oldNotRevoked": "The new token is ready, but the old one couldn't be revoked — revoke it manually in the list.",
+        "hide": "Hide",
+        "list": "Your tokens",
+        "none": "You have no tokens yet.",
+        "active": "Active",
+        "revoked": "Revoked",
+        "lastUsed": "Last used: {when}",
+        "neverUsed": "Never used yet",
+        "created": "Created: {when}",
+        "unnamed": "Unnamed token",
+        "revoke": "Revoke",
+        "regenerate": "Regenerate",
+        "revokeTitle": "Revoke this token?",
+        "revokeBody": "The phone setup that uses it stops immediately until you enter a new token.",
+        "revokeConfirm": "Revoke",
+        "regenerateTitle": "Regenerate this token?",
+        "regenerateBody": "A new token is created with the same allowed apps and the old one is revoked. You'll need to replace it in the phone setup.",
+        "regenerateConfirm": "Regenerate",
+        "revokedToast": "Token revoked.",
+        "createdToast": "Token created."
+      },
+      "apps": {
+        "title": "Allowed apps",
+        "hint": "We only accept notifications from these apps (Android package name, e.g. hu.bank.app). Empty list = nothing allowed.",
+        "label": "Package name",
+        "add": "Add",
+        "remove": "Remove {app}",
+        "save": "Save",
+        "saved": "Allowed apps saved.",
+        "none": "No allowed apps.",
+        "suggestions": "Apps seen recently — tap to add",
+        "addSuggestion": "Add {app}"
+      },
+      "hook": {
+        "title": "Webhook address and JSON template",
+        "url": "Webhook address",
+        "urlMissing": "The webhook address can't be determined right now.",
+        "header": "Send the token in the x-ingest-token header; the body is JSON (Content-Type: application/json).",
+        "json": "Request body (JSON)",
+        "curl": "Try it from the command line (curl)"
+      },
+      "guide": {
+        "title": "Step-by-step setup",
+        "untested": "Not tested on a device: nobody has tried this guide on an Android phone yet. Look up the names of the app-side variables in the app's own variable picker — we don't guess them here.",
+        "s1": "Install MacroDroid or Tasker and grant it the “Notification access” permission (Android settings).",
+        "s2": "Create a rule triggered by a new notification from your bank's app. The app's package name comes from the “Apps seen recently” list or from its Play Store page address.",
+        "s3": "Action: an HTTP POST request to the webhook address. Header: x-ingest-token = your token; Content-Type = application/json. Body: the JSON template above, choosing the app's own notification variables for the app, title and text.",
+        "s4": "Turn off battery optimisation for that app, otherwise Android may stop it.",
+        "s5": "Try it below with the “Start test” button.",
+        "macrodroid": "MacroDroid: the trigger is “Notification Received”, the action is “HTTP Request”.",
+        "tasker": "Tasker: the trigger is the “Notification” event, the action is “HTTP Request”."
+      },
+      "test": {
+        "title": "Test",
+        "hint": "Start the test, then send a notification from the phone (or with curl). It shows here whether it arrived and what we read from it.",
+        "start": "Start test",
+        "waiting": "Waiting for the event… ({seconds} s)",
+        "timeout": "No event arrived. Check the token, the allowed apps and the battery settings.",
+        "arrived": "It arrived.",
+        "parsed": "Read: {merchant} — {amount}",
+        "noMerchant": "unknown merchant",
+        "failed": "The test can't run right now. Please try again."
+      },
+      "outcome": {
+        "recorded": "Recorded as an expense.",
+        "duplicate": "We've already received this notification.",
+        "ignored": "Not an expense (e.g. a credit or a balance notice), so it was skipped.",
+        "unparsed": "It looks like an expense, but we couldn't read the amount or merchant — you'll see it in the “Notifications we couldn't read” list in the Rules section.",
+        "rejected": "Rejected: the app isn't among the allowed ones, or the token is invalid."
+      },
+      "native": {
+        "title": "Native Android app",
+        "soon": "Coming soon",
+        "body": "A separate app that would read notifications on the phone itself and call the same webhook. Not available yet — until then MacroDroid or Tasker is the recommended way."
+      },
+      "ios": "On iPhone, iOS doesn't allow reading other apps' notifications — use the Bank connection or the quick expense instead.",
+      "privacy": "Only the amount, currency, date and merchant are kept from a notification. The raw text of a notification we can't process is kept for at most 14 days so you can sort it manually.",
+      "copy": "Copy",
+      "copied": "Copied.",
+      "copyFailed": "Couldn't copy — select it manually.",
+      "error": {
+        "unavailable": "This feature isn't available yet. Please try again later.",
+        "invalid_apps": "Invalid package name. It must be an Android package name, e.g. hu.bank.app.",
+        "too_many_apps": "At most 20 apps can be allowed.",
+        "apps_too_long": "The app list is too long.",
+        "label_too_long": "The label can be at most 40 characters.",
+        "not_found": "We can't find this token — it may already be revoked.",
+        "limit_reached": "You've reached the token limit. Revoke one first.",
+        "failed": "That didn't work. Please try again."
       }
     },
     "rules": {

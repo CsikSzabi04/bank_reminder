@@ -183,3 +183,39 @@ test.describe("kereskedő-szabályok (B-44)", () => {
     expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0);
   });
 });
+
+// B-43: Android-szakasz. A szerver-oldal (A-43/A-44) telepítettségétől függetlenül helyes: nélküle „hamarosan" állapot,
+// vele a token-kezelő felület; a natív app kártya mindkettőben ott van, és nincs vízszintes túlcsordulás.
+test.describe("Android-szakasz (B-43)", () => {
+  test("a szakasz hibamentesen betöltődik: „hamarosan” állapot VAGY a token-kezelő, mindkettőben a natív app kártya", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto("/bank?section=android");
+    const comingSoon = page.getByRole("heading", { level: 2, name: "Android-értesítések — hamarosan" });
+    const tokens = page.getByRole("heading", { level: 3, name: "Webhook-token" });
+    await expect(comingSoon.or(tokens)).toBeVisible();
+    await expect(page.getByRole("heading", { level: 3, name: /Natív Android-app/ })).toBeVisible();
+    await expect(page.getByRole("alert")).toHaveCount(0);
+  });
+
+  test("mobilon sincs túlcsordulás", async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 740 });
+    await page.goto("/bank?section=android");
+    await expect(page.getByRole("heading", { level: 3, name: /Natív Android-app/ })).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0);
+  });
+
+  test.describe("iPhone", () => {
+    test.use({ userAgent: "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1" });
+    test("az iOS-jelzés megjelenik (az iOS nem engedi az értesítés-olvasást)", async ({ page }) => {
+      await page.goto("/bank?section=android");
+      await expect(page.getByRole("note").filter({ hasText: "iPhone-on az iOS nem engedi" })).toBeVisible();
+    });
+  });
+
+  test("asztali böngészőben nincs iOS-jelzés", async ({ page }) => {
+    await page.goto("/bank?section=android");
+    await expect(page.getByRole("heading", { level: 3, name: /Natív Android-app/ })).toBeVisible();
+    await expect(page.getByRole("note")).toHaveCount(0);
+  });
+});
+

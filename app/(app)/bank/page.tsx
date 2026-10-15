@@ -45,7 +45,7 @@ export default async function BankPage(props: PageProps<"/bank">) {
             {t("back")}
           </Link>
           {current === "overview" && <OverviewSection syncAllowed={syncAllowed} timeZone={profile.timezone} flash={flash} />}
-          {current === "android" && <AndroidSection />}
+          {current === "android" && <AndroidSection timeZone={profile.timezone} />}
           {current === "rules" && <RulesSection />}
         </div>
       </div>

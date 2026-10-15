@@ -552,6 +552,112 @@
       "empty": {
         "title": "Android-értesítések — hamarosan",
         "body": "Itt állíthatod be, hogy a telefonod bank-értesítéseiből az app automatikusan felvegye a kiadásokat."
+      },
+      "intro": "Android-telefonon a bank-értesítésekből azonnal felvehetők a kiadások — még a banki szinkron előtt. Az értesítésből felvett tétel ideiglenes; a banki adat később egyezteti és javítja.",
+      "status": {
+        "never": "Még nem érkezett esemény.",
+        "recent": "Utolsó esemény: {when}",
+        "stale": "Utolsó esemény: {when} — több mint 24 órája nem jött semmi. Ellenőrizd a telefon akkumulátor-beállításait: a kímélő mód leállíthatja a közvetítő appot."
+      },
+      "token": {
+        "title": "Webhook-token",
+        "lead": "A telefon-oldali app ezzel a tokennel hívja a webhookot. Több tokened is lehet (pl. több telefon).",
+        "labelLabel": "Címke (nem kötelező)",
+        "labelHint": "Például a telefon neve.",
+        "create": "Új token létrehozása",
+        "creating": "Létrehozás…",
+        "revealTitle": "A tokened — most látod utoljára",
+        "revealWarning": "Másold ki most. Később nem jeleníthető meg újra, a szerver csak az ujjlenyomatát őrzi. Ha elveszted, vonj vissza és hozz létre újat.",
+        "revealNext": "Következő lépés: add meg lent az engedélyezett appokat — amíg üres a lista, semmilyen értesítést nem fogadunk.",
+        "oldNotRevoked": "Az új token elkészült, de a régit nem sikerült visszavonni — vond vissza kézzel a listában.",
+        "hide": "Elrejtés",
+        "list": "Tokenjeid",
+        "none": "Még nincs tokened.",
+        "active": "Aktív",
+        "revoked": "Visszavonva",
+        "lastUsed": "Utoljára használva: {when}",
+        "neverUsed": "Még nem használták",
+        "created": "Létrehozva: {when}",
+        "unnamed": "Név nélküli token",
+        "revoke": "Visszavonás",
+        "regenerate": "Újragenerálás",
+        "revokeTitle": "Visszavonod a tokent?",
+        "revokeBody": "Az erre épülő telefon-beállítás azonnal leáll, amíg nem adsz meg új tokent.",
+        "revokeConfirm": "Visszavonás",
+        "regenerateTitle": "Újragenerálod a tokent?",
+        "regenerateBody": "Új token készül ugyanazokkal az engedélyezett appokkal, a régi visszavonódik. A telefon-oldali beállításban ki kell cserélned.",
+        "regenerateConfirm": "Újragenerálás",
+        "revokedToast": "A token visszavonva.",
+        "createdToast": "A token elkészült."
+      },
+      "apps": {
+        "title": "Engedélyezett appok",
+        "hint": "Csak ezekről az appokról fogadunk értesítést (Android-csomagnév, pl. hu.bank.app). Üres lista = semmi nem engedett.",
+        "label": "Csomagnév",
+        "add": "Hozzáadás",
+        "remove": "{app} eltávolítása",
+        "save": "Mentés",
+        "saved": "Az engedélyezett appok elmentve.",
+        "none": "Nincs engedélyezett app.",
+        "suggestions": "Legutóbb érkezett appok — koppintással hozzáadható",
+        "addSuggestion": "{app} hozzáadása"
+      },
+      "hook": {
+        "title": "Webhook-cím és JSON-sablon",
+        "url": "Webhook-cím",
+        "urlMissing": "A webhook-cím most nem határozható meg.",
+        "header": "A tokent a x-ingest-token fejlécben küldd, a törzs JSON (Content-Type: application/json).",
+        "json": "Kérés-törzs (JSON)",
+        "curl": "Kipróbálás parancssorból (curl)"
+      },
+      "guide": {
+        "title": "Beállítás lépésről lépésre",
+        "untested": "Nem tesztelt eszközön: ezt az útmutatót még nem próbálta ki senki Android-telefonon. Az app-oldali változók nevét az app saját változó-választójában keresd — itt nem találgatunk.",
+        "s1": "Telepítsd a MacroDroidot vagy a Taskert, és add meg neki az „Értesítéshez hozzáférés” engedélyt (Android-beállítások).",
+        "s2": "Hozz létre egy szabályt, amit a bank appjának új értesítése indít. Az app csomagnevét a „Legutóbb érkezett appok” lista vagy a Play Áruház-oldal címe adja.",
+        "s3": "Művelet: HTTP POST kérés a webhook-címre. Fejléc: x-ingest-token = a tokened; Content-Type = application/json. Törzs: a fenti JSON-sablon, az app, a cím és a szöveg helyére az app saját értesítés-változóit választva.",
+        "s4": "Az akkumulátor-optimalizálást kapcsold ki ennél az appnál, különben az Android leállíthatja.",
+        "s5": "Próbáld ki lent a „Teszt indítása” gombbal.",
+        "macrodroid": "MacroDroid: az indító az „Értesítés érkezett” (Notification Received), a művelet a „HTTP kérés” (HTTP Request).",
+        "tasker": "Tasker: az indító a „Notification” esemény, a művelet a „HTTP Request”."
+      },
+      "test": {
+        "title": "Teszt",
+        "hint": "Indítsd el a tesztet, majd küldj egy értesítést a telefonról (vagy a curl-lel). Itt megjelenik, megérkezett-e, és mit olvastunk ki belőle.",
+        "start": "Teszt indítása",
+        "waiting": "Várakozás az eseményre… ({seconds} mp)",
+        "timeout": "Nem érkezett esemény. Ellenőrizd a tokent, az engedélyezett appokat és az akkumulátor-beállításokat.",
+        "arrived": "Megérkezett.",
+        "parsed": "Kiolvasva: {merchant} — {amount}",
+        "noMerchant": "ismeretlen kereskedő",
+        "failed": "A teszt most nem futtatható. Próbáld újra."
+      },
+      "outcome": {
+        "recorded": "Felvettük kiadásként.",
+        "duplicate": "Ezt az értesítést már korábban megkaptuk.",
+        "ignored": "Nem kiadás (pl. jóváírás vagy egyenleg-értesítés), ezért kihagytuk.",
+        "unparsed": "Kiadásnak látszik, de az összeget vagy a kereskedőt nem tudtuk kiolvasni — a Szabályok szakasz „Nem értelmezett értesítések” listájában látod.",
+        "rejected": "Elutasítva: az app nincs az engedélyezettek között, vagy a token érvénytelen."
+      },
+      "native": {
+        "title": "Natív Android-app",
+        "soon": "Hamarosan",
+        "body": "Külön alkalmazás, amely a telefonon maga olvassa az értesítéseket, és ugyanazt a webhookot hívná. Még nem elérhető — addig a MacroDroid vagy a Tasker a javasolt út."
+      },
+      "ios": "iPhone-on az iOS nem engedi más appok értesítéseinek olvasását — használd a Bank-összekötést vagy a gyors kiadást.",
+      "privacy": "Az értesítésből csak az összeg, a pénznem, a dátum és a kereskedő marad meg. A feldolgozhatatlan értesítés nyers szövege legfeljebb 14 napig, hogy kézzel besorolhasd.",
+      "copy": "Másolás",
+      "copied": "Másolva.",
+      "copyFailed": "Nem sikerült másolni — jelöld ki kézzel.",
+      "error": {
+        "unavailable": "Ez a funkció még nem érhető el. Próbáld meg később.",
+        "invalid_apps": "Érvénytelen csomagnév. Android-csomagnév kell, pl. hu.bank.app.",
+        "too_many_apps": "Legfeljebb 20 app engedélyezhető.",
+        "apps_too_long": "Az app-lista túl hosszú.",
+        "label_too_long": "A címke legfeljebb 40 karakter lehet.",
+        "not_found": "Ezt a tokent nem találjuk — lehet, hogy már visszavonták.",
+        "limit_reached": "Elérted a tokenek számának korlátját. Vonj vissza egyet.",
+        "failed": "Nem sikerült. Próbáld újra."
       }
     },
     "rules": {

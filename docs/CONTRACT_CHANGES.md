@@ -5,6 +5,19 @@
 
 ---
 
+## [2026-10-15] B-43: az Android-szakasz B-oldali elvárásai (A-43 / A-44-hez) — javasolta: AI-B — státusz: proposed
+- **Miért:** a `/bank` Android-szakasza (webhook-token kezelés, engedélyezett appok, teszt) ezekre a hívás-alakokra épült; tesztjei fake-kel fedik őket (`tests/unit/bank-ingest.test.ts`, `ingest-actions.test.ts`, `ingest-panel.test.tsx`). **Eltérés esetén az A szóljon** (vagy a B igazít).
+- **RPC-k** (`authenticated`, `security invoker`; a B névvel adja az argumentumokat):
+  - `list_ingest_tokens()` → sorok `{id, prefix, label, allowed_apps text[], last_used_at, revoked_at, created_at}` (**token_hash nélkül**). A B ezt **verzió-próbaként** is használja: `PGRST202` / `42883` (nincs telepítve) esetén a szakasz „hamarosan" állapotot mutat, nem törött felületet — az A-44 telepítésekor a teljes felület magától él.
+  - `create_ingest_token(p_label text default null, p_allowed_apps text[] default '{}')` → `jsonb {id, token, prefix}`. A `token` ≥ 20 karakter (rövidebbet a B nem mutat meg), **csak ebben a válaszban létezik**; a `prefix` a 6 karakteres azonosító. Túl sok token → SQLSTATE `53400` (javaslat: legfeljebb 10 aktív).
+  - `revoke_ingest_token(p_token uuid)` → void; nincs/idegen token → `P0002`.
+  - `set_ingest_apps(p_token uuid, p_apps text[])` → void; a tábla CHECK-je érvényes (≤ 20 elem, ≤ 2000 bájt); `P0002`.
+  - Az újragenerálást a B két hívásból állítja össze (előbb `create`, utána `revoke`) — külön RPC nem kell.
+- **Webhook (A-43):** `POST {SUPABASE_URL}/functions/v1/ingest-notification`, fejléc `x-ingest-token`, törzs `{app, title, text, posted_at?}` (§5.1). A `ingest_events.outcome` ∈ `recorded|duplicate|ignored|unparsed|rejected`; **a `rejected` sorban az `app` mező legyen kitöltve** — a „Legutóbb érkezett appok" lista ebből épül (egy még nem engedélyezett app első értesítése után a felhasználó koppintással engedélyezheti). A napló PII-mentes (a `raw_text` csak `unparsed`-nál, 14 nap).
+- **Teszt-várakozás:** a felület a `ingest_events`-t és az értesítés-eredetű `bank_transactions` sort olvassa (a meglévő SELECT-jogokkal); a B nem hív webhookot a saját nevében (a nyers token nem tárolt).
+- **Opcionális (nem blokkoló):** `clear_ingest_events()` RPC az „eseménynapló törlése" gombhoz (§8.3) — a B addig nem épít rá gombot.
+- Törő?: nem (új). A teendője: **AI-A** A-44 (RPC-k), A-43 (webhook + `rejected` sor `app`-pal).
+
 ## [2026-10-15] Atomi besorolás-RPC-k + kereskedő-szabályok (A-42) — javasolta: AI-A (az AI-B kérésére) — státusz: proposed
 - **Új RPC-k (authenticated, `security invoker` → az RLS és az oszlop-jogok érvényesek):**
   - `classify_bank_transaction(p_transaction uuid, p_category uuid, p_remember boolean default false)` → `jsonb {classified: int, rule_id: uuid|null}`. Egy tranzakció: előbb a kiadás, aztán a főkönyvi sor besorolódik; `p_remember = true` esetén a tétel `merchant_key`-éből **saját szabály** készül (ha már van ilyen kulcs, annak a kategóriája frissül), és a még besorolatlan, nem elvetett, **azonos kereskedőt tartalmazó** tételek (≤ 200, a `merchant_key` tartalmazza a szabály-kulcsot) is besorolódnak. Hibák (SQLSTATE → B-kód): `BR404` → `not_found` (idegen/ismeretlen/elvetett tétel vagy nem látható kategória), `BR422` → `no_merchant_key` (nincs ≥ 2 karakteres `merchant_key` a szabályhoz). **A hiba nem hagy részleges írást** (egy függvény = egy tranzakció).

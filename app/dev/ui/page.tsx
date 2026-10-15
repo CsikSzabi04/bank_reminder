@@ -1,6 +1,12 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { BankFlashBanner } from "@/components/bank/bank-flash";
+import { AndroidGuide } from "@/components/bank/android-guide";
 import { ConnectPanel } from "@/components/bank/connect-panel";
+import { CopyField } from "@/components/bank/copy-field";
+import { IngestPanel } from "@/components/bank/ingest-panel";
+import { IngestTest } from "@/components/bank/ingest-test";
+import { NativeAppCard } from "@/components/bank/native-app-card";
+import { PlatformHint } from "@/components/bank/platform-hint";
 import { ConsentBannerView } from "@/components/bank/consent-banner";
 import { PendingList } from "@/components/bank/pending-list";
 import { RulesManager } from "@/components/bank/rules-manager";
@@ -13,6 +19,7 @@ import { AmountText } from "@/components/ui/amount-text";
 import { LanguageSwitch } from "@/components/shell/language-switch";
 import { ThemeSwitch } from "@/components/shell/theme-switch";
 import { parseConnections } from "@/lib/bank/connections";
+import { JSON_TEMPLATE } from "@/lib/bank/ingest";
 import { formatMoney } from "@/lib/format";
 import { FIXTURE_CATEGORIES } from "@/lib/fixtures/reminders";
 import type { Locale } from "@/lib/i18n/config";
@@ -187,6 +194,22 @@ export default async function DevUiPage() {
               { id: "r2", matchKey: "demo bolt", categoryId: "00000000-0000-4000-8000-0000000000c2", hits: 0, system: true },
             ]}
           />
+          <div className="flex flex-col gap-4">
+            <IngestPanel
+              timeZone="Europe/Budapest"
+              suggestions={["hu.demo.bank", "com.demo.wallet"]}
+              tokens={[
+                { id: "00000000-0000-4000-8000-0000000000a1", prefix: "tk_demo", label: "Demo telefon", allowedApps: ["hu.demo.card"], lastUsedAt: null, revokedAt: null, createdAt: "2026-10-01T10:00:00Z" },
+                { id: "00000000-0000-4000-8000-0000000000a2", prefix: "tk_old1", label: null, allowedApps: [], lastUsedAt: "2026-10-05T10:00:00Z", revokedAt: "2026-10-06T10:00:00Z", createdAt: "2026-09-01T10:00:00Z" },
+              ]}
+            />
+            <CopyField label="Webhook-cím" value="https://demo.supabase.co/functions/v1/ingest-notification" />
+            <CopyField label="JSON" value={JSON_TEMPLATE} multiline />
+            <AndroidGuide />
+            <IngestTest />
+            <NativeAppCard />
+            <PlatformHint />
+          </div>
           <div className="flex flex-col gap-3">
             <ConsentBannerView info={{ bank: "Demo Bank", daysLeft: 12, expired: false }} />
             <ConsentBannerView info={{ bank: "Demo Bank 2", daysLeft: -10, expired: true }} />
