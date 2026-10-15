@@ -18,3 +18,7 @@ docs/email-preview/
 supabase/config.toml.bak
 !.env.smtp.local.example
 playwright/.auth/
+
+# privát kulcsok (pl. Enable Banking .pem) soha ne kerüljenek a repóba (H3)
+*.pem
+*.key
